@@ -1,4 +1,5 @@
 class LetTutorSvg {
+  static const apple = 'assets/svg/ic_apple.svg';
   static const upArrow = 'assets/svg/ic_arrow_up.svg';
   static const leftArrow = 'assets/svg/ic_arrow_left.svg';
   static const calendar = 'assets/svg/ic_calendar.svg';
@@ -27,6 +28,7 @@ class LetTutorSvg {
   static const shareScreen = 'assets/svg/ic_share_screen.svg';
   static const filledStar = 'assets/svg/ic_filled_star.svg';
   static const borderStar = 'assets/svg/ic_border_star.svg';
+  static const smartPhone = 'assets/svg/ic_smart_phone.svg';
   static const threeDot = 'assets/svg/ic_three_dot.svg';
   static const tutor = 'assets/svg/ic_tutor.svg';
   static const upcoming = 'assets/svg/ic_upcoming.svg';
