@@ -17,25 +17,41 @@ class IntroScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                child: const Text(
-                  'LET\nTUTOR',
-                  style: TextStyle(
-                    color: LetTutorColors.primaryBlue,
-                    fontWeight: LetTutorFontWeights.semiBold,
-                    fontSize: LetTutorFontSizes.px24,
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(left: 15, top: 5),
+                    child: const SizedBox(
+                      height: 50,
+                      width: 4,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(color: LetTutorColors.primaryBlue),
+                      ),
+                    ),
                   ),
-                ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: const Text(
+                      'LET\nTUTOR',
+                      softWrap: true,
+                      style: TextStyle(
+                        color: LetTutorColors.primaryBlue,
+                        fontWeight: LetTutorFontWeights.medium,
+                        fontSize: LetTutorFontSizes.px24,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                 child: const Text(
                   'English\nLanguage Teaching',
                   style: TextStyle(
                     color: LetTutorColors.secondaryDarkBlue,
                     fontWeight: LetTutorFontWeights.medium,
-                    fontSize: LetTutorFontSizes.px20,
+                    fontSize: LetTutorFontSizes.px24,
                   ),
                 ),
               ),
@@ -44,7 +60,7 @@ class IntroScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               Container(
-                margin: const EdgeInsets.only(top: 50),
+                margin: const EdgeInsets.only(top: 45),
                 alignment: Alignment.centerRight,
                 child: Directionality(
                   textDirection: TextDirection.rtl,
