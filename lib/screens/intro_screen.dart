@@ -3,11 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../core/assets/assets.dart';
 import '../core/styles/styles.dart';
+import 'auth/login_screen.dart';
 
-class IntroScreen extends StatelessWidget {
+class LetTutorIntroScreen extends StatelessWidget {
   static const routeName = "/introduction";
 
-  const IntroScreen({super.key});
+  const LetTutorIntroScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +74,9 @@ class IntroScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(LetTutorLoginScreen.routeName);
+                    },
                     icon: SvgPicture.asset(
                       LetTutorSvg.leftArrow,
                       color: Colors.white,

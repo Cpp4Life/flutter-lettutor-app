@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/screens/intro_screen.dart';
+
+import 'screens/auth/login_screen.dart';
+import 'screens/intro_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -14,7 +16,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Poppins',
       ),
-      home: const IntroScreen(),
+      home: const LetTutorIntroScreen(),
+      routes: {
+        LetTutorLoginScreen.routeName: (context) => const LetTutorLoginScreen(),
+      },
     );
   }
 }
