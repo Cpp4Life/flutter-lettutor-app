@@ -1,0 +1,36 @@
+class LetTutorSvg {
+  static const upArrow = 'assets/svg/ic_arrow_up.svg';
+  static const leftArrow = 'assets/svg/ic_arrow_left.svg';
+  static const calendar = 'assets/svg/ic_calendar.svg';
+  static const clock = 'assets/svg/ic_clock.svg';
+  static const email = 'assets/svg/ic_email.svg';
+  static const facebookAuth = 'assets/svg/ic_facebook_auth.svg';
+  static const facebookSetting = 'assets/svg/ic_facebook_setting.svg';
+  static const ukFlag = 'assets/svg/ic_flag_kingdom.svg';
+  static const vnFlag = 'assets/svg/ic_flag_vietnam.svg';
+  static const google = 'assets/svg/ic_google.svg';
+  static const heart = 'assets/svg/ic_heart.svg';
+  static const history = 'assets/svg/ic_history.svg';
+  static const home = 'assets/svg/ic_home.svg';
+  static const list = 'assets/svg/ic_list.svg';
+  static const message = 'assets/svg/ic_message.svg';
+  static const microOff = 'assets/svg/ic_micro_off.svg';
+  static const microOn = 'assets/svg/ic_micro_on.svg';
+  static const network = 'assets/svg/ic_network.svg';
+  static const next = 'assets/svg/ic_next.svg';
+  static const password = 'assets/svg/ic_password.svg';
+  static const phone = 'assets/svg/ic_phone.svg';
+  static const report = 'assets/svg/ic_report.svg';
+  static const research = 'assets/svg/ic_search.svg';
+  static const settingNav = 'assets/svg/ic_setting_nav.svg';
+  static const settingProfile = 'assets/svg/ic_setting_profile.svg';
+  static const shareScreen = 'assets/svg/ic_share_screen.svg';
+  static const filledStar = 'assets/svg/ic_filled_star.svg';
+  static const borderStar = 'assets/svg/ic_border_star.svg';
+  static const threeDot = 'assets/svg/ic_three_dot.svg';
+  static const tutor = 'assets/svg/ic_tutor.svg';
+  static const upcoming = 'assets/svg/ic_upcoming.svg';
+  static const user = 'assets/svg/ic_user.svg';
+  static const videoOff = 'assets/svg/ic_video_off.svg';
+  static const videoOn = 'assets/svg/ic_video_on.svg';
+}
