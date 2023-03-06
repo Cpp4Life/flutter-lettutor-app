@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'screens/auth/login_screen.dart';
 import 'screens/intro_screen.dart';
+import 'screens/tabs_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const LetTutorIntroScreen(),
       routes: {
+        LetTutorTabsScreen.routeName: (context) => const LetTutorTabsScreen(),
         LetTutorLoginScreen.routeName: (context) => const LetTutorLoginScreen(),
       },
     );

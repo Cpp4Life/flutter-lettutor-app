@@ -4,6 +4,7 @@ import '../../core/assets/assets.dart';
 import '../../core/styles/styles.dart';
 import '../../widgets/social_login.dart';
 import '../../widgets/text_input.dart';
+import '../tabs_screen.dart';
 
 class LetTutorLoginScreen extends StatelessWidget {
   static const routeName = '/login';
@@ -84,7 +85,10 @@ class LetTutorLoginScreen extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushReplacementNamed(LetTutorTabsScreen.routeName);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: LetTutorColors.primaryBlue,
                   shape: RoundedRectangleBorder(
