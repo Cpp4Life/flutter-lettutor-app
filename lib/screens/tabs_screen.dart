@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/assets/assets.dart';
 import '../core/styles/styles.dart';
 import '../widgets/nav_item.dart';
+import 'home/home_screen.dart';
 
 class LetTutorTabsScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -20,11 +21,11 @@ class _LetTutorTabsScreenState extends State<LetTutorTabsScreen> {
   @override
   void initState() {
     _pages = [
-      {'page': '', 'title': 'Home'},
-      {'page': '', 'title': 'Message'},
-      {'page': '', 'title': 'Upcoming'},
-      {'page': '', 'title': 'Tutors'},
-      {'page': '', 'title': 'Settings'},
+      {'page': const LetTutorHomeScreen(), 'title': 'Home'},
+      {'page': const Center(child: Text('Message')), 'title': 'Message'},
+      {'page': const Center(child: Text('Upcoming')), 'title': 'Upcoming'},
+      {'page': const Center(child: Text('Tutors')), 'title': 'Tutors'},
+      {'page': const Center(child: Text('Settings')), 'title': 'Settings'},
     ];
     super.initState();
   }
@@ -62,8 +63,8 @@ class _LetTutorTabsScreenState extends State<LetTutorTabsScreen> {
             : [],
         automaticallyImplyLeading: false,
       ),
-      body: const Center(
-        child: Text('Homepage'),
+      body: SingleChildScrollView(
+        child: _pages[_selectedPageIndex]['page'] as Widget,
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
