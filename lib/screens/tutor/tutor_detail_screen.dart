@@ -107,7 +107,8 @@ class TutorDetailScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        // side backgroundColor: LetTutorColors.primaryBlue,
+                        padding: const EdgeInsets.all(10),
+                        backgroundColor: LetTutorColors.primaryBlue,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
                         ),

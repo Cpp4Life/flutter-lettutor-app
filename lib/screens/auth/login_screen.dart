@@ -85,9 +85,13 @@ class LoginScreen extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    TabsScreen.routeName,
+                    (Route<dynamic> route) => false,
+                  );
                 },
                 style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(10),
                   backgroundColor: LetTutorColors.primaryBlue,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),

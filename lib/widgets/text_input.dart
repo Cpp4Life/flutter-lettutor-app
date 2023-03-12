@@ -31,7 +31,7 @@ class TextFieldWidget extends StatelessWidget {
           hintStyle: const TextStyle(
             color: LetTutorColors.greyScaleMediumGrey,
           ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50),
           ),

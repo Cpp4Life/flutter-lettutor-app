@@ -67,6 +67,8 @@ class LetTutorOnboardScreen extends StatelessWidget {
                   textDirection: TextDirection.rtl,
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
+                      padding:
+                          const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 10),
                       backgroundColor: LetTutorColors.primaryBlue,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.horizontal(
