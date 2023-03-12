@@ -10,106 +10,108 @@ class LetTutorHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 200,
-          width: double.infinity,
-          color: LetTutorColors.primaryBlue,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Welcome to LetTutor!',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: LetTutorFontSizes.px16,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  side: const BorderSide(color: LetTutorColors.primaryBlue),
-                ),
-                child: const Text(
-                  'Book a lesson',
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            height: 200,
+            width: double.infinity,
+            color: LetTutorColors.primaryBlue,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Welcome to LetTutor!',
                   style: TextStyle(
-                    color: LetTutorColors.primaryBlue,
+                    color: Colors.white,
+                    fontSize: LetTutorFontSizes.px16,
                   ),
                 ),
-              )
-            ],
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    side: const BorderSide(color: LetTutorColors.primaryBlue),
+                  ),
+                  child: const Text(
+                    'Book a lesson',
+                    style: TextStyle(
+                      color: LetTutorColors.primaryBlue,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(20, 15, 15, 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 1.5, // Underline thickness
+          Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.fromLTRB(20, 15, 15, 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 1.5, // Underline thickness
+                          ),
                         ),
                       ),
-                    ),
-                    child: const Text(
-                      'Recommended Tutors',
-                      style: TextStyle(
-                        fontSize: LetTutorFontSizes.px14,
-                      ),
-                    ),
-                  ),
-                  Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: TextButton.icon(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        splashFactory: NoSplash.splashFactory,
-                      ),
-                      icon: SvgPicture.asset(
-                        LetTutorSvg.next,
-                        color: LetTutorColors.primaryBlue,
-                      ),
-                      label: const Text(
-                        'See all',
+                      child: const Text(
+                        'Recommended Tutors',
                         style: TextStyle(
-                          color: LetTutorColors.primaryBlue,
                           fontSize: LetTutorFontSizes.px14,
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: TextButton.icon(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          splashFactory: NoSplash.splashFactory,
+                        ),
+                        icon: SvgPicture.asset(
+                          LetTutorSvg.next,
+                          color: LetTutorColors.primaryBlue,
+                        ),
+                        label: const Text(
+                          'See all',
+                          style: TextStyle(
+                            color: LetTutorColors.primaryBlue,
+                            fontSize: LetTutorFontSizes.px14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(left: 15, right: 15),
-              child: ListView.builder(
-                itemCount: recommendedTutors.length,
-                itemBuilder: (context, index) {
-                  return TutorCardWidget(
-                    name: recommendedTutors[index]['name'] as String,
-                    avatar: '',
-                    intro: recommendedTutors[index]['intro'] as String,
-                    tags: recommendedTutors[index]['tags'] as List<String>,
-                  );
-                },
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-              ),
-            )
-          ],
-        ),
-      ],
+              Container(
+                margin: const EdgeInsets.only(left: 15, right: 15),
+                child: ListView.builder(
+                  itemCount: recommendedTutors.length,
+                  itemBuilder: (context, index) {
+                    return TutorCardWidget(
+                      name: recommendedTutors[index]['name'] as String,
+                      avatar: '',
+                      intro: recommendedTutors[index]['intro'] as String,
+                      tags: recommendedTutors[index]['tags'] as List<String>,
+                    );
+                  },
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

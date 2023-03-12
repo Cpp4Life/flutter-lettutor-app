@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/assets/assets.dart';
 import '../core/styles/styles.dart';
-import 'rating_widget.dart';
+import 'rating.dart';
 
 class TutorCardWidget extends StatelessWidget {
   final String name;
