@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'screens/auth/login_screen.dart';
-import 'screens/onboard_screen.dart';
-import 'screens/tabs_screen.dart';
+import 'screens/index.dart';
 
 void main() => runApp(const MyApp());
 
@@ -17,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Poppins',
       ),
-      home: const LetTutorIntroScreen(),
+      home: const LetTutorOnboardScreen(),
       routes: {
         LetTutorTabsScreen.routeName: (context) => const LetTutorTabsScreen(),
         LetTutorLoginScreen.routeName: (context) => const LetTutorLoginScreen(),

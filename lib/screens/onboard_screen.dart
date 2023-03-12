@@ -5,10 +5,10 @@ import '../core/assets/assets.dart';
 import '../core/styles/styles.dart';
 import 'auth/login_screen.dart';
 
-class LetTutorIntroScreen extends StatelessWidget {
+class LetTutorOnboardScreen extends StatelessWidget {
   static const routeName = "/introduction";
 
-  const LetTutorIntroScreen({super.key});
+  const LetTutorOnboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

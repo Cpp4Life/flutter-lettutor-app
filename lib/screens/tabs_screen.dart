@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/assets/assets.dart';
 import '../core/styles/styles.dart';
 import '../widgets/nav_item.dart';
-import 'home/home_screen.dart';
+import 'index.dart';
 
 class LetTutorTabsScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -22,7 +22,7 @@ class _LetTutorTabsScreenState extends State<LetTutorTabsScreen> {
   void initState() {
     _pages = [
       {'page': const LetTutorHomeScreen(), 'title': 'Home'},
-      {'page': const Center(child: Text('Message')), 'title': 'Message'},
+      {'page': const LetTutorMessageScreen(), 'title': 'Chats'},
       {'page': const Center(child: Text('Upcoming')), 'title': 'Upcoming'},
       {'page': const Center(child: Text('Tutors')), 'title': 'Tutors'},
       {'page': const Center(child: Text('Settings')), 'title': 'Settings'},
@@ -63,9 +63,7 @@ class _LetTutorTabsScreenState extends State<LetTutorTabsScreen> {
             : [],
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
-        child: _pages[_selectedPageIndex]['page'] as Widget,
-      ),
+      body: _pages[_selectedPageIndex]['page'] as Widget,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         selectedItemColor: LetTutorColors.primaryBlue,
