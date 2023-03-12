@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/assets/assets.dart';
 import '../core/styles/styles.dart';
-import '../widgets/nav_item.dart';
+import '../widgets/index.dart';
 import 'index.dart';
 
 class TabsScreen extends StatefulWidget {

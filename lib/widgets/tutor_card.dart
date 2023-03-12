@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/assets/assets.dart';
 import '../core/styles/styles.dart';
 import '../screens/tutor/tutor_detail_screen.dart';
-import 'chip_tag.dart';
-import 'rating.dart';
+import 'index.dart';
 
 class TutorCardWidget extends StatelessWidget {
   final String name;

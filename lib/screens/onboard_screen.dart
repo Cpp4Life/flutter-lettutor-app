@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../core/assets/assets.dart';
 import '../core/styles/styles.dart';
-import 'auth/login_screen.dart';
+import 'index.dart';
 
 class LetTutorOnboardScreen extends StatelessWidget {
   static const routeName = "/introduction";

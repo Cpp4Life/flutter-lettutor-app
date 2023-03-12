@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../core/assets/assets.dart';
 import '../../core/styles/styles.dart';
-import '../../widgets/social_login.dart';
-import '../../widgets/text_input.dart';
-import '../tabs_screen.dart';
+import '../../widgets/index.dart';
+import '../index.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = '/login';

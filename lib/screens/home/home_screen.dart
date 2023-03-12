@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../core/assets/assets.dart';
 import '../../core/styles/styles.dart';
-import '../../widgets/tutor_card.dart';
+import '../../widgets/index.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

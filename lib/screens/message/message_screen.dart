@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/assets/assets.dart';
 import '../../core/styles/styles.dart';
-import '../../widgets/free_content.dart';
-import '../../widgets/search_bar.dart';
+import '../../widgets/index.dart';
 
 class MessageScreen extends StatelessWidget {
   final int _messages = 0;
