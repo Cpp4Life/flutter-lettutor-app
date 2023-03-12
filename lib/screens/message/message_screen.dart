@@ -31,6 +31,7 @@ class LetTutorMessageScreen extends StatelessWidget {
                         leading: CircleAvatar(
                           child: Image.asset(
                             LetTutorImages.avatar,
+                            fit: BoxFit.cover,
                           ),
                         ),
                         title: const Text(

@@ -22,7 +22,7 @@ class TutorCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      child: InkWell(
+      child: GestureDetector(
         onTap: () {},
         child: Card(
           elevation: 4,
@@ -39,7 +39,10 @@ class TutorCardWidget extends StatelessWidget {
                         margin: const EdgeInsets.only(right: 10, top: 10),
                         child: CircleAvatar(
                           radius: 30,
-                          child: Image.asset(LetTutorImages.avatar),
+                          child: Image.asset(
+                            LetTutorImages.avatar,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       Expanded(

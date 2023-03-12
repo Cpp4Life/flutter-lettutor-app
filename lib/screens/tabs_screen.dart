@@ -57,7 +57,10 @@ class _LetTutorTabsScreenState extends State<LetTutorTabsScreen> {
                 IconButton(
                   splashColor: Colors.transparent,
                   onPressed: () {},
-                  icon: Image.asset(LetTutorImages.avatar),
+                  icon: Image.asset(
+                    LetTutorImages.avatar,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ]
             : [],

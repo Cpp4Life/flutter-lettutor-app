@@ -17,7 +17,10 @@ class FreeContentWidget extends StatelessWidget {
           child: SizedBox(
             width: 50,
             height: 50,
-            child: Image.asset(LetTutorImages.folder),
+            child: Image.asset(
+              LetTutorImages.folder,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         Text(
