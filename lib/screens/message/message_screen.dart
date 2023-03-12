@@ -5,10 +5,10 @@ import '../../core/styles/styles.dart';
 import '../../widgets/free_content.dart';
 import '../../widgets/search_bar.dart';
 
-class LetTutorMessageScreen extends StatelessWidget {
+class MessageScreen extends StatelessWidget {
   final int _messages = 0;
 
-  const LetTutorMessageScreen({super.key});
+  const MessageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

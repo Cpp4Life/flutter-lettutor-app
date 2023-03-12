@@ -17,8 +17,9 @@ class MyApp extends StatelessWidget {
       ),
       home: const LetTutorOnboardScreen(),
       routes: {
-        LetTutorTabsScreen.routeName: (context) => const LetTutorTabsScreen(),
-        LetTutorLoginScreen.routeName: (context) => const LetTutorLoginScreen(),
+        TabsScreen.routeName: (context) => const TabsScreen(),
+        LoginScreen.routeName: (context) => const LoginScreen(),
+        TutorDetailScreen.routeName: (context) => const TutorDetailScreen(),
       },
     );
   }

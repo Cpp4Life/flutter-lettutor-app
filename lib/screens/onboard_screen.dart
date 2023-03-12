@@ -75,7 +75,7 @@ class LetTutorOnboardScreen extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushNamed(LetTutorLoginScreen.routeName);
+                      Navigator.of(context).pushNamed(LoginScreen.routeName);
                     },
                     icon: SvgPicture.asset(
                       LetTutorSvg.leftArrow,

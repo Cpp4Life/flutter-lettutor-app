@@ -5,24 +5,24 @@ import '../core/styles/styles.dart';
 import '../widgets/nav_item.dart';
 import 'index.dart';
 
-class LetTutorTabsScreen extends StatefulWidget {
+class TabsScreen extends StatefulWidget {
   static const routeName = '/home';
 
-  const LetTutorTabsScreen({super.key});
+  const TabsScreen({super.key});
 
   @override
-  State<LetTutorTabsScreen> createState() => _LetTutorTabsScreenState();
+  State<TabsScreen> createState() => _TabsScreenState();
 }
 
-class _LetTutorTabsScreenState extends State<LetTutorTabsScreen> {
+class _TabsScreenState extends State<TabsScreen> {
   late List<Map<String, Object>> _pages;
   int _selectedPageIndex = 0;
 
   @override
   void initState() {
     _pages = [
-      {'page': const LetTutorHomeScreen(), 'title': 'Home'},
-      {'page': const LetTutorMessageScreen(), 'title': 'Chats'},
+      {'page': const HomeScreen(), 'title': 'Home'},
+      {'page': const MessageScreen(), 'title': 'Chats'},
       {'page': const Center(child: Text('Upcoming')), 'title': 'Upcoming'},
       {'page': const Center(child: Text('Tutors')), 'title': 'Tutors'},
       {'page': const Center(child: Text('Settings')), 'title': 'Settings'},

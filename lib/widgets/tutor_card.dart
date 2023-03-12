@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../core/assets/assets.dart';
 import '../core/styles/styles.dart';
+import '../screens/tutor/tutor_detail_screen.dart';
+import 'chip_tag.dart';
 import 'rating.dart';
 
 class TutorCardWidget extends StatelessWidget {
@@ -23,7 +25,9 @@ class TutorCardWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context).pushNamed(TutorDetailScreen.routeName);
+        },
         child: Card(
           elevation: 4,
           child: Container(
@@ -83,19 +87,7 @@ class TutorCardWidget extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   return Container(
                                     margin: const EdgeInsets.only(right: 5),
-                                    child: Chip(
-                                      backgroundColor: LetTutorColors.softBlue,
-                                      side: const BorderSide(
-                                        color: LetTutorColors.primaryBlue,
-                                      ),
-                                      label: Text(
-                                        tags[index],
-                                        style: const TextStyle(
-                                          fontSize: LetTutorFontSizes.px12,
-                                          color: LetTutorColors.primaryBlue,
-                                        ),
-                                      ),
-                                    ),
+                                    child: ChipTagWidget(tags[index]),
                                   );
                                 },
                               ),

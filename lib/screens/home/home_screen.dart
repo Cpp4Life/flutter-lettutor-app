@@ -5,8 +5,8 @@ import '../../core/assets/assets.dart';
 import '../../core/styles/styles.dart';
 import '../../widgets/tutor_card.dart';
 
-class LetTutorHomeScreen extends StatelessWidget {
-  const LetTutorHomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -15,6 +15,7 @@ class LetTutorSvg {
   static const home = 'assets/svg/ic_home.svg';
   static const list = 'assets/svg/ic_list.svg';
   static const message = 'assets/svg/ic_message.svg';
+  static const startMessaging = 'assets/svg/ic_message2.svg';
   static const microOff = 'assets/svg/ic_micro_off.svg';
   static const microOn = 'assets/svg/ic_micro_on.svg';
   static const network = 'assets/svg/ic_network.svg';

@@ -6,10 +6,10 @@ import '../../widgets/social_login.dart';
 import '../../widgets/text_input.dart';
 import '../tabs_screen.dart';
 
-class LetTutorLoginScreen extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
   static const routeName = '/login';
 
-  const LetTutorLoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +86,7 @@ class LetTutorLoginScreen extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .pushReplacementNamed(LetTutorTabsScreen.routeName);
+                  Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: LetTutorColors.primaryBlue,
