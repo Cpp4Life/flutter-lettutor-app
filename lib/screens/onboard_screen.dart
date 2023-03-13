@@ -5,10 +5,10 @@ import '../core/assets/assets.dart';
 import '../core/styles/styles.dart';
 import 'index.dart';
 
-class LetTutorOnboardScreen extends StatelessWidget {
-  static const routeName = "/introduction";
+class OnboardScreen extends StatelessWidget {
+  static const routeName = "/onboard";
 
-  const LetTutorOnboardScreen({super.key});
+  const OnboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

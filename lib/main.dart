@@ -15,8 +15,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Poppins',
       ),
-      home: const LetTutorOnboardScreen(),
+      home: const OnboardScreen(),
       routes: {
+        OnboardScreen.routeName: (context) => const OnboardScreen(),
         TabsScreen.routeName: (context) => const TabsScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
         TutorDetailScreen.routeName: (context) => const TutorDetailScreen(),
