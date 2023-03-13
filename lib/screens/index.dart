@@ -6,3 +6,4 @@ export 'home/home_screen.dart';
 export 'message/message_screen.dart';
 export 'tutor/tutor_detail_screen.dart';
 export 'setting/setting_screen.dart';
+export 'course/course_screen.dart';

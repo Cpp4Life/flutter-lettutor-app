@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/styles/styles.dart';
 import '../models/course.dart';
+import '../screens/index.dart';
 
 class CourseCardWidget extends StatelessWidget {
   final Course course;
@@ -11,7 +12,9 @@ class CourseCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(CourseScreen.routeName);
+      },
       child: Card(
         elevation: 5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

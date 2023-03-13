@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
         TabsScreen.routeName: (context) => const TabsScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
         TutorDetailScreen.routeName: (context) => const TutorDetailScreen(),
+        CourseScreen.routeName: (context) => const CourseScreen(),
       },
     );
   }
