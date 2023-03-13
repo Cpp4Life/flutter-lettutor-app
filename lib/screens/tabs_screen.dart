@@ -56,6 +56,7 @@ class _TabsScreenState extends State<TabsScreen> {
             ? [
                 IconButton(
                   splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
                   onPressed: () {},
                   icon: Image.asset(
                     LetTutorImages.avatar,

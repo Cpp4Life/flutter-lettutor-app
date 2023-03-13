@@ -14,24 +14,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        shadowColor: Colors.transparent,
-        iconTheme: const IconThemeData(
-          color: LetTutorColors.secondaryDarkBlue,
-          size: 16,
-        ),
-        centerTitle: false,
-        titleSpacing: -10,
-        title: const Text(
-          'Sign in',
-          style: TextStyle(
-            color: LetTutorColors.secondaryDarkBlue,
-            fontSize: LetTutorFontSizes.px16,
-            fontWeight: LetTutorFontWeights.semiBold,
-          ),
-        ),
-      ),
+      appBar: const CustomAppBarWidget('Sign in'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -91,6 +74,7 @@ class LoginScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
+                  splashFactory: NoSplash.splashFactory,
                   padding: const EdgeInsets.all(10),
                   backgroundColor: LetTutorColors.primaryBlue,
                   shape: RoundedRectangleBorder(

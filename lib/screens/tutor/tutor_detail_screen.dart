@@ -107,6 +107,7 @@ class TutorDetailScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
+                        splashFactory: NoSplash.splashFactory,
                         padding: const EdgeInsets.all(10),
                         backgroundColor: LetTutorColors.primaryBlue,
                         shape: RoundedRectangleBorder(
