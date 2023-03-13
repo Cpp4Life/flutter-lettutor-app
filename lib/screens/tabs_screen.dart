@@ -25,7 +25,7 @@ class _TabsScreenState extends State<TabsScreen> {
       {'page': const MessageScreen(), 'title': 'Chats'},
       {'page': const Center(child: Text('Upcoming')), 'title': 'Upcoming'},
       {'page': const Center(child: Text('Tutors')), 'title': 'Tutors'},
-      {'page': const Center(child: Text('Settings')), 'title': 'Settings'},
+      {'page': const SettingScreen(), 'title': 'Settings'},
     ];
     super.initState();
   }
