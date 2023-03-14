@@ -97,7 +97,7 @@ class HomeScreen extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: recommendedTutors.length,
                   itemBuilder: (context, index) {
-                    return TutorCardWidget(
+                    return RecommendedTutorCardWidget(
                       name: recommendedTutors[index]['name'] as String,
                       avatar: '',
                       intro: recommendedTutors[index]['intro'] as String,
