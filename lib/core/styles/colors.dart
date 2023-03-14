@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class LetTutorColors {
   // Primary
   static const primaryBlue = Color.fromRGBO(0, 113, 240, 1);
+  static const primaryRed = Color.fromRGBO(255, 98, 81, 1);
   static const softBlue = Color.fromRGBO(221, 234, 255, 1);
 
   // Secondary
