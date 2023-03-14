@@ -1,5 +1,6 @@
 export 'text_input.dart';
 export 'tutor_card.dart';
+export 'recommended_tutor_card.dart';
 export 'social_login.dart';
 export 'search_bar.dart';
 export 'rating.dart';
@@ -12,3 +13,4 @@ export 'chip_tag.dart';
 export 'course_card.dart';
 export 'setting_button.dart';
 export 'app_bar.dart';
+export 'star.dart';

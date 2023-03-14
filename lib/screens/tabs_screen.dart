@@ -24,7 +24,7 @@ class _TabsScreenState extends State<TabsScreen> {
       {'page': const HomeScreen(), 'title': 'Home'},
       {'page': const MessageScreen(), 'title': 'Chats'},
       {'page': const Center(child: Text('Upcoming')), 'title': 'Upcoming'},
-      {'page': const Center(child: Text('Tutors')), 'title': 'Tutors'},
+      {'page': const TutorsScreen(), 'title': 'Tutors'},
       {'page': const SettingScreen(), 'title': 'Settings'},
     ];
     super.initState();
@@ -67,7 +67,7 @@ class _TabsScreenState extends State<TabsScreen> {
             : [],
         automaticallyImplyLeading: false,
       ),
-      body: _pages[_selectedPageIndex]['page'] as Widget,
+      body: SafeArea(child: _pages[_selectedPageIndex]['page'] as Widget),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         selectedItemColor: LetTutorColors.primaryBlue,

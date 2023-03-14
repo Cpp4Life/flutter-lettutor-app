@@ -22,9 +22,14 @@ class CourseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final padding = MediaQuery.of(context).padding;
+    final width = size.width - padding.left - padding.right;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
+        bottom: false,
         child: SizedBox(
           width: double.maxFinite,
           height: double.maxFinite,
@@ -64,7 +69,7 @@ class CourseScreen extends StatelessWidget {
                 bottom: 0,
                 child: SingleChildScrollView(
                   child: Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: width,
                     padding: const EdgeInsets.fromLTRB(15, 65, 15, 10),
                     decoration: const BoxDecoration(
                       color: Colors.white,
@@ -90,7 +95,7 @@ class CourseScreen extends StatelessWidget {
                               Text(
                                 "The English you need for your work and career",
                                 style: TextStyle(
-                                  fontSize: LetTutorFontSizes.px16,
+                                  fontSize: LetTutorFontSizes.px14,
                                   color: LetTutorColors.greyScaleDarkGrey,
                                 ),
                               ),
@@ -121,7 +126,6 @@ class CourseScreen extends StatelessWidget {
                                       children: [
                                         const Icon(Icons.help_outline),
                                         Container(
-                                          width: MediaQuery.of(context).size.width - 70,
                                           margin:
                                               const EdgeInsets.only(left: 10, bottom: 10),
                                           child: const Text(
@@ -153,7 +157,6 @@ class CourseScreen extends StatelessWidget {
                                       children: [
                                         const Icon(Icons.help_outline),
                                         Container(
-                                          width: MediaQuery.of(context).size.width - 70,
                                           margin:
                                               const EdgeInsets.only(left: 10, bottom: 10),
                                           child: const Text(

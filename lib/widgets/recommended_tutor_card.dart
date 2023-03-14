@@ -5,13 +5,13 @@ import '../core/styles/styles.dart';
 import '../screens/tutor/tutor_detail_screen.dart';
 import 'index.dart';
 
-class TutorCardWidget extends StatelessWidget {
+class RecommendedTutorCardWidget extends StatelessWidget {
   final String name;
   final String intro;
   final String avatar;
   final List<String> tags;
 
-  const TutorCardWidget({
+  const RecommendedTutorCardWidget({
     required this.name,
     required this.intro,
     required this.avatar,
@@ -52,6 +52,7 @@ class TutorCardWidget extends StatelessWidget {
                         child: Column(
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   name,
@@ -59,17 +60,21 @@ class TutorCardWidget extends StatelessWidget {
                                     fontSize: LetTutorFontSizes.px16,
                                   ),
                                 ),
-                                const Spacer(),
-                                const Text(
-                                  '5.00',
-                                  style: TextStyle(
-                                    fontSize: LetTutorFontSizes.px16,
-                                    color: LetTutorColors.primaryRed,
-                                    fontWeight: LetTutorFontWeights.medium,
+                                IconButton(
+                                  padding: const EdgeInsets.only(top: 5, right: 5),
+                                  constraints: const BoxConstraints(),
+                                  onPressed: () {},
+                                  splashColor: Colors.transparent,
+                                  icon: const Icon(
+                                    Icons.favorite_border_outlined,
+                                    color: LetTutorColors.primaryBlue,
                                   ),
                                 ),
-                                const StarWidget(),
                               ],
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: const RatingWidget(),
                             ),
                             SizedBox(
                               height: 35,
@@ -105,6 +110,5 @@ class TutorCardWidget extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }
