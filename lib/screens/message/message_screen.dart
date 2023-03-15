@@ -5,6 +5,8 @@ import '../../core/styles/styles.dart';
 import '../../widgets/index.dart';
 
 class MessageScreen extends StatelessWidget {
+  static const routeName = '/message';
+
   final int _messages = 5;
 
   const MessageScreen({super.key});

@@ -23,7 +23,7 @@ class _TabsScreenState extends State<TabsScreen> {
     _pages = [
       {'page': const HomeScreen(), 'title': 'Home'},
       {'page': const MessageScreen(), 'title': 'Chats'},
-      {'page': const Center(child: Text('Upcoming')), 'title': 'Upcoming'},
+      {'page': const UpcomingScreen(), 'title': 'Upcoming'},
       {'page': const TutorsScreen(), 'title': 'Tutors'},
       {'page': const SettingScreen(), 'title': 'Settings'},
     ];

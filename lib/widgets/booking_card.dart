@@ -19,81 +19,78 @@ class BookingCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: Image.asset(
-            LetTutorImages.banner,
-            fit: BoxFit.cover,
-          ),
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        child: Image.asset(
+          LetTutorImages.banner,
+          fit: BoxFit.cover,
         ),
-        title: Text(
-          name,
-          style: const TextStyle(
-            fontSize: LetTutorFontSizes.px14,
-          ),
+      ),
+      title: Text(
+        name,
+        style: const TextStyle(
+          fontSize: LetTutorFontSizes.px14,
         ),
-        subtitle: Row(
-          children: <Widget>[
-            Text(
-              date,
+      ),
+      subtitle: Row(
+        children: <Widget>[
+          Text(
+            date,
+            style: const TextStyle(
+              fontSize: LetTutorFontSizes.px12,
+              color: LetTutorColors.greyScaleDarkGrey,
+            ),
+          ),
+          Container(
+            width: 40,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(vertical: 3),
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: LetTutorColors.primaryBlue,
+                width: 1,
+              ),
+              color: LetTutorColors.softBlue,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              startTime,
               style: const TextStyle(
-                fontSize: LetTutorFontSizes.px12,
-                color: LetTutorColors.greyScaleDarkGrey,
+                fontSize: LetTutorFontSizes.px10,
+                color: LetTutorColors.primaryBlue,
               ),
             ),
-            Container(
-              width: 40,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              margin: const EdgeInsets.symmetric(horizontal: 5),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: LetTutorColors.primaryBlue,
-                  width: 1,
-                ),
-                color: LetTutorColors.softBlue,
-                borderRadius: BorderRadius.circular(4),
+          ),
+          const Text(
+            '-',
+            style: TextStyle(
+              color: LetTutorColors.secondaryDarkBlue,
+            ),
+          ),
+          Container(
+            width: 40,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(vertical: 3),
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.orange,
+                width: 1,
               ),
-              child: Text(
-                startTime,
-                style: const TextStyle(
-                  fontSize: LetTutorFontSizes.px10,
-                  color: LetTutorColors.primaryBlue,
-                ),
+              color: Colors.orange[50],
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              endTime,
+              style: const TextStyle(
+                fontSize: LetTutorFontSizes.px10,
+                color: Colors.orange,
               ),
             ),
-            const Text(
-              '-',
-              style: TextStyle(
-                color: LetTutorColors.secondaryDarkBlue,
-              ),
-            ),
-            Container(
-              width: 40,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              margin: const EdgeInsets.symmetric(horizontal: 5),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.orange,
-                  width: 1,
-                ),
-                color: Colors.orange[50],
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                endTime,
-                style: const TextStyle(
-                  fontSize: LetTutorFontSizes.px10,
-                  color: Colors.orange,
-                ),
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
