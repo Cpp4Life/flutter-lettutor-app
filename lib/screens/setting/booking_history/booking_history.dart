@@ -12,6 +12,7 @@ class BookingHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: const CustomAppBarWidget('Booking History'),
       body: SafeArea(
         child: Container(
