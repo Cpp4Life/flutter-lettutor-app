@@ -50,7 +50,7 @@ class SettingScreen extends StatelessWidget {
               child: const SettingButtonWidget(
                 title: 'Booking History',
                 iconPath: LetTutorSvg.list,
-                routeName: '',
+                routeName: BookingHistoryScreen.routeName,
               ),
             ),
             Container(

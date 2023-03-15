@@ -5,7 +5,7 @@ import '../../core/styles/styles.dart';
 import '../../widgets/index.dart';
 
 class MessageScreen extends StatelessWidget {
-  final int _messages = 0;
+  final int _messages = 5;
 
   const MessageScreen({super.key});
 

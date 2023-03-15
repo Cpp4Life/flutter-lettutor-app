@@ -4,8 +4,10 @@ export 'tabs_screen.dart';
 export 'auth/login_screen.dart';
 export 'home/home_screen.dart';
 export 'message/message_screen.dart';
-export 'setting/setting_screen.dart';
 export 'course/course_screen.dart';
+
+export 'setting/setting_screen.dart';
+export 'setting/booking_history/booking_history.dart';
 
 export 'tutor/tutor_detail_screen.dart';
 export 'tutor/tutors_screen.dart';

@@ -19,7 +19,9 @@ class SettingButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context).pushNamed(routeName);
+      },
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.all(10),
         backgroundColor: Colors.white,

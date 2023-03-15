@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
         TutorsScreen.routeName: (context) => const TutorsScreen(),
         TutorDetailScreen.routeName: (context) => const TutorDetailScreen(),
         CourseScreen.routeName: (context) => const CourseScreen(),
+        BookingHistoryScreen.routeName: (context) => const BookingHistoryScreen(),
       },
     );
   }
