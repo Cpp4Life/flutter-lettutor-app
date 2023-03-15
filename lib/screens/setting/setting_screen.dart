@@ -23,6 +23,7 @@ class SettingScreen extends StatelessWidget {
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: CircleAvatar(
+                  backgroundColor: Colors.transparent,
                   radius: 30,
                   child: Image.asset(
                     LetTutorImages.avatar,

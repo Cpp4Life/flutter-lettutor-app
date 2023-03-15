@@ -28,6 +28,7 @@ class MessageScreen extends StatelessWidget {
                         visualDensity: const VisualDensity(vertical: -4),
                         contentPadding: EdgeInsets.zero,
                         leading: CircleAvatar(
+                          backgroundColor: Colors.transparent,
                           child: Image.asset(
                             LetTutorImages.avatar,
                             fit: BoxFit.cover,

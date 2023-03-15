@@ -41,6 +41,7 @@ class RecommendedTutorCardWidget extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(right: 10, top: 10),
                         child: CircleAvatar(
+                          backgroundColor: Colors.transparent,
                           radius: 30,
                           child: Image.asset(
                             LetTutorImages.avatar,

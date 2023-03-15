@@ -23,8 +23,9 @@ class BookingHistoryScreen extends StatelessWidget {
                 elevation: 3,
                 child: ListTile(
                   leading: CircleAvatar(
+                    backgroundColor: Colors.transparent,
                     child: Image.asset(
-                      LetTutorImages.avatar,
+                      LetTutorImages.banner,
                       fit: BoxFit.cover,
                     ),
                   ),

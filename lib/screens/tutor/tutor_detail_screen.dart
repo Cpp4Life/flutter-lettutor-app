@@ -46,6 +46,7 @@ class TutorDetailScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
+                          backgroundColor: Colors.transparent,
                           radius: 30,
                           child: Image.asset(
                             LetTutorImages.avatar,
@@ -244,7 +245,7 @@ class TutorDetailScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const FreeContentWidget('No data')
+                  const FreeContentWidget('No Data')
                 ],
               ),
             )
