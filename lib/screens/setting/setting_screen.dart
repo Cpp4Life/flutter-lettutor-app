@@ -67,7 +67,7 @@ class SettingScreen extends StatelessWidget {
               child: const SettingButtonWidget(
                 title: 'Advanced Settings',
                 iconPath: LetTutorSvg.settingProfile,
-                routeName: '',
+                routeName: AdvancedSettingsScreen.routeName,
               ),
             ),
             const SizedBox(

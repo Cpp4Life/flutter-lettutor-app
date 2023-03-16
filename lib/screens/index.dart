@@ -18,3 +18,4 @@ export 'setting/setting_screen.dart';
 export 'setting/booking_history/booking_history_screen.dart';
 export 'setting/view_feedbacks/view_feedbacks_screen.dart';
 export 'setting/session_history/session_history_screen.dart';
+export 'setting/advanced_settings/advanced_settings_screen.dart';

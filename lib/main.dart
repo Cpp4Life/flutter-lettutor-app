@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         MeetingScreen.routeName: (context) => const MeetingScreen(),
         ViewFeedbacksScreen.routeName: (context) => const ViewFeedbacksScreen(),
         SessionHistoryScreen.routeName: (context) => const SessionHistoryScreen(),
+        AdvancedSettingsScreen.routeName: (context) => const AdvancedSettingsScreen(),
       },
     );
   }
