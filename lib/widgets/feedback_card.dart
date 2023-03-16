@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../core/assets/assets.dart';
 import '../core/styles/styles.dart';
-import '../screens/tutor/tutor_detail_screen.dart';
 import 'index.dart';
 
-class TutorCardWidget extends StatelessWidget {
+class FeedbackCardWidget extends StatelessWidget {
   final String name;
-  final String intro;
   final String avatar;
-  final List<String> tags;
+  final DateTime date;
+  final String feedback;
 
-  const TutorCardWidget({
+  const FeedbackCardWidget({
     required this.name,
-    required this.intro,
     required this.avatar,
-    required this.tags,
+    required this.date,
+    required this.feedback,
     super.key,
   });
 
@@ -24,11 +23,9 @@ class TutorCardWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).pushNamed(TutorDetailScreen.routeName);
-        },
+        onTap: () {},
         child: Card(
-          elevation: 4,
+          elevation: 5,
           child: Container(
             padding: const EdgeInsets.all(10),
             child: Column(
@@ -54,11 +51,26 @@ class TutorCardWidget extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Text(
-                                  name,
-                                  style: const TextStyle(
-                                    fontSize: LetTutorFontSizes.px16,
-                                  ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      name,
+                                      style: const TextStyle(
+                                        fontSize: LetTutorFontSizes.px16,
+                                      ),
+                                    ),
+                                    FittedBox(
+                                      fit: BoxFit.fitHeight,
+                                      child: Text(
+                                        date.toString(),
+                                        style: const TextStyle(
+                                          fontSize: LetTutorFontSizes.px12,
+                                          color: LetTutorColors.secondaryDarkBlue,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 const Spacer(),
                                 const Text(
@@ -72,32 +84,26 @@ class TutorCardWidget extends StatelessWidget {
                                 const StarWidget(),
                               ],
                             ),
-                            SizedBox(
-                              height: 35,
-                              child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: tags.length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: const EdgeInsets.only(right: 5),
-                                    child: ChipTagWidget(tags[index]),
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
                     ],
                   ),
                 ),
-                Text(
-                  intro,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 4,
-                  style: const TextStyle(
-                    fontSize: LetTutorFontSizes.px12,
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: LetTutorColors.greyScaleMediumGrey,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Text(
+                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. ",
+                    style: TextStyle(
+                      fontSize: LetTutorFontSizes.px12,
+                    ),
                   ),
                 ),
               ],

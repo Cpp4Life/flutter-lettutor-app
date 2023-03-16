@@ -16,3 +16,4 @@ export 'tutor/tutors_screen.dart';
 
 export 'setting/setting_screen.dart';
 export 'setting/booking_history/booking_history.dart';
+export 'setting/view_feedbacks/view_feedbacks_screen.dart';

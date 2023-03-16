@@ -17,3 +17,4 @@ export 'star.dart';
 export 'booking_card.dart';
 export 'meeting_button.dart';
 export 'meeting_bar.dart';
+export 'feedback_card.dart';

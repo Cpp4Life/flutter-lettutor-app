@@ -43,7 +43,7 @@ class SettingScreen extends StatelessWidget {
               child: const SettingButtonWidget(
                 title: 'View Feedbacks',
                 iconPath: LetTutorSvg.user,
-                routeName: '',
+                routeName: ViewFeedbacksScreen.routeName,
               ),
             ),
             Container(
