@@ -44,7 +44,8 @@ class _AdvancedSettingsScreenState extends State<AdvancedSettingsScreen> {
                       margin: const EdgeInsets.only(right: 10),
                       child: SvgPicture.asset(
                         LetTutorSvg.ukFlag,
-                        height: 20,
+                        width: 32,
+                        height: 32,
                       ),
                     ),
                     const Text('English'),
@@ -60,7 +61,8 @@ class _AdvancedSettingsScreenState extends State<AdvancedSettingsScreen> {
                       margin: const EdgeInsets.only(right: 10),
                       child: SvgPicture.asset(
                         LetTutorSvg.vnFlag,
-                        height: 20,
+                        width: 32,
+                        height: 32,
                       ),
                     ),
                     const Text('Tiếng Việt'),
