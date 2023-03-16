@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/assets/assets.dart';
 import '../../core/styles/styles.dart';
 import '../../widgets/index.dart';
+import '../index.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -21,14 +22,30 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'Welcome to LetTutor!',
+                  'Upcoming lesson',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: LetTutorFontSizes.px16,
+                    fontSize: LetTutorFontSizes.px20,
+                  ),
+                ),
+                const Text(
+                  'Fri, 17 Mar 23 10:00 - 12:00',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: LetTutorFontSizes.px14,
+                  ),
+                ),
+                const Text(
+                  'Total lesson time is 11 hours 45 minutes',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: LetTutorFontSizes.px14,
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(MeetingScreen.routeName);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -37,12 +54,12 @@ class HomeScreen extends StatelessWidget {
                     side: const BorderSide(color: LetTutorColors.primaryBlue),
                   ),
                   child: const Text(
-                    'Book a lesson',
+                    'Enter lesson room',
                     style: TextStyle(
                       color: LetTutorColors.primaryBlue,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
