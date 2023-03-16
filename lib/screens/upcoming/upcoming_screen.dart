@@ -32,52 +32,55 @@ class UpcomingScreen extends StatelessWidget {
                     startTime: '08:30',
                     endTime: '11:30',
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: LetTutorColors.greyScaleMediumGrey,
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: LetTutorColors.greyScaleMediumGrey,
+                              ),
+                              borderRadius: const BorderRadius.horizontal(
+                                left: Radius.circular(10),
+                              ),
                             ),
-                            borderRadius: const BorderRadius.horizontal(
-                              left: Radius.circular(10),
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'Cancel',
-                            style: TextStyle(
-                              color: LetTutorColors.secondaryDarkBlue,
-                              fontSize: LetTutorFontSizes.px14,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: LetTutorColors.greyScaleMediumGrey,
-                            ),
-                            color: LetTutorColors.greyScaleMediumGrey,
-                            borderRadius: const BorderRadius.horizontal(
-                              right: Radius.circular(10),
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'Go to meeting',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: LetTutorFontSizes.px14,
+                            alignment: Alignment.center,
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: LetTutorColors.secondaryDarkBlue,
+                                fontSize: LetTutorFontSizes.px14,
+                              ),
                             ),
                           ),
                         ),
-                      )
-                    ],
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: LetTutorColors.greyScaleMediumGrey,
+                              ),
+                              color: LetTutorColors.greyScaleMediumGrey,
+                              borderRadius: const BorderRadius.horizontal(
+                                right: Radius.circular(10),
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: const Text(
+                              'Go to meeting',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: LetTutorFontSizes.px14,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
