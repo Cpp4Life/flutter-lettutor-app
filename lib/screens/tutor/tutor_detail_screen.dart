@@ -1,17 +1,52 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../core/assets/assets.dart';
 import '../../core/styles/styles.dart';
 import '../../models/course.dart';
 import '../../widgets/index.dart';
 
-class TutorDetailScreen extends StatelessWidget {
+class TutorDetailScreen extends StatefulWidget {
   static const routeName = '/tutor-detail';
 
   const TutorDetailScreen({super.key});
 
+  @override
+  State<TutorDetailScreen> createState() => _TutorDetailScreenState();
+}
+
+class _TutorDetailScreenState extends State<TutorDetailScreen> {
   final EdgeInsetsGeometry _margin = const EdgeInsets.only(left: 20, right: 20, top: 10);
+
+  late ChewieController _chewieController;
+
+  @override
+  void initState() {
+    _chewieController = ChewieController(
+      videoPlayerController: VideoPlayerController.network(
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+      ),
+      autoPlay: true,
+      looping: true,
+      deviceOrientationsOnEnterFullScreen: [
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ],
+      deviceOrientationsAfterFullScreen: [
+        DeviceOrientation.portraitUp,
+      ],
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _chewieController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +67,8 @@ class TutorDetailScreen extends StatelessWidget {
               ),
               titleSpacing: -10,
               flexibleSpace: FlexibleSpaceBar(
-                background: Image.network(
-                  'https://fastly.picsum.photos/id/795/536/354.jpg?hmac=RRoarvJYI4QeP2PEwjTqTgzyFgT53Lo9Pq-IFSiqv4k',
-                  fit: BoxFit.cover,
+                background: Chewie(
+                  controller: _chewieController,
                 ),
               ),
             ),
@@ -75,7 +109,7 @@ class TutorDetailScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  'Phillipines (the)',
+                                  'Philippines (the)',
                                   style: TextStyle(
                                     fontSize: LetTutorFontSizes.px14,
                                     fontWeight: LetTutorFontWeights.light,
