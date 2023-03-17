@@ -33,7 +33,7 @@ class MeetingBarWidget extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(50),
                 color: Colors.red,
               ),
               child: const MeetingButtonWidget(
