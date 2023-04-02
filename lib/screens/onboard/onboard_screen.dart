@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../core/assets/assets.dart';
-import '../core/styles/styles.dart';
-import 'index.dart';
+import '../../core/assets/assets.dart';
+import '../../core/styles/styles.dart';
+import '../index.dart';
 
 class OnboardScreen extends StatelessWidget {
   static const routeName = "/onboard";
