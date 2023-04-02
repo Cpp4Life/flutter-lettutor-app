@@ -30,7 +30,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
         'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
       ),
       autoPlay: true,
-      looping: true,
+      looping: false,
       deviceOrientationsOnEnterFullScreen: [
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,

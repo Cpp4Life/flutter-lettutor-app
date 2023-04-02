@@ -4,46 +4,29 @@ import 'package:flutter/material.dart';
 import '../../core/assets/assets.dart';
 import '../../core/styles/styles.dart';
 import '../../widgets/index.dart';
-import '../index.dart';
 
-class LoginScreen extends StatelessWidget {
-  static const routeName = '/login';
+class SignUpScreen extends StatelessWidget {
+  static const routeName = '/signup';
 
-  const LoginScreen({super.key});
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWidget('Sign in'),
+      appBar: const CustomAppBarWidget('Sign up'),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Image.asset(
-                        LetTutorImages.logo,
-                        fit: BoxFit.cover,
-                        // height: 50,
-                      ),
-                    ),
-                    const Text(
-                      'LET TUTOR',
-                      style: TextStyle(
-                        fontSize: LetTutorFontSizes.px24,
-                        color: LetTutorColors.primaryBlue,
-                        fontWeight: LetTutorFontWeights.semiBold,
-                      ),
-                    ),
-                  ],
+                const Text('Full name *'),
+                const TextFieldWidget(
+                  hintText: 'Name',
+                  keyboardType: TextInputType.text,
                 ),
                 const Text('Email'),
                 const TextFieldWidget(
@@ -56,25 +39,17 @@ class LoginScreen extends StatelessWidget {
                   hintText: '********',
                   keyboardType: TextInputType.text,
                 ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  margin: const EdgeInsets.only(bottom: 5),
-                  child: const Text(
-                    'Forgot Password?',
-                    style: TextStyle(
-                      color: LetTutorColors.primaryBlue,
-                      fontSize: LetTutorFontSizes.px12,
-                    ),
-                  ),
+                const Text('Confirm password *'),
+                const TextFieldWidget(
+                  obscureText: true,
+                  hintText: '********',
+                  keyboardType: TextInputType.text,
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      TabsScreen.routeName,
-                      (Route<dynamic> route) => false,
-                    );
-                  },
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     splashFactory: NoSplash.splashFactory,
                     padding: const EdgeInsets.all(10),
@@ -84,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   child: const Text(
-                    'Log In',
+                    'Register',
                     style: TextStyle(
                       fontWeight: LetTutorFontWeights.medium,
                       color: Colors.white,
@@ -116,20 +91,20 @@ class LoginScreen extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 25),
                   child: Text.rich(
                     TextSpan(
-                      text: 'Don\'t have account? ',
+                      text: 'Already have an account? ',
                       style: const TextStyle(
                         fontSize: LetTutorFontSizes.px12,
                       ),
                       children: <InlineSpan>[
                         TextSpan(
-                          text: 'Sign up',
+                          text: 'Log In',
                           style: const TextStyle(
                             fontSize: LetTutorFontSizes.px14,
                             color: LetTutorColors.primaryBlue,
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.of(context).pushNamed(SignUpScreen.routeName);
+                              Navigator.of(context).pop();
                             },
                         )
                       ],

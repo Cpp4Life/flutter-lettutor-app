@@ -24,6 +24,7 @@ class LetTutorApp extends StatelessWidget {
         OnboardScreen.routeName: (context) => const OnboardScreen(),
         TabsScreen.routeName: (context) => const TabsScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
+        SignUpScreen.routeName: (context) => const SignUpScreen(),
         TutorsScreen.routeName: (context) => const TutorsScreen(),
         TutorDetailScreen.routeName: (context) => const TutorDetailScreen(),
         CourseScreen.routeName: (context) => const CourseScreen(),
