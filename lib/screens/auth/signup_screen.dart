@@ -3,15 +3,77 @@ import 'package:flutter/material.dart';
 
 import '../../core/assets/assets.dart';
 import '../../core/styles/styles.dart';
+import '../../helpers/index.dart';
 import '../../widgets/index.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   static const routeName = '/signup';
 
   const SignUpScreen({super.key});
 
   @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final TextEditingController _emailCtrl = TextEditingController();
+  final TextEditingController _passwordCtrl = TextEditingController();
+  final TextEditingController _confirmPasswordCtrl = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
+    void handleRegister() {
+      final email = _emailCtrl.value.text;
+      final password = _passwordCtrl.value.text;
+      final confirmPassword = _confirmPasswordCtrl.value.text;
+
+      // empty validation
+      if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+        TopSnackBar.show(
+          context: context,
+          message: 'Please fill in all fields',
+          isSuccess: false,
+        );
+        return;
+      }
+
+      // email validation
+      if (!RegEx.isValidEmail(email)) {
+        TopSnackBar.show(
+          context: context,
+          message: 'Please enter a valid email',
+          isSuccess: false,
+        );
+        return;
+      }
+
+      // password validation
+      if (password.length < 8) {
+        TopSnackBar.show(
+          context: context,
+          message: 'Password must be at least 8 characters',
+          isSuccess: false,
+        );
+        return;
+      }
+
+      // confirm password validation
+      if (confirmPassword != password) {
+        TopSnackBar.show(
+          context: context,
+          message: 'Passwords do not match',
+          isSuccess: false,
+        );
+        return;
+      }
+
+      TopSnackBar.show(
+        context: context,
+        message: 'Successfully registered new account!',
+        isSuccess: true,
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBarWidget('Sign up'),
@@ -29,27 +91,30 @@ class SignUpScreen extends StatelessWidget {
                   keyboardType: TextInputType.text,
                 ),
                 const Text('Email'),
-                const TextFieldWidget(
+                TextFieldWidget(
                   hintText: 'example@email.com',
                   keyboardType: TextInputType.emailAddress,
+                  controller: _emailCtrl,
                 ),
                 const Text('Password'),
-                const TextFieldWidget(
+                TextFieldWidget(
                   obscureText: true,
                   hintText: '********',
                   keyboardType: TextInputType.text,
+                  controller: _passwordCtrl,
                 ),
                 const Text('Confirm password *'),
-                const TextFieldWidget(
+                TextFieldWidget(
                   obscureText: true,
                   hintText: '********',
                   keyboardType: TextInputType.text,
+                  controller: _confirmPasswordCtrl,
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: handleRegister,
                   style: ElevatedButton.styleFrom(
                     splashFactory: NoSplash.splashFactory,
                     padding: const EdgeInsets.all(10),
