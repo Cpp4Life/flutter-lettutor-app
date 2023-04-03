@@ -39,6 +39,8 @@ dependencies:
   chewie: ^1.4.0
   flutter_dotenv: ^5.0.2
   top_snackbar_flutter: ^3.0.0+1
+  http: ^0.13.5
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:

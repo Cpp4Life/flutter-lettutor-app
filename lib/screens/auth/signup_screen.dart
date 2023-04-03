@@ -1,9 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/assets/assets.dart';
 import '../../core/styles/styles.dart';
 import '../../helpers/index.dart';
+import '../../models/http_exception.dart';
+import '../../providers/index.dart';
 import '../../widgets/index.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -22,7 +25,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void handleRegister() {
+    final _authPvd = Provider.of<AuthProvider>(context, listen: false);
+
+    void handleRegister() async {
       final email = _emailCtrl.value.text;
       final password = _passwordCtrl.value.text;
       final confirmPassword = _confirmPasswordCtrl.value.text;
@@ -67,11 +72,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return;
       }
 
-      TopSnackBar.show(
-        context: context,
-        message: 'Successfully registered new account!',
-        isSuccess: true,
-      );
+      try {
+        await _authPvd.register(email, password, () {
+          TopSnackBar.show(
+            context: context,
+            message: 'Successfully registered an account',
+            isSuccess: true,
+          );
+          Navigator.of(context).pop();
+        });
+      } on HttpException catch (error) {
+        TopSnackBar.show(
+          context: context,
+          message: error.toString(),
+          isSuccess: false,
+        );
+      } catch (error) {
+        TopSnackBar.show(
+          context: context,
+          message: 'Failed to sign you up! Please try again later',
+          isSuccess: false,
+        );
+      }
     }
 
     return Scaffold(
@@ -85,18 +107,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Full name *'),
-                const TextFieldWidget(
-                  hintText: 'Name',
-                  keyboardType: TextInputType.text,
-                ),
-                const Text('Email'),
+                const Text('Email *'),
                 TextFieldWidget(
                   hintText: 'example@email.com',
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailCtrl,
                 ),
-                const Text('Password'),
+                const Text('Password *'),
                 TextFieldWidget(
                   obscureText: true,
                   hintText: '********',
