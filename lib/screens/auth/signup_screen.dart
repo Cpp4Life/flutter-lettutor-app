@@ -25,8 +25,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _authPvd = Provider.of<AuthProvider>(context, listen: false);
-
     void handleRegister() async {
       final email = _emailCtrl.value.text;
       final password = _passwordCtrl.value.text;
@@ -73,14 +71,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
 
       try {
-        await _authPvd.register(email, password, () {
-          TopSnackBar.show(
-            context: context,
-            message: 'Successfully registered an account',
-            isSuccess: true,
-          );
-          Navigator.of(context).pop();
-        });
+        await Provider.of<AuthProvider>(context, listen: false).register(
+          email,
+          password,
+          () {
+            TopSnackBar.show(
+              context: context,
+              message: 'Successfully registered an account',
+              isSuccess: true,
+            );
+            Navigator.of(context).pop();
+          },
+        );
       } on HttpException catch (error) {
         TopSnackBar.show(
           context: context,
@@ -88,6 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           isSuccess: false,
         );
       } catch (error) {
+        debugPrint(error.toString());
         TopSnackBar.show(
           context: context,
           message: 'Failed to sign you up! Please try again later',

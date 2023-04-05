@@ -1,15 +1,66 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/assets/assets.dart';
 import '../../core/styles/styles.dart';
+import '../../helpers/index.dart';
+import '../../models/index.dart';
+import '../../providers/index.dart';
 import '../../widgets/index.dart';
 import '../index.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   static const routeName = '/login';
 
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailCtrl = TextEditingController();
+
+  final TextEditingController _passwordCtrl = TextEditingController();
+
+  void handleLogin() async {
+    final email = _emailCtrl.value.text;
+    final password = _passwordCtrl.value.text;
+
+    // empty validation
+    if (email.isEmpty || password.isEmpty) {
+      TopSnackBar.show(
+        context: context,
+        message: 'Please fill in all fields',
+        isSuccess: false,
+      );
+      return;
+    }
+
+    try {
+      await Provider.of<AuthProvider>(context, listen: false).login(
+        email,
+        password,
+        () {
+          Navigator.of(context).pop();
+        },
+      );
+    } on HttpException catch (error) {
+      TopSnackBar.show(
+        context: context,
+        message: error.toString(),
+        isSuccess: false,
+      );
+    } catch (error) {
+      debugPrint(error.toString());
+      TopSnackBar.show(
+        context: context,
+        message: 'Failed to login! Please try again later',
+        isSuccess: false,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +97,15 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
                 const Text('Email'),
-                const TextFieldWidget(
+                TextFieldWidget(
+                  controller: _emailCtrl,
                   hintText: 'example@email.com',
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const Text('Password'),
-                const TextFieldWidget(
+                TextFieldWidget(
                   obscureText: true,
+                  controller: _passwordCtrl,
                   hintText: '********',
                   keyboardType: TextInputType.text,
                 ),
@@ -69,12 +122,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      TabsScreen.routeName,
-                      (Route<dynamic> route) => false,
-                    );
-                  },
+                  onPressed: handleLogin,
                   style: ElevatedButton.styleFrom(
                     splashFactory: NoSplash.splashFactory,
                     padding: const EdgeInsets.all(10),
