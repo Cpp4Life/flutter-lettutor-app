@@ -21,8 +21,14 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailCtrl = TextEditingController();
-
   final TextEditingController _passwordCtrl = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailCtrl.dispose();
+    _passwordCtrl.dispose();
+    super.dispose();
+  }
 
   void handleLogin() async {
     final email = _emailCtrl.value.text;
@@ -73,28 +79,27 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Image.asset(
-                        LetTutorImages.logo,
-                        fit: BoxFit.cover,
-                        // height: 50,
-                      ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 85,
+                  child: Image.asset(
+                    LetTutorImages.logo,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: const Text(
+                    'LET TUTOR',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: LetTutorFontSizes.px24,
+                      color: LetTutorColors.primaryBlue,
+                      fontWeight: LetTutorFontWeights.semiBold,
                     ),
-                    const Text(
-                      'LET TUTOR',
-                      style: TextStyle(
-                        fontSize: LetTutorFontSizes.px24,
-                        color: LetTutorColors.primaryBlue,
-                        fontWeight: LetTutorFontWeights.semiBold,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 const Text('Email'),
                 TextFieldWidget(
@@ -113,11 +118,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   margin: const EdgeInsets.only(bottom: 5),
-                  child: const Text(
-                    'Forgot Password?',
-                    style: TextStyle(
-                      color: LetTutorColors.primaryBlue,
-                      fontSize: LetTutorFontSizes.px12,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(ForgotPasswordScreen.routeName);
+                    },
+                    child: const Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        color: LetTutorColors.primaryBlue,
+                        fontSize: LetTutorFontSizes.px12,
+                      ),
                     ),
                   ),
                 ),

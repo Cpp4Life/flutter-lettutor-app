@@ -14,8 +14,6 @@ class AuthProvider with ChangeNotifier {
   Token? _refreshToken;
 
   bool get isAuth {
-    debugPrint('isAuth called');
-    print(_accessToken?.token != null);
     return _accessToken?.token != null;
   }
 
@@ -72,5 +70,24 @@ class AuthProvider with ChangeNotifier {
 
   register(String email, String password, Function callback) async {
     return _authenticate(email, password, 'register', callback);
+  }
+
+  forgetPassword(String email, Function callback) async {
+    try {
+      final url = Uri.parse('$_url/user/forgotPassword');
+      final response = await http.post(
+        url,
+        body: {
+          'email': email,
+        },
+      );
+      final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      if (response.statusCode == 400 || response.statusCode == 500) {
+        throw HttpException(decodedResponse['message']);
+      }
+      await callback();
+    } catch (error) {
+      rethrow;
+    }
   }
 }

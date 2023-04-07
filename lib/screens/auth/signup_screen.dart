@@ -24,6 +24,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _confirmPasswordCtrl = TextEditingController();
 
   @override
+  void dispose() {
+    _emailCtrl.dispose();
+    _passwordCtrl.dispose();
+    _confirmPasswordCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     void handleRegister() async {
       final email = _emailCtrl.value.text;
