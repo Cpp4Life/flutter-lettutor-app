@@ -49,7 +49,8 @@ class _LoginScreenState extends State<LoginScreen> {
         email,
         password,
         () {
-          Navigator.of(context).pop();
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
         },
       );
     } on HttpException catch (error) {
