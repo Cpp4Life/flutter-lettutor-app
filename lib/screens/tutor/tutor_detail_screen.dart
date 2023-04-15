@@ -122,7 +122,9 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            const RatingWidget(),
+                            const RatingWidget(
+                              count: 0,
+                            ),
                             IconButton(
                               padding: const EdgeInsets.only(top: 5),
                               constraints: const BoxConstraints(),

@@ -133,8 +133,9 @@ class HomeScreen extends StatelessWidget {
                                   name: tutorsData.tutors[index].name as String,
                                   avatar: tutorsData.tutors[index].avatar,
                                   bio: tutorsData.tutors[index].bio as String,
-                                  tags: tutorsData.tutors[index].specialties?.split(',')
-                                      as List<String>,
+                                  specialties: tutorsData.tutors[index].specialties
+                                      ?.split(',') as List<String>,
+                                  rating: tutorsData.tutors[index].rating,
                                 );
                               },
                               shrinkWrap: true,

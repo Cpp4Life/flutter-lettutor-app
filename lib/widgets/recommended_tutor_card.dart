@@ -9,15 +9,17 @@ import 'index.dart';
 class RecommendedTutorCardWidget extends StatelessWidget {
   final String name;
   final String bio;
-  final List<String> tags;
+  final List<String> specialties;
   final String? avatar;
+  final double? rating;
 
   const RecommendedTutorCardWidget({
     Key? key,
     required this.name,
     required this.bio,
     required this.avatar,
-    required this.tags,
+    required this.specialties,
+    required this.rating,
   }) : super(key: key);
 
   @override
@@ -89,18 +91,20 @@ class RecommendedTutorCardWidget extends StatelessWidget {
                             ),
                             Container(
                               margin: const EdgeInsets.only(bottom: 5),
-                              child: const RatingWidget(),
+                              child: RatingWidget(
+                                count: rating == null ? 0 : rating!.round(),
+                              ),
                             ),
                             SizedBox(
                               height: 35,
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: tags.length,
+                                itemCount: specialties.length,
                                 itemBuilder: (context, index) {
                                   return Container(
                                     margin: const EdgeInsets.only(right: 5),
-                                    child: ChipTagWidget(tags[index]),
+                                    child: ChipTagWidget(specialties[index]),
                                   );
                                 },
                               ),
