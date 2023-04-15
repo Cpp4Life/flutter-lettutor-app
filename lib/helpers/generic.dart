@@ -12,6 +12,9 @@ class Generic {
       if (T == Feedback) {
         return Feedback.fromJSON(json) as T;
       }
+      if (T == Tutor) {
+        return Tutor.fromJSON(json) as T;
+      }
       return json;
     } catch (error, stackTrace) {
       developer.log(
