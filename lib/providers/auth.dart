@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/index.dart';
 
 class AuthProvider with ChangeNotifier {
-  final String? _url = dotenv.env['BASE_URL'];
+  final String _baseURL = dotenv.env['BASE_URL'] as String;
   User? _user;
   Token? _accessToken;
   Token? _refreshToken;
@@ -30,7 +30,9 @@ class AuthProvider with ChangeNotifier {
   _authenticate(
       String email, String password, String urlSegment, Function callback) async {
     try {
-      final url = Uri.parse('$_url/auth/$urlSegment');
+      // * e.g: https://domain.com/auth/login
+      // * e.g: https://domain.com/auth/register
+      final url = Uri.parse('$_baseURL/auth/$urlSegment');
       final body = {
         'email': email,
         'password': password,
@@ -74,7 +76,8 @@ class AuthProvider with ChangeNotifier {
 
   forgetPassword(String email, Function callback) async {
     try {
-      final url = Uri.parse('$_url/user/forgotPassword');
+      // * e.g: https://domain.com/user/forgotPassword
+      final url = Uri.parse('$_baseURL/user/forgotPassword');
       final response = await http.post(
         url,
         body: {

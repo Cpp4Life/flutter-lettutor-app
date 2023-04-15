@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import '../helpers/index.dart';
 import 'index.dart';
 
@@ -44,7 +42,7 @@ class Tutor {
   String? languages;
   String? specialties;
   String? resume;
-  Double? rating;
+  double? rating;
   bool? isNative;
   int? price;
   bool? isOnline;

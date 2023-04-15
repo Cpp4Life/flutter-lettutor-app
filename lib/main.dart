@@ -20,6 +20,13 @@ class LetTutorApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => AuthProvider(),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, TutorProvider>(
+          create: (context) => TutorProvider('', []),
+          update: (context, auth, previousTutors) => TutorProvider(
+            auth.token ?? '',
+            previousTutors == null ? [] : previousTutors.tutors,
+          ),
         )
       ],
       child: Consumer<AuthProvider>(

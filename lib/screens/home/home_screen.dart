@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
+import '../../providers/index.dart';
 import '../../widgets/index.dart';
 import '../index.dart';
 
@@ -109,21 +111,38 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(left: 15, right: 15),
-                child: ListView.builder(
-                  itemCount: recommendedTutors.length,
-                  itemBuilder: (context, index) {
-                    return RecommendedTutorCardWidget(
-                      name: recommendedTutors[index]['name'] as String,
-                      avatar: '',
-                      intro: recommendedTutors[index]['intro'] as String,
-                      tags: recommendedTutors[index]['tags'] as List<String>,
-                    );
-                  },
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                ),
+              FutureBuilder(
+                future: Provider.of<TutorProvider>(context, listen: false)
+                    .fetchAndSetTutors(page: 1, perPage: 9),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.error != null) {
+                    return const FreeContentWidget('No available tutors');
+                  }
+                  return Consumer<TutorProvider>(
+                    builder: (context, tutorsData, child) => tutorsData.tutors.isEmpty
+                        ? const FreeContentWidget('No available tutors')
+                        : Container(
+                            margin: const EdgeInsets.only(left: 15, right: 15),
+                            child: ListView.builder(
+                              itemCount: tutorsData.tutors.length,
+                              itemBuilder: (context, index) {
+                                return RecommendedTutorCardWidget(
+                                  key: ValueKey(tutorsData.tutors[index].id),
+                                  name: tutorsData.tutors[index].name as String,
+                                  avatar: tutorsData.tutors[index].avatar,
+                                  bio: tutorsData.tutors[index].bio as String,
+                                  tags: tutorsData.tutors[index].specialties?.split(',')
+                                      as List<String>,
+                                );
+                              },
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                            ),
+                          ),
+                  );
+                },
               )
             ],
           ),
@@ -132,36 +151,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-const recommendedTutors = [
-  {
-    "name": "Abby",
-    "tags": ["english"],
-    "intro":
-        "I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.",
-  },
-  {
-    "name": "Selena Phan",
-    "tags": ["english", "Vietnamese"],
-    "intro":
-        "I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.",
-  },
-  {
-    "name": "Kathy Huynh",
-    "tags": ["English", "Vietnamese"],
-    "intro":
-        "I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.",
-  },
-  {
-    "name": "Jovieline",
-    "tags": [
-      "english",
-      "Vietnamese",
-      "Basic French",
-      "Basic German",
-      "Basic Mandarin Chinese"
-    ],
-    "intro":
-        "I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.",
-  },
-];

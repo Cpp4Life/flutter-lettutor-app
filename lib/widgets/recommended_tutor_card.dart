@@ -7,17 +7,17 @@ import 'index.dart';
 
 class RecommendedTutorCardWidget extends StatelessWidget {
   final String name;
-  final String intro;
-  final String avatar;
+  final String bio;
   final List<String> tags;
+  final String? avatar;
 
   const RecommendedTutorCardWidget({
+    Key? key,
     required this.name,
-    required this.intro,
+    required this.bio,
     required this.avatar,
     required this.tags,
-    super.key,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +43,20 @@ class RecommendedTutorCardWidget extends StatelessWidget {
                         child: CircleAvatar(
                           backgroundColor: Colors.transparent,
                           radius: 30,
-                          child: Image.asset(
-                            LetTutorImages.avatar,
-                            fit: BoxFit.cover,
-                          ),
+                          child: avatar == null
+                              ? Image.asset(
+                                  LetTutorImages.avatar,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  avatar as String,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Image.asset(
+                                    LetTutorImages.avatar,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
                       Expanded(
@@ -55,10 +65,13 @@ class RecommendedTutorCardWidget extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  name,
-                                  style: const TextStyle(
-                                    fontSize: LetTutorFontSizes.px16,
+                                Container(
+                                  margin: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    name,
+                                    style: const TextStyle(
+                                      fontSize: LetTutorFontSizes.px16,
+                                    ),
                                   ),
                                 ),
                                 IconButton(
@@ -98,7 +111,7 @@ class RecommendedTutorCardWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  intro,
+                  bio,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 4,
                   style: const TextStyle(
