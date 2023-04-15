@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/styles/styles.dart';
+import '../../core/styles/index.dart';
 import '../../widgets/index.dart';
 
 class UpcomingScreen extends StatelessWidget {

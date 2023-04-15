@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../core/styles/styles.dart';
+import '../../core/styles/index.dart';
 import '../../widgets/index.dart';
 
 class MeetingScreen extends StatefulWidget {

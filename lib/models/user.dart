@@ -8,7 +8,7 @@ class User {
   List<String>? roles;
   String? language;
   DateTime? birthday;
-  late bool isActivated;
+  bool? isActivated;
   List<Map<String, dynamic>>? walletInfo;
   List<String>? courses;
   String? requireNote;
@@ -18,7 +18,7 @@ class User {
   bool? isPhoneActivated;
   int? timezone;
   String? studySchedule;
-  late bool canSendMessage;
+  bool? canSendMessage;
 
   User({
     required this.id,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../core/assets/assets.dart';
-import '../core/styles/styles.dart';
+import '../core/assets/index.dart';
+import '../core/styles/index.dart';
 
 class SettingButtonWidget extends StatelessWidget {
   final String title;

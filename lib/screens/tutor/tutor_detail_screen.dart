@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../core/assets/assets.dart';
-import '../../core/styles/styles.dart';
+import '../../core/assets/index.dart';
+import '../../core/styles/index.dart';
 import '../../models/course.dart';
 import '../../widgets/index.dart';
 

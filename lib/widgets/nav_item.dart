@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../core/styles/styles.dart';
+import '../core/styles/index.dart';
 
 class NavItem {
   static BottomNavigationBarItem generateItem(

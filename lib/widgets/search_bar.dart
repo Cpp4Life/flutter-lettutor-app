@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/styles/styles.dart';
+import '../core/styles/index.dart';
 
 class SearchBarWidget extends StatelessWidget {
   final String title;

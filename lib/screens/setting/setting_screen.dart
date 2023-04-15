@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../core/assets/assets.dart';
-import '../../core/styles/styles.dart';
+import '../../core/assets/index.dart';
+import '../../core/styles/index.dart';
 import '../../widgets/index.dart';
 import '../index.dart';
 
