@@ -42,7 +42,7 @@ class RecommendedTutorCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(bottom: 10, right: 10),
+                        margin: const EdgeInsets.only(right: 10),
                         height: 60,
                         width: 60,
                         child: ClipRRect(

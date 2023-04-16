@@ -17,7 +17,9 @@ class SessionHistoryScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const SearchBarWidget('Search session history'),
+            const SearchBarWidget(
+              title: 'Search session history',
+            ),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),

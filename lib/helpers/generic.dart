@@ -21,6 +21,12 @@ class Generic {
       if (T == Token) {
         return Token.fromJSON(json) as T;
       }
+      if (T == LearnTopic) {
+        return LearnTopic.fromJSON(json) as T;
+      }
+      if (T == TestPreparation) {
+        return TestPreparation.fromJSON(json) as T;
+      }
       return json;
     } catch (error, stackTrace) {
       developer.log(

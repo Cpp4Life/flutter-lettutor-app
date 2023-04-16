@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../core/assets/index.dart';
@@ -7,17 +8,19 @@ import 'index.dart';
 
 class TutorCardWidget extends StatelessWidget {
   final String name;
-  final String intro;
-  final String avatar;
-  final List<String> tags;
+  final String bio;
+  final List<String> specialties;
+  final String? avatar;
+  final double? rating;
 
   const TutorCardWidget({
+    Key? key,
     required this.name,
-    required this.intro,
+    required this.bio,
     required this.avatar,
-    required this.tags,
-    super.key,
-  });
+    required this.specialties,
+    required this.rating,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +42,23 @@ class TutorCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(right: 10, top: 10),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          radius: 30,
-                          child: Image.asset(
-                            LetTutorImages.avatar,
+                        margin: const EdgeInsets.only(right: 10),
+                        height: 60,
+                        width: 60,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: CachedNetworkImage(
+                            imageUrl: avatar ?? 'https://picsum.photos/200/300',
                             fit: BoxFit.cover,
+                            width: double.maxFinite,
+                            height: double.maxFinite,
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                CircularProgressIndicator(
+                                    value: downloadProgress.progress),
+                            errorWidget: (context, url, error) => Image.asset(
+                              LetTutorImages.avatar,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
@@ -54,22 +67,27 @@ class TutorCardWidget extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Text(
-                                  name,
-                                  style: const TextStyle(
-                                    fontSize: LetTutorFontSizes.px16,
+                                Container(
+                                  margin: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    name,
+                                    style: const TextStyle(
+                                      fontSize: LetTutorFontSizes.px16,
+                                    ),
                                   ),
                                 ),
                                 const Spacer(),
-                                const Text(
-                                  '5.00',
-                                  style: TextStyle(
+                                Text(
+                                  rating == null ? '0' : rating!.round().toString(),
+                                  style: const TextStyle(
                                     fontSize: LetTutorFontSizes.px16,
                                     color: LetTutorColors.primaryRed,
                                     fontWeight: LetTutorFontWeights.medium,
                                   ),
                                 ),
-                                const StarWidget(),
+                                const StarWidget(
+                                  isFilled: true,
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -77,11 +95,11 @@ class TutorCardWidget extends StatelessWidget {
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: tags.length,
+                                itemCount: specialties.length,
                                 itemBuilder: (context, index) {
                                   return Container(
                                     margin: const EdgeInsets.only(right: 5),
-                                    child: ChipTagWidget(tags[index]),
+                                    child: ChipTagWidget(specialties[index]),
                                   );
                                 },
                               ),
@@ -93,7 +111,7 @@ class TutorCardWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  intro,
+                  bio,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 4,
                   style: const TextStyle(

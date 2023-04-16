@@ -122,7 +122,9 @@ class Tutor {
     updatedAt = strToDateTime(json['updatedAt']);
     deletedAt = strToDateTime(json['deletedAt']);
     studentGroupId = json['studentGroupId'];
-    feedbacks = Generic.fromJSON<List<Feedback>, Feedback>(json['feedbacks']);
+    feedbacks = json['feedbacks'] == null
+        ? []
+        : Generic.fromJSON<List<Feedback>, Feedback>(json['feedbacks']);
     userId = json['userId'];
     video = json['video'];
     bio = json['bio'];

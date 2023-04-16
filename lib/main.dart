@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:lettutor_app/providers/learn_topic.dart';
+import 'package:lettutor_app/providers/test_preparation.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/index.dart';
@@ -27,6 +29,12 @@ class LetTutorApp extends StatelessWidget {
             auth.token ?? '',
             previousTutors == null ? [] : previousTutors.tutors,
           ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LearnTopicProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TestPreparationProvider(),
         )
       ],
       child: Consumer<AuthProvider>(

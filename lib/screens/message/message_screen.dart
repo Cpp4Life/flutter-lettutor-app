@@ -15,7 +15,9 @@ class MessageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SearchBarWidget('Search Message'),
+        const SearchBarWidget(
+          title: 'Search Message',
+        ),
         _messages == 0
             ? const FreeContentWidget('No recent chat')
             : Expanded(
