@@ -35,7 +35,19 @@ class LetTutorApp extends StatelessWidget {
           theme: ThemeData(
             fontFamily: 'Poppins',
           ),
-          home: auth.isAuth ? const TabsScreen() : const OnboardScreen(),
+          home: auth.isAuth
+              ? const TabsScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return const OnboardScreen();
+                  },
+                ),
           routes: {
             OnboardScreen.routeName: (context) => const OnboardScreen(),
             TabsScreen.routeName: (context) => const TabsScreen(),

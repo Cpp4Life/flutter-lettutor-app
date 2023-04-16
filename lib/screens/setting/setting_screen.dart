@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
+import '../../providers/index.dart';
 import '../../widgets/index.dart';
 import '../index.dart';
 
@@ -112,6 +114,7 @@ class SettingScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pushReplacementNamed(OnboardScreen.routeName);
+                Provider.of<AuthProvider>(context, listen: false).logout();
               },
               style: ElevatedButton.styleFrom(
                 splashFactory: NoSplash.splashFactory,

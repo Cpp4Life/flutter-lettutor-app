@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../helpers/index.dart';
 import '../models/index.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -12,6 +14,7 @@ class AuthProvider with ChangeNotifier {
   User? _user;
   Token? _accessToken;
   Token? _refreshToken;
+  Timer? _authTimer;
 
   bool get isAuth {
     return _accessToken?.token != null;
@@ -47,16 +50,18 @@ class AuthProvider with ChangeNotifier {
       if (response.statusCode == 400 || response.statusCode == 500) {
         throw HttpException(decodedResponse['message']);
       }
-      _user = User.fromJSON(decodedResponse['user']);
-      _accessToken = Token.fromJSON(decodedResponse['tokens']['access']);
-      _refreshToken = Token.fromJSON(decodedResponse['tokens']['refresh']);
+      _user = Generic.fromJSON<User, void>(decodedResponse['user']);
+      _accessToken = Generic.fromJSON<Token, void>(decodedResponse['tokens']['access']);
+      _refreshToken = Generic.fromJSON<Token, void>(decodedResponse['tokens']['refresh']);
       await callback();
       notifyListeners();
       final prefs = await SharedPreferences.getInstance();
       final userData = jsonEncode(
         {
-          'token': _accessToken?.token,
-          'expiryDate': _accessToken?.expires?.toIso8601String(),
+          'accessToken': _accessToken?.token,
+          'accessTokenExp': _accessToken?.expires?.toIso8601String(),
+          'refreshToken': _refreshToken?.token,
+          'refreshTokenExp': _refreshToken?.expires?.toIso8601String(),
           'userID': _user?.id,
         },
       );
@@ -92,5 +97,75 @@ class AuthProvider with ChangeNotifier {
     } catch (error) {
       rethrow;
     }
+  }
+
+  Future<bool> tryAutoLogin() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (!prefs.containsKey('userData')) {
+        return false;
+      }
+
+      final extractedUserData = jsonDecode(prefs.getString('userData')!);
+      if (extractedUserData == null) {
+        return false;
+      }
+
+      final accessTokenExp = DateTime.parse(extractedUserData['accessTokenExp']);
+      final refreshTokenExp = DateTime.parse(extractedUserData['refreshTokenExp']);
+
+      // access token and refresh token expired
+      if (_isExpired(accessTokenExp) && _isExpired(refreshTokenExp)) {
+        return false;
+      }
+
+      // refresh token not expired then fetch new access token
+      final url = Uri.parse('$_baseURL/auth/refresh-token');
+      final response = await http.post(
+        url,
+        body: {
+          'refreshToken': extractedUserData['refreshToken'],
+          'timezone': '7',
+        },
+      );
+      final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      if (response.statusCode >= 400) {
+        throw HttpException(decodedResponse['message']);
+      }
+      _user = Generic.fromJSON<User, void>(decodedResponse['user']);
+      _accessToken = Generic.fromJSON<Token, void>(decodedResponse['tokens']['access']);
+      _refreshToken = Generic.fromJSON<Token, void>(decodedResponse['tokens']['refresh']);
+      notifyListeners();
+      _autoLogout();
+      return true;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  void logout() async {
+    _user = null;
+    _accessToken = null;
+    _refreshToken = null;
+    if (_authTimer != null) {
+      _authTimer!.cancel();
+      _authTimer = null;
+    }
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
+
+  void _autoLogout() {
+    if (_authTimer != null) {
+      _authTimer!.cancel();
+    }
+
+    final timeToExp = _accessToken!.expires!.difference(DateTime.now()).inSeconds;
+    _authTimer = Timer(Duration(seconds: timeToExp), logout);
+  }
+
+  bool _isExpired(DateTime date) {
+    return date.isBefore(DateTime.now());
   }
 }
