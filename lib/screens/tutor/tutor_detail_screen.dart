@@ -48,7 +48,6 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
         _tutor = tutor;
         _chewieController = ChewieController(
           videoPlayerController: VideoPlayerController.network(_tutor.video as String),
-          aspectRatio: 9 / 16,
           autoPlay: true,
           looping: false,
           deviceOrientationsOnEnterFullScreen: [
@@ -66,6 +65,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
 
   @override
   void dispose() {
+    _chewieController!.pause();
     _chewieController!.dispose();
     super.dispose();
   }
@@ -229,7 +229,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                     margin: _margin,
                     child: InfoChipWidget(
                       title: 'Languages',
-                      tags: [_tutor.languages ?? ''],
+                      tags: _tutor.languages?.split(',') ?? [],
                     ),
                   ),
                   Container(
