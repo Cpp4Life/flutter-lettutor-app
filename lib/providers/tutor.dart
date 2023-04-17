@@ -70,4 +70,20 @@ class TutorProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<Tutor> searchTutorByID(String id) async {
+    try {
+      // * e.g: https://domain.com/tutor/:tutorId
+      final url = Uri.parse('$_baseURL/tutor/$id');
+      final headers = Http.getHeaders(token: _authToken as String);
+      final response = await http.get(url, headers: headers);
+      final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      if (response.statusCode >= 400) {
+        throw HttpException(decodedResponse['message']);
+      }
+      return Generic.fromJSON<Tutor, void>(decodedResponse);
+    } catch (error) {
+      rethrow;
+    }
+  }
 }

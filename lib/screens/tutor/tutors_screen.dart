@@ -110,6 +110,7 @@ class _TutorsScreenState extends State<TutorsScreen> {
                           itemBuilder: (context, index) {
                             return TutorCardWidget(
                               key: ValueKey(tutorsData.tutors[index].id),
+                              id: tutorsData.tutors[index].userId as String,
                               name: tutorsData.tutors[index].name as String,
                               avatar: tutorsData.tutors[index].avatar,
                               bio: tutorsData.tutors[index].bio as String,

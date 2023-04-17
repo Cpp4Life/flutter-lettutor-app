@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../core/assets/index.dart';
 import '../core/styles/index.dart';
 import '../screens/tutor/tutor_detail_screen.dart';
 import 'index.dart';
@@ -35,33 +33,14 @@ class RecommendedTutorCardWidget extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   margin: const EdgeInsets.only(bottom: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        height: 60,
-                        width: 60,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: CachedNetworkImage(
-                            imageUrl: avatar ?? 'https://picsum.photos/200/300',
-                            fit: BoxFit.cover,
-                            width: double.maxFinite,
-                            height: double.maxFinite,
-                            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                CircularProgressIndicator(
-                                    value: downloadProgress.progress),
-                            errorWidget: (context, url, error) => Image.asset(
-                              LetTutorImages.avatar,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
+                      CachedImageNetworkWidget(avatar),
                       Expanded(
                         child: Column(
                           children: [

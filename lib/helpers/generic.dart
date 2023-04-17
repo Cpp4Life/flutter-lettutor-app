@@ -1,5 +1,3 @@
-import 'dart:developer' as developer;
-
 import '../models/index.dart';
 
 class Generic {
@@ -27,14 +25,15 @@ class Generic {
       if (T == TestPreparation) {
         return TestPreparation.fromJSON(json) as T;
       }
+      if (T == UserCourse) {
+        return UserCourse.fromJSON(json) as T;
+      }
+      if (T == TutorCourse) {
+        return TutorCourse.fromJSON(json) as T;
+      }
       return json;
     } catch (error, stackTrace) {
-      developer.log(
-        error.toString(),
-        time: DateTime.now(),
-        stackTrace: stackTrace,
-      );
-      return [] as T;
+      rethrow;
     }
   }
 

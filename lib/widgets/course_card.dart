@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:lettutor_app/models/index.dart';
 
+import '../core/assets/index.dart';
 import '../core/styles/index.dart';
-import '../models/course.dart';
 import '../screens/index.dart';
 
 class CourseCardWidget extends StatelessWidget {
-  final Course course;
+  final UserCourse course;
 
   const CourseCardWidget(this.course, {super.key});
 
@@ -21,57 +22,51 @@ class CourseCardWidget extends StatelessWidget {
         child: SizedBox(
           width: 200,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ClipRRect(
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
                 child: SizedBox(
                   height: 150,
                   child: Image.asset(
-                    course.imageUrl,
+                    LetTutorImages.banner,
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               Container(
                 padding: const EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      course.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: LetTutorFontSizes.px16,
-                        fontWeight: LetTutorFontWeights.semiBold,
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            course.level,
-                            style: const TextStyle(
-                              fontSize: LetTutorFontSizes.px12,
-                              color: LetTutorColors.secondaryDarkBlue,
-                            ),
-                          ),
-                          Text(
-                            '${course.lessons} Lessons',
-                            style: const TextStyle(
-                              fontSize: LetTutorFontSizes.px12,
-                              color: LetTutorColors.secondaryDarkBlue,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                child: Text(
+                  course.name ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: LetTutorFontSizes.px16,
+                    fontWeight: LetTutorFontWeights.semiBold,
+                  ),
                 ),
-              )
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 15),
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    splashFactory: NoSplash.splashFactory,
+                    padding: const EdgeInsets.all(10),
+                    backgroundColor: LetTutorColors.primaryBlue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
+                  child: const Text(
+                    'Explore',
+                    style: TextStyle(
+                      fontWeight: LetTutorFontWeights.medium,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

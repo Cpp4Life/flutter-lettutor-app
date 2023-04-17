@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 import '../helpers/index.dart';
 import 'index.dart';
 
@@ -46,6 +48,7 @@ class Tutor {
   bool? isNative;
   int? price;
   bool? isOnline;
+  User? user;
 
   Tutor({
     required this.id,
@@ -92,10 +95,11 @@ class Tutor {
     this.isNative = false,
     this.price,
     this.isOnline = false,
+    this.user,
   });
 
   Tutor.fromJSON(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id'] ?? const Uuid().v4();
     level = json['level'];
     email = json['email'];
     google = json['google'];
@@ -141,5 +145,6 @@ class Tutor {
     isNative = json['isNative'];
     price = json['price'];
     isOnline = json['isOnline'];
+    user = json['User'] == null ? null : Generic.fromJSON<User, void>(json['User']);
   }
 }

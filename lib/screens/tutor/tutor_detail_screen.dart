@@ -2,11 +2,13 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
-import '../../models/course.dart';
+import '../../models/index.dart';
+import '../../providers/index.dart';
 import '../../widgets/index.dart';
 
 class TutorDetailScreen extends StatefulWidget {
@@ -20,31 +22,51 @@ class TutorDetailScreen extends StatefulWidget {
 
 class _TutorDetailScreenState extends State<TutorDetailScreen> {
   final EdgeInsetsGeometry _margin = const EdgeInsets.only(left: 20, right: 20, top: 10);
-
-  late ChewieController _chewieController;
+  ChewieController? _chewieController;
+  late Tutor _tutor = Tutor(id: '');
+  var _isInit = true;
 
   @override
   void initState() {
-    _chewieController = ChewieController(
-      videoPlayerController: VideoPlayerController.network(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-      ),
-      autoPlay: true,
-      looping: false,
-      deviceOrientationsOnEnterFullScreen: [
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ],
-      deviceOrientationsAfterFullScreen: [
-        DeviceOrientation.portraitUp,
-      ],
-    );
     super.initState();
   }
 
   @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      fetchTutor();
+    }
+    super.didChangeDependencies();
+  }
+
+  void fetchTutor() async {
+    final tutorId = ModalRoute.of(context)?.settings.arguments;
+    if (tutorId != null) {
+      final tutor = await Provider.of<TutorProvider>(context, listen: false)
+          .searchTutorByID(tutorId as String);
+      setState(() {
+        _tutor = tutor;
+        _chewieController = ChewieController(
+          videoPlayerController: VideoPlayerController.network(_tutor.video as String),
+          aspectRatio: 9 / 16,
+          autoPlay: true,
+          looping: false,
+          deviceOrientationsOnEnterFullScreen: [
+            DeviceOrientation.landscapeLeft,
+            DeviceOrientation.landscapeRight,
+          ],
+          deviceOrientationsAfterFullScreen: [
+            DeviceOrientation.portraitUp,
+          ],
+        );
+        _isInit = false;
+      });
+    }
+  }
+
+  @override
   void dispose() {
-    _chewieController.dispose();
+    _chewieController!.dispose();
     super.dispose();
   }
 
@@ -67,9 +89,11 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
               ),
               titleSpacing: -10,
               flexibleSpace: FlexibleSpaceBar(
-                background: Chewie(
-                  controller: _chewieController,
-                ),
+                background: _chewieController == null
+                    ? Container()
+                    : Chewie(
+                        controller: _chewieController!,
+                      ),
               ),
             ),
             SliverList(
@@ -80,37 +104,30 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          radius: 30,
-                          child: Image.asset(
-                            LetTutorImages.avatar,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                        CachedImageNetworkWidget(_tutor.user?.avatar),
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
-                                  'Abby',
-                                  style: TextStyle(
+                                  _tutor.user?.name ?? '',
+                                  style: const TextStyle(
                                     fontSize: LetTutorFontSizes.px14,
                                     fontWeight: LetTutorFontWeights.medium,
                                   ),
                                 ),
                                 Text(
-                                  'Teacher',
-                                  style: TextStyle(
+                                  _tutor.profession ?? '',
+                                  style: const TextStyle(
                                     fontSize: LetTutorFontSizes.px12,
                                     color: LetTutorColors.greyScaleDarkGrey,
                                   ),
                                 ),
                                 Text(
-                                  'Philippines (the)',
-                                  style: TextStyle(
+                                  _tutor.country ?? _tutor.user?.country ?? '',
+                                  style: const TextStyle(
                                     fontSize: LetTutorFontSizes.px14,
                                     fontWeight: LetTutorFontWeights.light,
                                   ),
@@ -122,8 +139,8 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            const RatingWidget(
-                              count: 0,
+                            RatingWidget(
+                              count: _tutor.rating == null ? 0 : _tutor.rating!.round(),
                             ),
                             IconButton(
                               padding: const EdgeInsets.only(top: 5),
@@ -202,75 +219,59 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                   ),
                   Container(
                     margin: _margin,
-                    child: const Text(
-                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                      style: TextStyle(fontSize: LetTutorFontSizes.px12),
+                    child: Text(
+                      _tutor.bio ?? '',
+                      style: const TextStyle(fontSize: LetTutorFontSizes.px12),
                       textAlign: TextAlign.justify,
                     ),
                   ),
                   Container(
                     margin: _margin,
-                    child: const InfoChipWidget(
+                    child: InfoChipWidget(
                       title: 'Languages',
-                      tags: ['english'],
+                      tags: [_tutor.languages ?? ''],
                     ),
                   ),
                   Container(
                     margin: _margin,
-                    child: const InfoTextWidget(
+                    child: InfoTextWidget(
                       title: 'Education',
-                      content:
-                          'Bachelor of Elementary education at Stratford International School.',
+                      content: _tutor.education ?? '',
                     ),
                   ),
                   Container(
                     margin: _margin,
-                    child: const InfoTextWidget(
+                    child: InfoTextWidget(
                       title: 'Experience',
-                      content:
-                          'I have 3 years teaching experience both kids and adult as a classroom teacher and as em ESL Teacher in Vietnam in public schools and centers.',
+                      content: _tutor.experience ?? '',
                     ),
                   ),
                   Container(
                     margin: _margin,
-                    child: const InfoTextWidget(
+                    child: InfoTextWidget(
                       title: 'Interests',
-                      content:
-                          'traveling, reading, watching movies, learn foreign language.',
+                      content: _tutor.interests ?? '',
                     ),
                   ),
                   Container(
                     margin: _margin,
-                    child: const InfoTextWidget(
+                    child: InfoTextWidget(
                       title: 'Profession',
-                      content: 'Teacher.',
+                      content: _tutor.profession ?? '',
                     ),
                   ),
                   Container(
                     margin: _margin,
-                    child: const InfoChipWidget(
-                      title: 'Languages',
-                      tags: ['English for kids', 'STARTERS', 'MOVERS', 'Conversational'],
+                    child: InfoChipWidget(
+                      title: 'Specialties',
+                      tags: _tutor.specialties?.split(',') ?? [],
                     ),
                   ),
                   Container(
                     margin: _margin,
-                    child: const InfoCourseWidget(
+                    child: InfoCourseWidget(
                       title: 'Course',
-                      courses: [
-                        Course(
-                          name: 'Basic conversation topics',
-                          imageUrl: LetTutorImages.banner,
-                          level: 'Beginner',
-                          lessons: 10,
-                        ),
-                        Course(
-                          name: 'Class - Elementary 2',
-                          imageUrl: LetTutorImages.course,
-                          level: 'Beginner',
-                          lessons: 10,
-                        )
-                      ],
+                      courses: _tutor.user?.courses ?? [],
                     ),
                   ),
                   Container(
