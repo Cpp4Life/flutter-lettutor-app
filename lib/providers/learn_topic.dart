@@ -24,8 +24,7 @@ class LearnTopicProvider with ChangeNotifier {
       if (response.statusCode >= 400) {
         throw HttpException(decodedResponse['message']);
       }
-      _learnTopics = Generic.fromJSON<List<LearnTopic>, LearnTopic>(decodedResponse);
-      return [..._learnTopics];
+      return Generic.fromJSON<List<LearnTopic>, LearnTopic>(decodedResponse);
     } catch (error) {
       rethrow;
     }

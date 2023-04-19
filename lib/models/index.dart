@@ -1,4 +1,5 @@
 export 'course.dart';
+export 'course_category.dart';
 export 'feedback.dart';
 export 'http/http.dart';
 export 'http/http_exception.dart';

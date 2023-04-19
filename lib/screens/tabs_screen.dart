@@ -22,7 +22,7 @@ class _TabsScreenState extends State<TabsScreen> {
   void initState() {
     _pages = [
       {'page': const HomeScreen(), 'title': 'Home'},
-      {'page': const MessageScreen(), 'title': 'Chats'},
+      {'page': const CourseScreen(), 'title': 'Course'},
       {'page': const UpcomingScreen(), 'title': 'Upcoming'},
       {'page': const TutorsScreen(), 'title': 'Tutors'},
       {'page': const SettingScreen(), 'title': 'Settings'},
@@ -83,8 +83,8 @@ class _TabsScreenState extends State<TabsScreen> {
           ),
           NavItem.generateItem(
             context,
-            svgSource: LetTutorSvg.message,
-            label: 'Message',
+            svgSource: LetTutorSvg.course,
+            label: 'Course',
           ),
           NavItem.generateItem(
             context,

@@ -28,6 +28,12 @@ class LetTutorApp extends StatelessWidget {
             previousTutors == null ? [] : previousTutors.tutors,
           ),
         ),
+        ChangeNotifierProxyProvider<AuthProvider, CourseProvider>(
+          create: (context) => CourseProvider(''),
+          update: (context, auth, previousCourses) => CourseProvider(
+            auth.token ?? '',
+          ),
+        ),
         ChangeNotifierProvider(
           create: (context) => LearnTopicProvider(),
         ),
@@ -63,6 +69,7 @@ class LetTutorApp extends StatelessWidget {
             TutorsScreen.routeName: (context) => const TutorsScreen(),
             TutorDetailScreen.routeName: (context) => const TutorDetailScreen(),
             CourseScreen.routeName: (context) => const CourseScreen(),
+            CourseDetailScreen.routeName: (context) => const CourseDetailScreen(),
             BookingHistoryScreen.routeName: (context) => const BookingHistoryScreen(),
             MessageScreen.routeName: (context) => const MessageScreen(),
             UpcomingScreen.routeName: (context) => const UpcomingScreen(),

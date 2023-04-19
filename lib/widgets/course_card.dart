@@ -14,7 +14,7 @@ class CourseCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(CourseScreen.routeName);
+        Navigator.of(context).pushNamed(CourseDetailScreen.routeName);
       },
       child: Card(
         elevation: 5,
