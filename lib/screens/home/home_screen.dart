@@ -129,6 +129,7 @@ class HomeScreen extends StatelessWidget {
                               itemCount: tutorsData.tutors.length,
                               itemBuilder: (context, index) {
                                 return RecommendedTutorCardWidget(
+                                  id: tutorsData.tutors[index].userId as String,
                                   key: ValueKey(tutorsData.tutors[index].id),
                                   name: tutorsData.tutors[index].name as String,
                                   avatar: tutorsData.tutors[index].avatar,

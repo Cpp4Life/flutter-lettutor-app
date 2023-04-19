@@ -5,6 +5,7 @@ import '../screens/tutor/tutor_detail_screen.dart';
 import 'index.dart';
 
 class RecommendedTutorCardWidget extends StatelessWidget {
+  final String id;
   final String name;
   final String bio;
   final List<String> specialties;
@@ -13,6 +14,7 @@ class RecommendedTutorCardWidget extends StatelessWidget {
 
   const RecommendedTutorCardWidget({
     Key? key,
+    required this.id,
     required this.name,
     required this.bio,
     required this.avatar,
@@ -26,7 +28,10 @@ class RecommendedTutorCardWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context).pushNamed(TutorDetailScreen.routeName);
+          Navigator.of(context).pushNamed(
+            TutorDetailScreen.routeName,
+            arguments: id,
+          );
         },
         child: Card(
           elevation: 4,

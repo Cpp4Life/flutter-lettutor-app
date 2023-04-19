@@ -26,7 +26,6 @@ class InfoCourseWidget extends StatelessWidget {
           ),
         ),
         Container(
-          margin: const EdgeInsets.only(top: 5),
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: SizedBox(
             height: courses.isEmpty ? 100 : 275,
