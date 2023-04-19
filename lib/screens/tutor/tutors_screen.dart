@@ -62,10 +62,13 @@ class _TutorsScreenState extends State<TutorsScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SearchBarWidget(
-          title: 'Search Tutors',
-          controller: _searchCtrl,
-          onChanged: handleChange,
+        Container(
+          margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+          child: SearchBarWidget(
+            title: 'Search Tutors',
+            controller: _searchCtrl,
+            onChanged: handleChange,
+          ),
         ),
         Container(
           margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
