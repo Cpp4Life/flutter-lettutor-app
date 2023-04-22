@@ -19,6 +19,16 @@ class CourseScreen extends StatefulWidget {
 
 class _CourseScreenState extends State<CourseScreen> {
   final List<CourseCategory> _categories = [];
+  final Map<String, String> _levels = {
+    '0': 'Any level',
+    '1': 'Beginner',
+    '2': 'High Beginner',
+    '3': 'Pre-Intermediate',
+    '4': 'Intermediate',
+    '5': 'Upper-Intermediate',
+    '6': 'Advanced',
+    '7': 'Proficiency',
+  };
 
   @override
   void initState() {
@@ -49,8 +59,8 @@ class _CourseScreenState extends State<CourseScreen> {
             Expanded(
               child: TabBarView(
                 children: [
-                  CourseTabWidget(_categories),
-                  EbookTabWidget(_categories),
+                  CourseTabWidget(_categories, _levels),
+                  EbookTabWidget(_categories, _levels),
                 ],
               ),
             )

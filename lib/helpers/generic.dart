@@ -1,5 +1,3 @@
-import 'package:lettutor_app/models/course_category.dart';
-
 import '../models/index.dart';
 
 class Generic {
@@ -35,6 +33,15 @@ class Generic {
       }
       if (T == CourseCategory) {
         return CourseCategory.fromJSON(json) as T;
+      }
+      if (T == Course) {
+        return Course.fromJSON(json) as T;
+      }
+      if (T == Topic) {
+        return Topic.fromJSON(json) as T;
+      }
+      if (T == Ebook) {
+        return Ebook.fromJSON(json) as T;
       }
       return json;
     } catch (error, stackTrace) {

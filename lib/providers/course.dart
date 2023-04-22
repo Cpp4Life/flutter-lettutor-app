@@ -11,10 +11,17 @@ class CourseProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
   final String? _authToken;
 
+  List<Course> _courses = [];
+
+  List<Course> get courses {
+    return [..._courses];
+  }
+
   CourseProvider(this._authToken);
 
   Future<List<CourseCategory>> fetchAndSetCourseCategory() async {
     try {
+      // * e.g: https://domain.com/content-category
       final url = Uri.parse('$_baseURL/content-category');
       final headers = Http.getHeaders(token: _authToken as String);
       final response = await http.get(url, headers: headers);
@@ -24,6 +31,40 @@ class CourseProvider with ChangeNotifier {
       }
       return Generic.fromJSON<List<CourseCategory>, CourseCategory>(
           decodedResponse['rows']);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future fetchAndSetCourses({
+    required int page,
+    required int size,
+    String q = '',
+    String categoryId = '',
+  }) async {
+    try {
+      // * e.g: https://domain.com/course?page=1&size=100
+      // * e.g: https://domain.com/course?page=1&size=100&q=""
+      // * e.g: https://domain.com/course?page=1&size=100&categoryId[]=""
+      // * e.g: https://domain.com/course?page=1&size=100&q=""&categoryId[]=""
+      String urlBuilder = '$_baseURL/course?page=$page&size=$size';
+      if (q.isNotEmpty) {
+        urlBuilder += '&q=$q';
+      }
+      if (categoryId.isNotEmpty) {
+        urlBuilder += '&categoryId[]=$categoryId';
+      }
+
+      final url = Uri.parse(urlBuilder);
+      final headers = Http.getHeaders(token: _authToken as String);
+      final response = await http.get(url, headers: headers);
+      final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      if (response.statusCode >= 400) {
+        throw HttpException(decodedResponse['message']);
+      }
+      final jsonList = decodedResponse['data']['rows'] as List<dynamic>;
+      _courses = Generic.fromJSON<List<Course>, Course>(jsonList);
+      notifyListeners();
     } catch (e) {
       rethrow;
     }

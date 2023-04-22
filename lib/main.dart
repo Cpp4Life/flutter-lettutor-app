@@ -34,6 +34,12 @@ class LetTutorApp extends StatelessWidget {
             auth.token ?? '',
           ),
         ),
+        ChangeNotifierProxyProvider<AuthProvider, EbookProvider>(
+          create: (context) => EbookProvider(''),
+          update: (context, auth, previousCourses) => EbookProvider(
+            auth.token ?? '',
+          ),
+        ),
         ChangeNotifierProvider(
           create: (context) => LearnTopicProvider(),
         ),
