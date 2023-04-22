@@ -1,3 +1,5 @@
+import 'package:lettutor_app/models/index.dart';
+
 import '../helpers/index.dart';
 
 class Course {
@@ -19,6 +21,7 @@ class Course {
   DateTime? updatedAt;
   List<Topic>? topics;
   List<CourseCategory>? categories;
+  List<Tutor>? users;
 
   Course({
     required this.id,
@@ -39,6 +42,7 @@ class Course {
     this.updatedAt,
     this.topics,
     this.categories,
+    this.users,
   });
 
   Course.fromJSON(Map<String, dynamic> json) {
@@ -58,9 +62,14 @@ class Course {
     displayOrder = json['displayOrder'];
     createdAt = strToDateTime(json['createdAt']);
     updatedAt = strToDateTime(json['updatedAt']);
-    topics = Generic.fromJSON<List<Topic>, Topic>(json['topics']);
-    categories =
-        Generic.fromJSON<List<CourseCategory>, CourseCategory>(json['categories']);
+    topics = json['topics'] == null
+        ? []
+        : Generic.fromJSON<List<Topic>, Topic>(json['topics']);
+    categories = json['categories'] == null
+        ? []
+        : Generic.fromJSON<List<CourseCategory>, CourseCategory>(json['categories']);
+    users =
+        json['users'] == null ? [] : Generic.fromJSON<List<Tutor>, Tutor>(json['users']);
   }
 }
 

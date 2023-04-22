@@ -42,7 +42,8 @@ class Ebook {
     updatedAt = strToDateTime(json['updatedAt']);
     isPrivate = json['isPrivate'];
     createdBy = json['createdBy'];
-    categories =
-        Generic.fromJSON<List<CourseCategory>, CourseCategory>(json['categories']);
+    categories = json['categories'] == null
+        ? []
+        : Generic.fromJSON<List<CourseCategory>, CourseCategory>(json['categories']);
   }
 }

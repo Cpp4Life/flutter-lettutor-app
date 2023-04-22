@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lettutor_app/core/styles/index.dart';
 
 import '../../../core/assets/index.dart';
+import '../../../screens/index.dart';
 
 class CourseItemWidget extends StatelessWidget {
   final String id;
@@ -23,7 +24,12 @@ class CourseItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          CourseDetailScreen.routeName,
+          arguments: id,
+        );
+      },
       child: Card(
         elevation: 5,
         shape: const RoundedRectangleBorder(

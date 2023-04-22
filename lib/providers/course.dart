@@ -69,4 +69,20 @@ class CourseProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<Course> findCourseById(String id) async {
+    try {
+      // * e.g: https://domain.com/course/:courseId
+      final url = Uri.parse('$_baseURL/course/$id');
+      final headers = Http.getHeaders(token: _authToken as String);
+      final response = await http.get(url, headers: headers);
+      final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      if (response.statusCode >= 400) {
+        throw HttpException(decodedResponse['message']);
+      }
+      return Generic.fromJSON<Course, void>(decodedResponse['data']);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
