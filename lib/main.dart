@@ -40,6 +40,12 @@ class LetTutorApp extends StatelessWidget {
             auth.token ?? '',
           ),
         ),
+        ChangeNotifierProxyProvider<AuthProvider, UserProvider>(
+          create: (context) => UserProvider(''),
+          update: (context, auth, previous) => UserProvider(
+            auth.token ?? '',
+          ),
+        ),
         ChangeNotifierProvider(
           create: (context) => LearnTopicProvider(),
         ),
@@ -83,6 +89,7 @@ class LetTutorApp extends StatelessWidget {
             ViewFeedbacksScreen.routeName: (context) => const ViewFeedbacksScreen(),
             SessionHistoryScreen.routeName: (context) => const SessionHistoryScreen(),
             AdvancedSettingsScreen.routeName: (context) => const AdvancedSettingsScreen(),
+            ProfileScreen.routeName: (context) => const ProfileScreen(),
           },
         ),
       ),

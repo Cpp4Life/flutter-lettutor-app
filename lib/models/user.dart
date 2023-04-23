@@ -13,7 +13,7 @@ class User {
   String? language;
   String? birthday;
   bool? isActivated;
-  List<Map<String, dynamic>>? walletInfo;
+  WalletInfo? walletInfo;
   String? requireNote;
   String? level;
   List<LearnTopic>? learnTopics;
@@ -26,6 +26,7 @@ class User {
   bool? caredByStaffId;
   String? studentGroupId;
   List<UserCourse>? courses;
+  num? avgRating;
 
   User({
     required this.id,
@@ -49,6 +50,7 @@ class User {
     this.caredByStaffId,
     this.studentGroupId,
     this.courses,
+    this.avgRating,
   });
 
   User.fromJSON(Map<String, dynamic> json) {
@@ -83,6 +85,7 @@ class User {
     courses = json['courses'] == null
         ? []
         : Generic.fromJSON<List<UserCourse>, UserCourse>(json['courses']);
+    avgRating = json['avgRating'];
   }
 }
 
@@ -107,6 +110,26 @@ class TutorCourse {
   TutorCourse.fromJSON(Map<String, dynamic> json) {
     userId = json['UserId'];
     courseId = json['CourseId'];
+    createdAt = strToDateTime(json['createdAt']);
+    updatedAt = strToDateTime(json['updatedAt']);
+  }
+}
+
+class WalletInfo {
+  late String id;
+  String? userId;
+  String? amount;
+  bool? isBlocked;
+  int? bonus;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  WalletInfo.fromJSON(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['userId'];
+    amount = json['amount'];
+    isBlocked = json['isBlocked'];
+    bonus = json['bonus'];
     createdAt = strToDateTime(json['createdAt']);
     updatedAt = strToDateTime(json['updatedAt']);
   }

@@ -40,7 +40,7 @@ class _CourseTabWidgetState extends State<CourseTabWidget> {
 
   @override
   void dispose() {
-    _courseCtrl.clear();
+    _courseCtrl.dispose();
     super.dispose();
   }
 

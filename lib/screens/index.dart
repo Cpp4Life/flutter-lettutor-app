@@ -7,6 +7,7 @@ export 'home/home_screen.dart';
 export 'meeting/meeting_screen.dart';
 export 'message/message_screen.dart';
 export 'onboard/onboard_screen.dart';
+export 'profile/profile_screen.dart';
 export 'setting/advanced_settings/advanced_settings_screen.dart';
 export 'setting/booking_history/booking_history_screen.dart';
 export 'setting/session_history/session_history_screen.dart';

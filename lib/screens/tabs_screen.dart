@@ -57,7 +57,9 @@ class _TabsScreenState extends State<TabsScreen> {
                 IconButton(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(ProfileScreen.routeName);
+                  },
                   icon: Image.asset(
                     LetTutorImages.avatar,
                     fit: BoxFit.cover,

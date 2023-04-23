@@ -39,4 +39,5 @@ class LetTutorSvg {
   static const meetingChat = 'assets/svg/ic_meeting_chat.svg';
   static const course = 'assets/svg/ic_course.svg';
   static const ebook = 'assets/svg/ic_ebook.svg';
+  static const camera = 'assets/svg/ic_camera.svg';
 }

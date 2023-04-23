@@ -4,3 +4,4 @@ export 'ebook.dart';
 export 'learn_topic.dart';
 export 'test_preparation.dart';
 export 'tutor.dart';
+export 'user.dart';

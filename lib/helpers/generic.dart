@@ -43,6 +43,9 @@ class Generic {
       if (T == Ebook) {
         return Ebook.fromJSON(json) as T;
       }
+      if (T == WalletInfo) {
+        return WalletInfo.fromJSON(json) as T;
+      }
       return json;
     } catch (error, stackTrace) {
       rethrow;
