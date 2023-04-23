@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 import '../../constants/index.dart';
@@ -78,8 +80,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Provider.of<UserProvider>(context, listen: false).getUserInfo().then((value) {
         setState(() {
           _user = value;
-          _nameCtrl.text = _user.name as String;
-          _phoneCtrl.text = _user.phone as String;
+          _nameCtrl.text = _user.name ?? '';
+          _phoneCtrl.text = _user.phone ?? '';
         });
       });
       Provider.of<LearnTopicProvider>(context, listen: false)
@@ -113,7 +115,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     void onSave() async {
+      if (!mounted) {
+        return;
+      }
       try {
+        if (_nameCtrl.text.isEmpty) {
+          TopSnackBar.show(
+            context: context,
+            message: 'Username cannot be empty!',
+            isSuccess: false,
+          );
+          return;
+        }
+
         await Provider.of<UserProvider>(context, listen: false).updateUserInfo(
           _user.name as String,
           _user.country as String,
@@ -124,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           () {
             TopSnackBar.show(
               context: context,
-              message: 'Successfully updated profile',
+              message: 'Successfully updated profile! Oh-hoo~~',
               isSuccess: true,
             );
           },
@@ -145,10 +159,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     }
 
-    final Orientation orientation = MediaQuery.of(context).orientation;
-    final size = MediaQuery.of(context).size;
-    final horizontalPosition =
-        orientation == Orientation.portrait ? (size.width / 2) : (size.width / 2 - 45);
+    void pickImageFromGallery() async {
+      final picker = ImagePicker();
+      final imageFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 100,
+      );
+      if (imageFile == null) {
+        return;
+      }
+      if (!mounted) {
+        return;
+      }
+      try {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        final fileName = path.basename(imageFile.path);
+        await userProvider.uploadAvatar(
+          imageFile.path,
+          fileName,
+          () {
+            TopSnackBar.show(
+              context: context,
+              message: 'Successfully updated avatar! Oh-hoo~~',
+              isSuccess: true,
+            );
+          },
+        );
+        userProvider.getUserInfo().then((value) {
+          setState(() {
+            _user = value;
+            _nameCtrl.text = _user.name ?? '';
+            _phoneCtrl.text = _user.phone ?? '';
+          });
+        });
+      } on HttpException catch (e) {
+        TopSnackBar.show(
+          context: context,
+          message: e.toString(),
+          isSuccess: false,
+        );
+      } catch (error) {
+        debugPrint(error.toString());
+        TopSnackBar.show(
+          context: context,
+          message: 'Failed to update your avatar! Please try again later',
+          isSuccess: false,
+        );
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -162,6 +220,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Stack(
                   children: [
                     Container(
+                      width: 75,
+                      height: 75,
                       margin: const EdgeInsets.only(bottom: 10),
                       alignment: Alignment.center,
                       child: ClipRRect(
@@ -169,8 +229,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: CachedNetworkImage(
                           imageUrl: _user.avatar ?? 'https://picsum.photos/200/300',
                           fit: BoxFit.cover,
-                          width: 70,
-                          height: 70,
+                          width: 75,
+                          height: 75,
                           progressIndicatorBuilder: (context, url, downloadProgress) =>
                               CircularProgressIndicator(value: downloadProgress.progress),
                           errorWidget: (context, url, error) => Image.asset(
@@ -182,9 +242,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Positioned(
                       bottom: 15,
-                      left: horizontalPosition,
+                      right: 0,
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: pickImageFromGallery,
                         child: CircleAvatar(
                           backgroundColor: LetTutorColors.greyScaleDarkGrey,
                           radius: 10,

@@ -63,4 +63,28 @@ class UserProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future uploadAvatar(String path, String fileName, Function callback) async {
+    try {
+      // * e.g: https://domain.com/user/uploadAvatar
+      final url = Uri.parse('$_baseURL/user/uploadAvatar');
+      final request = http.MultipartRequest('POST', url);
+      final headers = Http.getHeaders(token: _authToken as String);
+      final image = await http.MultipartFile.fromPath(
+        'avatar',
+        path,
+        filename: fileName,
+      );
+      request.files.add(image);
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        await callback();
+      } else {
+        throw HttpException('Oops! Cannot update your avatar.');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

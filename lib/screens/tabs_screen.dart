@@ -1,7 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../core/assets/index.dart';
 import '../core/styles/index.dart';
+import '../models/index.dart';
+import '../providers/index.dart';
 import '../widgets/index.dart';
 import 'index.dart';
 
@@ -17,6 +21,10 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   late List<Map<String, Object>> _pages;
   int _selectedPageIndex = 0;
+  User _user = User(
+    id: '',
+    avatar: null,
+  );
 
   @override
   void initState() {
@@ -27,6 +35,15 @@ class _TabsScreenState extends State<TabsScreen> {
       {'page': const TutorsScreen(), 'title': 'Tutors'},
       {'page': const SettingScreen(), 'title': 'Settings'},
     ];
+    Future.delayed(Duration.zero).then((_) {
+      Provider.of<UserProvider>(context, listen: false).getUserInfo().then((value) {
+        if (mounted) {
+          setState(() {
+            _user = value;
+          });
+        }
+      });
+    });
     super.initState();
   }
 
@@ -60,9 +77,18 @@ class _TabsScreenState extends State<TabsScreen> {
                   onPressed: () {
                     Navigator.of(context).pushNamed(ProfileScreen.routeName);
                   },
-                  icon: Image.asset(
-                    LetTutorImages.avatar,
-                    fit: BoxFit.cover,
+                  icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: CachedNetworkImage(
+                      imageUrl: _user.avatar ?? 'https://picsum.photos/200/300',
+                      fit: BoxFit.cover,
+                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                          CircularProgressIndicator(value: downloadProgress.progress),
+                      errorWidget: (context, url, error) => Image.asset(
+                        LetTutorImages.avatar,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 ),
               ]
