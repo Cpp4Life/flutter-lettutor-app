@@ -17,7 +17,7 @@ class EbookProvider with ChangeNotifier {
     return [..._ebooks];
   }
 
-  EbookProvider(this._authToken);
+  EbookProvider(this._authToken, this._ebooks);
 
   Future fetchAndSetEbooks({
     required int page,

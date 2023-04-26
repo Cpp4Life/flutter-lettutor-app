@@ -17,7 +17,7 @@ class CourseProvider with ChangeNotifier {
     return [..._courses];
   }
 
-  CourseProvider(this._authToken);
+  CourseProvider(this._authToken, this._courses);
 
   Future<List<CourseCategory>> fetchAndSetCourseCategory() async {
     try {

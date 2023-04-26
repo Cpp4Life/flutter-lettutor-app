@@ -1,6 +1,5 @@
-import 'package:lettutor_app/models/index.dart';
-
 import '../helpers/index.dart';
+import 'index.dart';
 
 class User {
   late String id;

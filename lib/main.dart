@@ -29,20 +29,28 @@ class LetTutorApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProxyProvider<AuthProvider, CourseProvider>(
-          create: (context) => CourseProvider(''),
+          create: (context) => CourseProvider('', []),
           update: (context, auth, previousCourses) => CourseProvider(
             auth.token ?? '',
+            previousCourses == null ? [] : previousCourses.courses,
           ),
         ),
         ChangeNotifierProxyProvider<AuthProvider, EbookProvider>(
-          create: (context) => EbookProvider(''),
-          update: (context, auth, previousCourses) => EbookProvider(
+          create: (context) => EbookProvider('', []),
+          update: (context, auth, previousEbooks) => EbookProvider(
             auth.token ?? '',
+            previousEbooks == null ? [] : previousEbooks.ebooks,
           ),
         ),
         ChangeNotifierProxyProvider<AuthProvider, UserProvider>(
           create: (context) => UserProvider(''),
           update: (context, auth, previous) => UserProvider(
+            auth.token ?? '',
+          ),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, ScheduleProvider>(
+          create: (context) => ScheduleProvider(''),
+          update: (context, auth, previous) => ScheduleProvider(
             auth.token ?? '',
           ),
         ),
