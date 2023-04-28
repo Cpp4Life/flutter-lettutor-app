@@ -70,8 +70,8 @@ class BookingInfo {
   DateTime? createdAt;
   DateTime? updatedAt;
   String? recordUrl;
-  String? cancelReasonId;
-  String? lessonPlanId;
+  int? cancelReasonId;
+  int? lessonPlanId;
   String? cancelNote;
   String? calendarId;
   bool? isDeleted;

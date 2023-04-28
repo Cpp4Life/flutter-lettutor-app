@@ -46,6 +46,15 @@ class Generic {
       if (T == WalletInfo) {
         return WalletInfo.fromJSON(json) as T;
       }
+      if (T == Schedule) {
+        return Schedule.fromJSON(json) as T;
+      }
+      if (T == ScheduleDetails) {
+        return ScheduleDetails.fromJSON(json) as T;
+      }
+      if (T == BookingInfo) {
+        return BookingInfo.fromJSON(json) as T;
+      }
       return json;
     } catch (error, stackTrace) {
       rethrow;

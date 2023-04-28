@@ -49,9 +49,10 @@ class LetTutorApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProxyProvider<AuthProvider, ScheduleProvider>(
-          create: (context) => ScheduleProvider(''),
-          update: (context, auth, previous) => ScheduleProvider(
+          create: (context) => ScheduleProvider('', []),
+          update: (context, auth, previousSchedules) => ScheduleProvider(
             auth.token ?? '',
+            previousSchedules == null ? [] : previousSchedules.schedules,
           ),
         ),
         ChangeNotifierProvider(
