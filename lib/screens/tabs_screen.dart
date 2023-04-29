@@ -33,6 +33,7 @@ class _TabsScreenState extends State<TabsScreen> {
       {'page': const CourseScreen(), 'title': 'Course'},
       {'page': const UpcomingScreen(), 'title': 'Upcoming'},
       {'page': const TutorsScreen(), 'title': 'Tutors'},
+      {'page': const ChatGPTScreen(), 'title': 'ChatGPT'},
       {'page': const SettingScreen(), 'title': 'Settings'},
     ];
     Future.delayed(Duration.zero).then((_) {
@@ -123,6 +124,11 @@ class _TabsScreenState extends State<TabsScreen> {
             context,
             svgSource: LetTutorSvg.tutor,
             label: 'Tutors',
+          ),
+          NavItem.generateItem(
+            context,
+            svgSource: LetTutorSvg.chatgpt,
+            label: 'ChatGPT',
           ),
           NavItem.generateItem(
             context,

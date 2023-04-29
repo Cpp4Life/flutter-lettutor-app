@@ -28,19 +28,22 @@ class _TutorsScreenState extends State<TutorsScreen> {
     _specialties.add(LearnTopic(id: 1, key: '', name: 'All'));
     Provider.of<LearnTopicProvider>(context, listen: false).fetchAndSetLearnTopics().then(
       (value) {
-        setState(() {
-          _specialties.addAll(value);
-        });
+        if (mounted) {
+          setState(() {
+            _specialties.addAll(value);
+          });
+        }
       },
     );
     Provider.of<TestPreparationProvider>(context, listen: false).fetchAndSetTests().then(
       (value) {
-        Timer(
-          const Duration(seconds: 1),
-          () => setState(() {
-            _specialties.addAll(value);
-          }),
-        );
+        Timer(const Duration(seconds: 1), () {
+          if (mounted) {
+            setState(() {
+              _specialties.addAll(value);
+            });
+          }
+        });
       },
     );
     super.initState();

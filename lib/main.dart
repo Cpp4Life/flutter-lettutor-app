@@ -60,7 +60,10 @@ class LetTutorApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => TestPreparationProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ChatProvider(),
+        ),
       ],
       child: Consumer<AuthProvider>(
         builder: (context, auth, _) => MaterialApp(
@@ -99,6 +102,7 @@ class LetTutorApp extends StatelessWidget {
             SessionHistoryScreen.routeName: (context) => const SessionHistoryScreen(),
             AdvancedSettingsScreen.routeName: (context) => const AdvancedSettingsScreen(),
             ProfileScreen.routeName: (context) => const ProfileScreen(),
+            ChatGPTScreen.routeName: (context) => const ChatGPTScreen(),
           },
         ),
       ),

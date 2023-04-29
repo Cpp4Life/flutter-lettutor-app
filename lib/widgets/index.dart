@@ -1,6 +1,8 @@
 export 'app_bar.dart';
 export 'booking_card.dart';
 export 'cached_image_network.dart';
+export 'chat/chat_item.dart';
+export 'chat/message_input.dart';
 export 'chip_tag.dart';
 export 'course/components/course_category_chip.dart';
 export 'course/components/course_item.dart';

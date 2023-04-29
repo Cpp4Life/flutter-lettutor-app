@@ -20,9 +20,7 @@ class PeriodItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        print('scheduleID: $scheduleId - isBooked: $isBooked');
-      },
+      onPressed: () {},
       style: ElevatedButton.styleFrom(
         backgroundColor: isBooked ? LetTutorColors.paleGrey : Colors.white,
         shape: const RoundedRectangleBorder(

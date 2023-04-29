@@ -1,3 +1,4 @@
+export 'chat.dart';
 export 'course.dart';
 export 'ebook.dart';
 export 'feedback.dart';

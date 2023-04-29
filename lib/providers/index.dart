@@ -1,4 +1,5 @@
 export 'auth.dart';
+export 'chat.dart';
 export 'course.dart';
 export 'ebook.dart';
 export 'learn_topic.dart';
