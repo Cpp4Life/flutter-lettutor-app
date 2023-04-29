@@ -18,6 +18,8 @@ export 'meeting_button.dart';
 export 'nav_item.dart';
 export 'rating.dart';
 export 'recommended_tutor_card.dart';
+export 'schedule/period/period_grid.dart';
+export 'schedule/period/period_item.dart';
 export 'schedule/schedule_grid.dart';
 export 'schedule/schedule_item.dart';
 export 'search_bar.dart';

@@ -32,6 +32,7 @@ class ScheduleGridWidget extends StatelessWidget {
             itemCount: provider.schedules.length,
             itemBuilder: (context, index) => ScheduleItemWidget(
               provider.schedules[index].startTimestamp!,
+              provider.schedules[index].scheduleDetails!,
               ValueKey(provider.schedules[index].id),
             ),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -7,6 +7,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
+import '../../helpers/index.dart';
 import '../../models/index.dart';
 import '../../providers/index.dart';
 import '../../widgets/index.dart';
@@ -174,7 +175,12 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                           margin: _margin,
                           child: ElevatedButton(
                             onPressed: () {
-                              _showTutorSchedules(_tutor.user?.id as String);
+                              final modal = BottomModalSheet(
+                                context: context,
+                                title: 'Choose the available schedule',
+                                widget: ScheduleGridWidget(_tutor.user!.id),
+                              );
+                              modal.show();
                             },
                             style: ElevatedButton.styleFrom(
                               splashFactory: NoSplash.splashFactory,
@@ -305,54 +311,6 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                 ],
               ),
       ),
-    );
-  }
-
-  Future<void> _showTutorSchedules(String tutorId) {
-    return showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(10),
-        ),
-      ),
-      isScrollControlled: true,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      builder: (context) {
-        return SafeArea(
-          right: false,
-          left: false,
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: LetTutorColors.paleGrey,
-                      ),
-                      child: const Text(
-                        'Choose the available schedule',
-                        style: TextStyle(
-                          fontSize: LetTutorFontSizes.px14,
-                          fontWeight: LetTutorFontWeights.medium,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: ScheduleGridWidget(tutorId),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        );
-      },
     );
   }
 }

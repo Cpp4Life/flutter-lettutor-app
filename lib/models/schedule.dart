@@ -11,6 +11,18 @@ class Schedule {
   bool? isBooked;
   List<ScheduleDetails>? scheduleDetails;
 
+  Schedule({
+    required this.id,
+    this.tutorId,
+    this.startTime,
+    this.endTime,
+    this.startTimestamp,
+    this.endTimestamp,
+    this.createdAt,
+    this.isBooked,
+    this.scheduleDetails,
+  });
+
   Schedule.fromJSON(Map<String, dynamic> json) {
     id = json['id'];
     tutorId = json['tutorId'];
