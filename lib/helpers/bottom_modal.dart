@@ -3,17 +3,11 @@ import 'package:flutter/material.dart';
 import '../core/styles/index.dart';
 
 class BottomModalSheet {
-  final BuildContext context;
-  final String title;
-  final Widget widget;
-
-  BottomModalSheet({
-    required this.context,
-    required this.title,
-    required this.widget,
-  });
-
-  Future<void> show() {
+  static Future<void> show({
+    required BuildContext context,
+    required String title,
+    required Widget widget,
+  }) {
     return showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(

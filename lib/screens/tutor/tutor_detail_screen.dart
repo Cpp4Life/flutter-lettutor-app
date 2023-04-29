@@ -175,12 +175,11 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                           margin: _margin,
                           child: ElevatedButton(
                             onPressed: () {
-                              final modal = BottomModalSheet(
+                              BottomModalSheet.show(
                                 context: context,
                                 title: 'Choose the available schedule',
                                 widget: ScheduleGridWidget(_tutor.user!.id),
                               );
-                              modal.show();
                             },
                             style: ElevatedButton.styleFrom(
                               splashFactory: NoSplash.splashFactory,

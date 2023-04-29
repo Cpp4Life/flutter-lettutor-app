@@ -20,12 +20,11 @@ class ScheduleItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        final modal = BottomModalSheet(
+        BottomModalSheet.show(
           context: context,
           title: 'Choose available time',
           widget: PeriodGridWidget(details),
         );
-        modal.show();
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,

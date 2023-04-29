@@ -28,7 +28,7 @@ class _PeriodGridWidgetState extends State<PeriodGridWidget> {
       padding: const EdgeInsets.all(10.0),
       itemCount: widget.details.length,
       itemBuilder: (context, index) => PeriodItemWidget(
-        scheduleId: widget.details[index].scheduleId!,
+        id: widget.details[index].id,
         startPeriodTimestamp: widget.details[index].startPeriodTimestamp!,
         endPeriodTimestamp: widget.details[index].endPeriodTimestamp!,
         isBooked: widget.details[index].isBooked!,
