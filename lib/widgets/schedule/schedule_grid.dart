@@ -13,7 +13,7 @@ class ScheduleGridWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: Provider.of<ScheduleProvider>(context, listen: false)
-          .getTutorSchedules(tutorId),
+          .fetchAndSetSchedules(tutorId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(

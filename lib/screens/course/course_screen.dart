@@ -35,9 +35,11 @@ class _CourseScreenState extends State<CourseScreen> {
     Provider.of<CourseProvider>(context, listen: false)
         .fetchAndSetCourseCategory()
         .then((value) {
-      setState(() {
-        _categories.addAll(value);
-      });
+      if (mounted) {
+        setState(() {
+          _categories.addAll(value);
+        });
+      }
     });
     super.initState();
   }

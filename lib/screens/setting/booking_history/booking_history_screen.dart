@@ -19,11 +19,11 @@ class BookingHistoryScreen extends StatelessWidget {
             itemCount: 10,
             itemBuilder: (context, index) => const Card(
               elevation: 5,
-              child: BookingCardWidget(
-                  name: 'Dat Truong Gia',
-                  date: '2023-16-03',
-                  startTime: '08:30',
-                  endTime: '11:30'),
+              // child: BookingCardWidget(
+              //     name: 'Dat Truong Gia',
+              //     date: '2023-16-03',
+              //     startTime: '08:30',
+              //     endTime: '11:30'),
             ),
           ),
         ),

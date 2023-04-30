@@ -12,14 +12,19 @@ class ScheduleProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
   final String? _authToken;
   List<Schedule> _schedules = [];
+  List<BookingInfo> _bookingInfo = [];
 
   List<Schedule> get schedules {
     return [..._schedules];
   }
 
+  List<BookingInfo> get bookings {
+    return [..._bookingInfo];
+  }
+
   ScheduleProvider(this._authToken, this._schedules);
 
-  Future getTutorSchedules(String tutorId) async {
+  Future fetchAndSetSchedules(String tutorId) async {
     try {
       // * e.g: https://domain.com/schedule
       final url = Uri.parse('$_baseURL/schedule');
@@ -46,7 +51,7 @@ class ScheduleProvider with ChangeNotifier {
 
   Future bookClass(String scheduleDetailIds, Function callback) async {
     try {
-      // * e.g: https://domain.com/booking
+      // * e.g: POST https://domain.com/booking
       final url = Uri.parse('$_baseURL/booking');
       final headers = Http.getHeaders(token: _authToken as String);
       final response = await http.post(
@@ -62,6 +67,50 @@ class ScheduleProvider with ChangeNotifier {
       }
       _updateBookedStatus(scheduleDetailIds);
       await callback();
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future cancelBooking(String scheduleDetailIds, Function callback) async {
+    try {
+      // * e.g: DELETE https://domain.com/booking
+      final url = Uri.parse('$_baseURL/booking');
+      final headers = Http.getHeaders(token: _authToken as String);
+      final response = await http.delete(
+        url,
+        headers: headers,
+        body: jsonEncode({
+          'scheduleDetailIds': [scheduleDetailIds],
+        }),
+      );
+      final decodedResponse = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw HttpException(decodedResponse['message']);
+      }
+      await callback();
+      _bookingInfo.removeWhere((element) => element.id == scheduleDetailIds);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future fetchAndSetUpcomingClass({required int page, required int perPage}) async {
+    try {
+      // * e.g: https://domain.com/booking/list/student?page=#&perPage=#&dateTimeLte=#&orderBy=meeting&sortBy=desc
+      final now = DateTime.now().millisecondsSinceEpoch;
+      final url = Uri.parse(
+          '$_baseURL/booking/list/student?page=$page&perPage=$perPage&dateTimeGte=$now&orderBy=meeting&sortBy=asc');
+      final headers = Http.getHeaders(token: _authToken as String);
+      final response = await http.get(url, headers: headers);
+      final decodedResponse = jsonDecode(response.body);
+      if (response.statusCode >= 400) {
+        throw HttpException(decodedResponse['message']);
+      }
+      final jsonList = decodedResponse['data']['rows'] as List<dynamic>;
+      _bookingInfo = Generic.fromJSON<List<BookingInfo>, BookingInfo>(jsonList);
       notifyListeners();
     } catch (e) {
       rethrow;

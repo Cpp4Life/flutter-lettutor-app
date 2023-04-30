@@ -1,4 +1,5 @@
 import '../helpers/index.dart';
+import 'index.dart';
 
 class Schedule {
   late String id;
@@ -10,6 +11,7 @@ class Schedule {
   DateTime? createdAt;
   bool? isBooked;
   List<ScheduleDetails>? scheduleDetails;
+  Tutor? tutorInfo;
 
   Schedule({
     required this.id,
@@ -21,6 +23,7 @@ class Schedule {
     this.createdAt,
     this.isBooked,
     this.scheduleDetails,
+    this.tutorInfo,
   });
 
   Schedule.fromJSON(Map<String, dynamic> json) {
@@ -37,6 +40,9 @@ class Schedule {
         : Generic.fromJSON<List<ScheduleDetails>, ScheduleDetails>(
             json['scheduleDetails'],
           );
+    tutorInfo = json['tutorInfo'] == null
+        ? null
+        : Generic.fromJSON<Tutor, void>(json['tutorInfo']);
   }
 }
 
@@ -51,6 +57,7 @@ class ScheduleDetails {
   DateTime? updatedAt;
   List<BookingInfo>? bookingInfo;
   bool? isBooked;
+  Schedule? scheduleInfo;
 
   ScheduleDetails.fromJSON(Map<String, dynamic> json) {
     startPeriodTimestamp = json['startPeriodTimestamp'];
@@ -65,6 +72,9 @@ class ScheduleDetails {
         ? []
         : Generic.fromJSON<List<BookingInfo>, BookingInfo>(json['bookingInfo']);
     isBooked = json['isBooked'];
+    scheduleInfo = json['scheduleInfo'] == null
+        ? null
+        : Generic.fromJSON<Schedule, void>(json['scheduleInfo']);
   }
 }
 
@@ -87,6 +97,9 @@ class BookingInfo {
   String? cancelNote;
   String? calendarId;
   bool? isDeleted;
+  bool? showRecordUrl;
+  List<String> studentMaterials = [];
+  ScheduleDetails? scheduleDetailInfo;
 
   BookingInfo.fromJSON(Map<String, dynamic> json) {
     createdAtTimeStamp = json['createdAtTimeStamp'];
@@ -107,5 +120,11 @@ class BookingInfo {
     cancelNote = json['cancelNote'];
     calendarId = json['calendarId'];
     isDeleted = json['isDeleted'];
+    showRecordUrl = json['showRecordUrl'];
+    studentMaterials =
+        json['studentMaterials'] != null ? json['studentMaterials'].cast<String>() : [];
+    scheduleDetailInfo = json['scheduleDetailInfo'] == null
+        ? null
+        : Generic.fromJSON<ScheduleDetails, void>(json['scheduleDetailInfo']);
   }
 }
