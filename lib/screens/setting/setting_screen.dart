@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
@@ -42,34 +43,38 @@ class SettingScreen extends StatelessWidget {
             ),
             Container(
               margin: _margin,
-              child: const SettingButtonWidget(
+              child: SettingButtonWidget(
                 title: 'View Feedbacks',
                 iconPath: LetTutorSvg.user,
-                routeName: ViewFeedbacksScreen.routeName,
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(ViewFeedbacksScreen.routeName),
               ),
             ),
             Container(
               margin: _margin,
-              child: const SettingButtonWidget(
+              child: SettingButtonWidget(
                 title: 'Booking History',
                 iconPath: LetTutorSvg.list,
-                routeName: BookingHistoryScreen.routeName,
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(BookingHistoryScreen.routeName),
               ),
             ),
             Container(
               margin: _margin,
-              child: const SettingButtonWidget(
+              child: SettingButtonWidget(
                 title: 'Session History',
                 iconPath: LetTutorSvg.history,
-                routeName: SessionHistoryScreen.routeName,
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(SessionHistoryScreen.routeName),
               ),
             ),
             Container(
               margin: _margin,
-              child: const SettingButtonWidget(
+              child: SettingButtonWidget(
                 title: 'Advanced Settings',
                 iconPath: LetTutorSvg.settingProfile,
-                routeName: AdvancedSettingsScreen.routeName,
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(AdvancedSettingsScreen.routeName),
               ),
             ),
             const SizedBox(
@@ -77,18 +82,18 @@ class SettingScreen extends StatelessWidget {
             ),
             Container(
               margin: _margin,
-              child: const SettingButtonWidget(
+              child: SettingButtonWidget(
                 title: 'Our Website',
                 iconPath: LetTutorSvg.network,
-                routeName: '',
+                onPressed: () => launchUrl(Uri.parse('https://lettutor.com')),
               ),
             ),
             Container(
               margin: _margin,
-              child: const SettingButtonWidget(
+              child: SettingButtonWidget(
                 title: 'Facebook',
                 iconPath: LetTutorSvg.facebookSetting,
-                routeName: '',
+                onPressed: () {},
               ),
             ),
             Container(

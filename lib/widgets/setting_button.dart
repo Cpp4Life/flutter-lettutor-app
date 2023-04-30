@@ -7,21 +7,19 @@ import '../core/styles/index.dart';
 class SettingButtonWidget extends StatelessWidget {
   final String title;
   final String iconPath;
-  final String routeName;
+  final Function() onPressed;
 
   const SettingButtonWidget({
     required this.title,
     required this.iconPath,
-    required this.routeName,
+    required this.onPressed,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        Navigator.of(context).pushNamed(routeName);
-      },
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.all(10),
         backgroundColor: Colors.white,
