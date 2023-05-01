@@ -1,15 +1,51 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart' as intl;
+import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
+import '../../models/index.dart';
 import '../../providers/index.dart';
 import '../../widgets/index.dart';
-import '../index.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _totalTimeInMinutes = 0;
+  BookingInfo? _upcomingClass;
+  bool _isLoading = true;
+  bool _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      fetchTotalLessonTimeAndUpcomingClass();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  void fetchTotalLessonTimeAndUpcomingClass() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final totalTime = await userProvider.getTotalLessonTime();
+    final upcoming = await userProvider.getUpcoming();
+    if (mounted) {
+      setState(() {
+        _totalTimeInMinutes = totalTime;
+        _upcomingClass = upcoming;
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,50 +56,86 @@ class HomeScreen extends StatelessWidget {
             height: 200,
             width: double.infinity,
             color: LetTutorColors.primaryBlue,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Upcoming lesson',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: LetTutorFontSizes.px20,
+            child: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Upcoming lesson',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: LetTutorFontSizes.px20,
+                        ),
+                      ),
+                      Text(
+                        _upcomingClass == null
+                            ? 'There is no upcoming class'
+                            : intl.DateFormat('E, dd MMM yyyy, HH:mm - ').format(
+                                  DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
+                                      .scheduleDetailInfo!.startPeriodTimestamp!),
+                                ) +
+                                intl.DateFormat('HH:mm').format(
+                                  DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
+                                      .scheduleDetailInfo!.endPeriodTimestamp!),
+                                ),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: LetTutorFontSizes.px14,
+                        ),
+                      ),
+                      Text(
+                        'Total lesson time is ${durationToString(_totalTimeInMinutes)}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: LetTutorFontSizes.px14,
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_upcomingClass != null) {
+                            final base64Decoded = base64.decode(
+                              base64.normalize(
+                                _upcomingClass!.studentMeetingLink!
+                                    .split('token=')[1]
+                                    .split(".")[1],
+                              ),
+                            );
+                            final urlObject = utf8.decode(base64Decoded);
+                            final jsonRes = json.decode(urlObject);
+                            final String roomId = jsonRes['room'];
+                            final String tokenMeeting =
+                                _upcomingClass!.studentMeetingLink!.split('token=')[1];
+
+                            final options = JitsiMeetingOptions(room: roomId)
+                              ..serverURL = 'https://meet.lettutor.com'
+                              ..audioOnly = true
+                              ..audioMuted = true
+                              ..token = tokenMeeting
+                              ..videoMuted = true;
+
+                            await JitsiMeet.joinMeeting(options);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          side: const BorderSide(color: LetTutorColors.primaryBlue),
+                        ),
+                        child: const Text(
+                          'Enter lesson room',
+                          style: TextStyle(
+                            color: LetTutorColors.primaryBlue,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                const Text(
-                  'Fri, 17 Mar 23 10:00 - 12:00',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: LetTutorFontSizes.px14,
-                  ),
-                ),
-                const Text(
-                  'Total lesson time is 11 hours 45 minutes',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: LetTutorFontSizes.px14,
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(MeetingScreen.routeName);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    side: const BorderSide(color: LetTutorColors.primaryBlue),
-                  ),
-                  child: const Text(
-                    'Enter lesson room',
-                    style: TextStyle(
-                      color: LetTutorColors.primaryBlue,
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
           Column(
             children: [
@@ -151,5 +223,11 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String durationToString(int minutes) {
+    final d = Duration(minutes: minutes);
+    List<String> parts = d.toString().split(':');
+    return '${parts[0].padLeft(2, '0')} hour(s) ${parts[1].padLeft(2, '0')} minutes';
   }
 }

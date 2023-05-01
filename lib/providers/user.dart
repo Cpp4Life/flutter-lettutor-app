@@ -87,4 +87,53 @@ class UserProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<int> getTotalLessonTime() async {
+    try {
+      // * e.g: https://domain.com/call/total
+      final url = Uri.parse('$_baseURL/call/total');
+      final headers = Http.getHeaders(token: _authToken as String);
+      final response = await http.get(url, headers: headers);
+      final decodedResponse = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw HttpException(decodedResponse['message']);
+      }
+      return decodedResponse['total'];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<BookingInfo?> getUpcoming() async {
+    try {
+      // * e.g: https://domain.com/booking/next?dateTime=#
+      final dateTime = DateTime.now().millisecondsSinceEpoch;
+      final url = Uri.parse('$_baseURL/booking/next?dateTime=$dateTime');
+      final headers = Http.getHeaders(token: _authToken as String);
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final decodedResponse = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw HttpException(decodedResponse['message']);
+      }
+      final jsonList = decodedResponse['data'];
+      List<BookingInfo> upcomingLessons =
+          Generic.fromJSON<List<BookingInfo>, BookingInfo>(jsonList);
+      upcomingLessons.sort(
+        (l1, l2) => l1.scheduleDetailInfo!.startPeriodTimestamp!
+            .compareTo(l2.scheduleDetailInfo!.startPeriodTimestamp!),
+      );
+
+      upcomingLessons = upcomingLessons
+          .where(
+              (element) => element.scheduleDetailInfo!.startPeriodTimestamp! > dateTime)
+          .toList();
+
+      return upcomingLessons.isEmpty ? null : upcomingLessons.first;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

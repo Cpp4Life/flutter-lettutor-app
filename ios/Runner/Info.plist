@@ -53,8 +53,10 @@
 		<string>file</string>
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow application to access gallery</string>
+	<string>$(PRODUCT_NAME) LetTutor needs access to your gallery</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow application to access camera</string>
+	<string>$(PRODUCT_NAME) LetTutor needs access to your camera for meetings.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) LetTutor needs access to your microphone for meetings.</string>
 </dict>
 </plist>
