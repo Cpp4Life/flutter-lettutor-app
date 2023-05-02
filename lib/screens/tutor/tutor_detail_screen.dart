@@ -8,7 +8,7 @@ import 'package:video_player/video_player.dart';
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
 import '../../helpers/index.dart';
-import '../../models/index.dart';
+import '../../models/index.dart' as model;
 import '../../providers/index.dart';
 import '../../widgets/index.dart';
 
@@ -23,7 +23,10 @@ class TutorDetailScreen extends StatefulWidget {
 
 class _TutorDetailScreenState extends State<TutorDetailScreen> {
   final EdgeInsetsGeometry _margin = const EdgeInsets.only(left: 20, right: 20, top: 10);
-  Tutor _tutor = Tutor(id: '');
+  final int _page = 1;
+  final int _perPage = 12;
+  model.Tutor _tutor = model.Tutor(id: '');
+  List<model.Feedback> _feedbacks = [];
   ChewieController? _chewieController;
   bool _isInit = true;
   bool _isLoading = true;
@@ -45,24 +48,25 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
   void fetchTutor() async {
     final tutorId = ModalRoute.of(context)?.settings.arguments;
     if (tutorId != null) {
-      Provider.of<TutorProvider>(context, listen: false)
-          .searchTutorByID(tutorId as String)
-          .then((tutor) {
-        setState(() {
-          _tutor = tutor;
-          _chewieController = ChewieController(
-            videoPlayerController: VideoPlayerController.network(_tutor.video as String),
-            autoPlay: true,
-            looping: false,
-            deviceOrientationsOnEnterFullScreen: [
-              DeviceOrientation.landscapeLeft,
-              DeviceOrientation.landscapeRight,
-            ],
-            deviceOrientationsAfterFullScreen: [
-              DeviceOrientation.portraitUp,
-            ],
-          );
-        });
+      final provider = Provider.of<TutorProvider>(context, listen: false);
+      final tutor = await provider.searchTutorByID(tutorId as String);
+      final feedbacks = await provider.getTutorFeedbacks(
+          page: _page, perPage: _perPage, tutorId: tutorId);
+      setState(() {
+        _tutor = tutor;
+        _feedbacks.addAll(feedbacks);
+        _chewieController = ChewieController(
+          videoPlayerController: VideoPlayerController.network(_tutor.video as String),
+          autoPlay: true,
+          looping: false,
+          deviceOrientationsOnEnterFullScreen: [
+            DeviceOrientation.landscapeLeft,
+            DeviceOrientation.landscapeRight,
+          ],
+          deviceOrientationsAfterFullScreen: [
+            DeviceOrientation.portraitUp,
+          ],
+        );
       });
     }
 
@@ -169,7 +173,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                                           setState(() {
                                             _tutor.isFavorite = !_tutor.isFavorite!;
                                           });
-                                        } on HttpException catch (e) {
+                                        } on model.HttpException catch (e) {
                                           TopSnackBar.show(
                                               context: context,
                                               message: e.toString(),
@@ -315,14 +319,26 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                         ),
                         Container(
                           margin: _margin,
-                          child: const Text(
-                            'Rating and Comment (0)',
-                            style: TextStyle(
+                          child: Text(
+                            'Rating and Comment (${_feedbacks.length})',
+                            style: const TextStyle(
                               color: LetTutorColors.primaryBlue,
                             ),
                           ),
                         ),
-                        const FreeContentWidget('No Data')
+                        _feedbacks.isEmpty
+                            ? const FreeContentWidget('No Data')
+                            : Container(
+                                margin: _margin,
+                                child: ListView.builder(
+                                  itemCount: _feedbacks.length,
+                                  itemBuilder: (context, index) => RateCommentWidget(
+                                    _feedbacks[index],
+                                  ),
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                ),
+                              ),
                       ],
                     ),
                   )

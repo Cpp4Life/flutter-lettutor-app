@@ -88,6 +88,8 @@ class Feedback {
     secondId = json['secondId'];
     rating = json['rating'];
     content = json['content'];
+    createdAt = strToDateTime(json['createdAt']);
+    updatedAt = strToDateTime(json['updatedAt']);
     firstInfo = FirstInfo.fromJSON(json['firstInfo']);
   }
 }

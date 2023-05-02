@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../core/styles/index.dart';
-import '../models/index.dart';
-import 'index.dart';
+import '../../core/styles/index.dart';
+import '../../models/index.dart';
+import '../index.dart';
 
 class InfoCourseWidget extends StatelessWidget {
   final String title;

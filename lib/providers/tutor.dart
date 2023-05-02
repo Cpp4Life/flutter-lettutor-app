@@ -5,21 +5,21 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../helpers/index.dart';
-import '../models/index.dart';
+import '../models/index.dart' as model;
 
 class TutorProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
-  List<Tutor> _tutors = [];
-  List<FavoriteTutor> _favoriteTutors = [];
+  List<model.Tutor> _tutors = [];
+  List<model.FavoriteTutor> _favoriteTutors = [];
   final String? _authToken;
 
   TutorProvider(this._authToken, this._tutors);
 
-  List<Tutor> get tutors {
+  List<model.Tutor> get tutors {
     return [..._tutors];
   }
 
-  List<FavoriteTutor> get favoriteTutors {
+  List<model.FavoriteTutor> get favoriteTutors {
     return [..._favoriteTutors];
   }
 
@@ -27,17 +27,17 @@ class TutorProvider with ChangeNotifier {
     try {
       // * e.g: GET https://domain.com/tutor/more?perPage=#&page=#
       final url = Uri.parse('$_baseURL/tutor/more?perPage=$perPage&page=$page');
-      final headers = Http.getHeaders(token: _authToken as String);
+      final headers = model.Http.getHeaders(token: _authToken as String);
       final response = await http.get(url, headers: headers);
       final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
       if (response.statusCode >= 400) {
-        throw HttpException(decodedResponse['message']);
+        throw model.HttpException(decodedResponse['message']);
       }
       final tutorsList = decodedResponse['tutors']['rows'] as List<dynamic>;
       final favoriteList = decodedResponse['favoriteTutor'] as List<dynamic>;
-      _tutors = Generic.fromJSON<List<Tutor>, Tutor>(tutorsList);
+      _tutors = Generic.fromJSON<List<model.Tutor>, model.Tutor>(tutorsList);
       _favoriteTutors =
-          Generic.fromJSON<List<FavoriteTutor>, FavoriteTutor>(favoriteList);
+          Generic.fromJSON<List<model.FavoriteTutor>, model.FavoriteTutor>(favoriteList);
       notifyListeners();
     } catch (error) {
       rethrow;
@@ -52,7 +52,7 @@ class TutorProvider with ChangeNotifier {
     try {
       // * e.g POST https://domain.com/tutor/search
       final url = Uri.parse('$_baseURL/tutor/search');
-      final headers = Http.getHeaders(token: _authToken as String);
+      final headers = model.Http.getHeaders(token: _authToken as String);
       final response = await http.post(
         url,
         headers: headers,
@@ -69,28 +69,49 @@ class TutorProvider with ChangeNotifier {
       );
       final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
       if (response.statusCode >= 400) {
-        throw HttpException(decodedResponse['message']);
+        throw model.HttpException(decodedResponse['message']);
       }
       final jsonList = decodedResponse['rows'] as List<dynamic>;
-      _tutors = Generic.fromJSON<List<Tutor>, Tutor>(jsonList);
+      _tutors = Generic.fromJSON<List<model.Tutor>, model.Tutor>(jsonList);
       notifyListeners();
     } catch (error) {
       rethrow;
     }
   }
 
-  Future<Tutor> searchTutorByID(String id) async {
+  Future<model.Tutor> searchTutorByID(String id) async {
     try {
       // * e.g: GET https://domain.com/tutor/:tutorId
       final url = Uri.parse('$_baseURL/tutor/$id');
-      final headers = Http.getHeaders(token: _authToken as String);
+      final headers = model.Http.getHeaders(token: _authToken as String);
       final response = await http.get(url, headers: headers);
       final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
       if (response.statusCode >= 400) {
-        throw HttpException(decodedResponse['message']);
+        throw model.HttpException(decodedResponse['message']);
       }
-      return Generic.fromJSON<Tutor, void>(decodedResponse);
+      return Generic.fromJSON<model.Tutor, void>(decodedResponse);
     } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<List<model.Feedback>> getTutorFeedbacks({
+    required int page,
+    required int perPage,
+    required String tutorId,
+  }) async {
+    try {
+      // * e.g: GET https://domain.com/feedback/v2/:id?page=#&perPage=#
+      final url = Uri.parse('$_baseURL/feedback/v2/$tutorId?page=$page&perPage=$perPage');
+      final headers = model.Http.getHeaders(token: _authToken as String);
+      final response = await http.get(url, headers: headers);
+      final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      if (response.statusCode >= 400) {
+        throw model.HttpException(decodedResponse['message']);
+      }
+      final jsonList = decodedResponse['data']['rows'];
+      return Generic.fromJSON<List<model.Feedback>, model.Feedback>(jsonList);
+    } catch (e) {
       rethrow;
     }
   }
@@ -99,7 +120,7 @@ class TutorProvider with ChangeNotifier {
     try {
       // * e.g: POST https://domain.com/user/manageFavoriteTutor
       final url = Uri.parse('$_baseURL/user/manageFavoriteTutor');
-      final headers = Http.getHeaders(token: _authToken as String);
+      final headers = model.Http.getHeaders(token: _authToken as String);
       final response = await http.post(
         url,
         headers: headers,
@@ -109,7 +130,7 @@ class TutorProvider with ChangeNotifier {
       );
       final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
       if (response.statusCode != 200) {
-        throw HttpException(decodedResponse['message']);
+        throw model.HttpException(decodedResponse['message']);
       }
       final index =
           _favoriteTutors.indexWhere((element) => element.tutorInfo!.userId == tutorId);
