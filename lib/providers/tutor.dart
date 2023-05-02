@@ -110,7 +110,10 @@ class TutorProvider with ChangeNotifier {
         throw model.HttpException(decodedResponse['message']);
       }
       final jsonList = decodedResponse['data']['rows'];
-      return Generic.fromJSON<List<model.Feedback>, model.Feedback>(jsonList);
+      final feedbacks = Generic.fromJSON<List<model.Feedback>, model.Feedback>(jsonList);
+      feedbacks.sort((f1, f2) => f2.createdAt!.millisecondsSinceEpoch
+          .compareTo(f1.createdAt!.millisecondsSinceEpoch));
+      return feedbacks;
     } catch (e) {
       rethrow;
     }
