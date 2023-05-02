@@ -80,6 +80,8 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final tutorProvider = Provider.of<TutorProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -156,14 +158,31 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                                         ? 0
                                         : _tutor.rating!.round(),
                                   ),
-                                  IconButton(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    constraints: const BoxConstraints(),
-                                    onPressed: () {},
-                                    splashColor: Colors.transparent,
-                                    icon: const Icon(
-                                      Icons.favorite_border_outlined,
-                                      color: LetTutorColors.primaryRed,
+                                  Consumer<TutorProvider>(
+                                    builder: (context, provider, _) => IconButton(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      constraints: const BoxConstraints(),
+                                      onPressed: () async {
+                                        try {
+                                          await tutorProvider
+                                              .toggleFavorite(_tutor.user!.id);
+                                          setState(() {
+                                            _tutor.isFavorite = !_tutor.isFavorite!;
+                                          });
+                                        } on HttpException catch (e) {
+                                          TopSnackBar.show(
+                                              context: context,
+                                              message: e.toString(),
+                                              isSuccess: false);
+                                        }
+                                      },
+                                      splashColor: Colors.transparent,
+                                      icon: Icon(
+                                        _tutor.isFavorite!
+                                            ? Icons.favorite
+                                            : Icons.favorite_border_outlined,
+                                        color: LetTutorColors.primaryRed,
+                                      ),
                                     ),
                                   ),
                                 ],

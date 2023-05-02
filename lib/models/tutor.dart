@@ -49,6 +49,9 @@ class Tutor {
   int? price;
   bool? isOnline;
   User? user;
+  bool? isFavorite;
+  num? avgRating;
+  int? totalFeedback;
 
   Tutor({
     required this.id,
@@ -96,6 +99,9 @@ class Tutor {
     this.price,
     this.isOnline = false,
     this.user,
+    this.isFavorite = false,
+    this.avgRating,
+    this.totalFeedback,
   });
 
   Tutor.fromJSON(Map<String, dynamic> json) {
@@ -146,5 +152,29 @@ class Tutor {
     price = json['price'];
     isOnline = json['isOnline'];
     user = json['User'] == null ? null : Generic.fromJSON<User, void>(json['User']);
+    isFavorite = json['isFavorite'];
+    avgRating = json['avgRating'];
+    totalFeedback = json['totalFeedback'];
+  }
+}
+
+// Only use for home screen to show favorite tutors
+class FavoriteTutor {
+  late String id;
+  String? firstId;
+  String? secondId;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  Tutor? secondInfo;
+  Tutor? tutorInfo;
+
+  FavoriteTutor.fromJSON(Map<String, dynamic> json) {
+    id = json['id'];
+    firstId = json['firstId'];
+    secondId = json['secondId'];
+    createdAt = strToDateTime(json['createdAt']);
+    updatedAt = strToDateTime(json['updatedAt']);
+    secondInfo = Generic.fromJSON<Tutor, void>(json['secondInfo']);
+    tutorInfo = Generic.fromJSON<Tutor, void>(json['secondInfo']['tutorInfo']);
   }
 }

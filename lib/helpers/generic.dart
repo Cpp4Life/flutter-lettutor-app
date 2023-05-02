@@ -55,6 +55,9 @@ class Generic {
       if (T == BookingInfo) {
         return BookingInfo.fromJSON(json) as T;
       }
+      if (T == FavoriteTutor) {
+        return FavoriteTutor.fromJSON(json) as T;
+      }
       return json;
     } catch (error, stackTrace) {
       rethrow;

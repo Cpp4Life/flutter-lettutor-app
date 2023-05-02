@@ -200,22 +200,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const FreeContentWidget('No available tutors');
                   }
                   return Consumer<TutorProvider>(
-                    builder: (context, tutorsData, child) => tutorsData.tutors.isEmpty
+                    builder: (context, provider, child) => provider.favoriteTutors.isEmpty
                         ? const FreeContentWidget('No available tutors')
                         : Container(
                             margin: const EdgeInsets.only(left: 15, right: 15),
                             child: ListView.builder(
-                              itemCount: tutorsData.tutors.length,
+                              itemCount: provider.favoriteTutors.length,
                               itemBuilder: (context, index) {
                                 return RecommendedTutorCardWidget(
-                                  id: tutorsData.tutors[index].userId as String,
-                                  key: ValueKey(tutorsData.tutors[index].id),
-                                  name: tutorsData.tutors[index].name as String,
-                                  avatar: tutorsData.tutors[index].avatar,
-                                  bio: tutorsData.tutors[index].bio as String,
-                                  specialties: tutorsData.tutors[index].specialties
+                                  id: provider.favoriteTutors[index].secondInfo!.id,
+                                  key: ValueKey(
+                                      provider.favoriteTutors[index].secondInfo!.id),
+                                  name: provider.favoriteTutors[index].secondInfo!.name
+                                      as String,
+                                  avatar:
+                                      provider.favoriteTutors[index].secondInfo!.avatar,
+                                  bio: provider.favoriteTutors[index].tutorInfo!.bio
+                                      as String,
+                                  specialties: provider
+                                      .favoriteTutors[index].tutorInfo!.specialties
                                       ?.split(',') as List<String>,
-                                  rating: tutorsData.tutors[index].rating,
+                                  rating:
+                                      provider.favoriteTutors[index].tutorInfo!.rating,
                                 );
                               },
                               shrinkWrap: true,

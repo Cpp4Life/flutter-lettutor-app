@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:lettutor_app/helpers/index.dart';
 
+import '../helpers/index.dart';
 import '../models/index.dart';
 
 class UserProvider with ChangeNotifier {
@@ -66,7 +66,7 @@ class UserProvider with ChangeNotifier {
 
   Future uploadAvatar(String path, String fileName, Function callback) async {
     try {
-      // * e.g: https://domain.com/user/uploadAvatar
+      // * e.g: POST https://domain.com/user/uploadAvatar
       final url = Uri.parse('$_baseURL/user/uploadAvatar');
       final request = http.MultipartRequest('POST', url);
       final headers = Http.getHeaders(token: _authToken as String);
@@ -90,7 +90,7 @@ class UserProvider with ChangeNotifier {
 
   Future<int> getTotalLessonTime() async {
     try {
-      // * e.g: https://domain.com/call/total
+      // * e.g: GET https://domain.com/call/total
       final url = Uri.parse('$_baseURL/call/total');
       final headers = Http.getHeaders(token: _authToken as String);
       final response = await http.get(url, headers: headers);
@@ -106,7 +106,7 @@ class UserProvider with ChangeNotifier {
 
   Future<BookingInfo?> getUpcoming() async {
     try {
-      // * e.g: https://domain.com/booking/next?dateTime=#
+      // * e.g: GET https://domain.com/booking/next?dateTime=#
       final dateTime = DateTime.now().millisecondsSinceEpoch;
       final url = Uri.parse('$_baseURL/booking/next?dateTime=$dateTime');
       final headers = Http.getHeaders(token: _authToken as String);

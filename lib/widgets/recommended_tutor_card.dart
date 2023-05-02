@@ -67,8 +67,8 @@ class RecommendedTutorCardWidget extends StatelessWidget {
                                   onPressed: () {},
                                   splashColor: Colors.transparent,
                                   icon: const Icon(
-                                    Icons.favorite_border_outlined,
-                                    color: LetTutorColors.primaryBlue,
+                                    Icons.favorite,
+                                    color: LetTutorColors.primaryRed,
                                   ),
                                 ),
                               ],
