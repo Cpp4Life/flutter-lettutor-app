@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../constants/index.dart';
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
 import '../../helpers/index.dart';
@@ -144,7 +145,9 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                                         ),
                                       ),
                                       Text(
-                                        _tutor.country ?? _tutor.user?.country ?? '',
+                                        _tutor.country ??
+                                            countries[_tutor.user?.country] ??
+                                            '',
                                         style: const TextStyle(
                                           fontSize: LetTutorFontSizes.px14,
                                           fontWeight: LetTutorFontWeights.light,
@@ -272,7 +275,11 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                           margin: _margin,
                           child: InfoChipWidget(
                             title: 'Languages',
-                            tags: _tutor.languages?.split(',') ?? [],
+                            tags: languages.entries
+                                .where((element) =>
+                                    _tutor.languages!.split(',').contains(element.key))
+                                .map((e) => e.value['name'] as String)
+                                .toList(),
                           ),
                         ),
                         Container(
