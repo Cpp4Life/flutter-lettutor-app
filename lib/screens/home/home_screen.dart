@@ -49,6 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final navigationProvider = Provider.of<NavigationProvider>(context);
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -96,29 +98,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          if (_upcomingClass != null) {
-                            final base64Decoded = base64.decode(
-                              base64.normalize(
-                                _upcomingClass!.studentMeetingLink!
-                                    .split('token=')[1]
-                                    .split(".")[1],
-                              ),
-                            );
-                            final urlObject = utf8.decode(base64Decoded);
-                            final jsonRes = json.decode(urlObject);
-                            final String roomId = jsonRes['room'];
-                            final String tokenMeeting =
-                                _upcomingClass!.studentMeetingLink!.split('token=')[1];
-
-                            final options = JitsiMeetingOptions(room: roomId)
-                              ..serverURL = 'https://meet.lettutor.com'
-                              ..audioOnly = true
-                              ..audioMuted = true
-                              ..token = tokenMeeting
-                              ..videoMuted = true;
-
-                            await JitsiMeet.joinMeeting(options);
+                          if (_upcomingClass == null) {
+                            navigationProvider.index = 3;
+                            return;
                           }
+
+                          final base64Decoded = base64.decode(
+                            base64.normalize(
+                              _upcomingClass!.studentMeetingLink!
+                                  .split('token=')[1]
+                                  .split(".")[1],
+                            ),
+                          );
+                          final urlObject = utf8.decode(base64Decoded);
+                          final jsonRes = json.decode(urlObject);
+                          final String roomId = jsonRes['room'];
+                          final String tokenMeeting =
+                              _upcomingClass!.studentMeetingLink!.split('token=')[1];
+
+                          final options = JitsiMeetingOptions(room: roomId)
+                            ..serverURL = 'https://meet.lettutor.com'
+                            ..audioOnly = true
+                            ..audioMuted = true
+                            ..token = tokenMeeting
+                            ..videoMuted = true;
+
+                          await JitsiMeet.joinMeeting(options);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -140,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Column(
             children: [
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 15, 15, 15),
+                padding: const EdgeInsets.only(left: 20, right: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -162,7 +167,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Directionality(
                       textDirection: TextDirection.rtl,
                       child: TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          navigationProvider.index = 3;
+                        },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
                           splashFactory: NoSplash.splashFactory,

@@ -20,7 +20,6 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   late List<Map<String, Object>> _pages;
-  int _selectedPageIndex = 0;
   User _user = User(
     id: '',
     avatar: null,
@@ -36,26 +35,20 @@ class _TabsScreenState extends State<TabsScreen> {
       {'page': const ChatGPTScreen(), 'title': 'ChatGPT'},
       {'page': const SettingScreen(), 'title': 'Settings'},
     ];
-    Future.delayed(Duration.zero).then((_) {
-      Provider.of<UserProvider>(context, listen: false).getUserInfo().then((value) {
-        if (mounted) {
-          setState(() {
-            _user = value;
-          });
-        }
-      });
+    Provider.of<UserProvider>(context, listen: false).getUserInfo().then((value) {
+      if (mounted) {
+        setState(() {
+          _user = value;
+        });
+      }
     });
     super.initState();
   }
 
-  void _selectPage(int index) {
-    setState(() {
-      _selectedPageIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<NavigationProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -63,14 +56,14 @@ class _TabsScreenState extends State<TabsScreen> {
         shadowColor: Colors.transparent,
         centerTitle: false,
         title: Text(
-          _pages[_selectedPageIndex]['title'] as String,
+          _pages[provider.index]['title'] as String,
           style: const TextStyle(
             color: LetTutorColors.secondaryDarkBlue,
             fontSize: LetTutorFontSizes.px16,
             fontWeight: LetTutorFontWeights.semiBold,
           ),
         ),
-        actions: _selectedPageIndex == 0
+        actions: provider.index == 0
             ? [
                 IconButton(
                   splashColor: Colors.transparent,
@@ -96,12 +89,12 @@ class _TabsScreenState extends State<TabsScreen> {
             : [],
         automaticallyImplyLeading: false,
       ),
-      body: SafeArea(child: _pages[_selectedPageIndex]['page'] as Widget),
+      body: SafeArea(child: _pages[provider.index]['page'] as Widget),
       bottomNavigationBar: BottomNavigationBar(
-        onTap: _selectPage,
+        onTap: (value) => provider.index = value,
         selectedItemColor: LetTutorColors.primaryBlue,
         unselectedItemColor: LetTutorColors.greyScaleDarkGrey,
-        currentIndex: _selectedPageIndex,
+        currentIndex: provider.index,
         type: BottomNavigationBarType.fixed,
         selectedFontSize: LetTutorFontSizes.px12,
         items: [

@@ -64,6 +64,9 @@ class LetTutorApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ChatProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => NavigationProvider(),
+        ),
       ],
       child: Consumer<AuthProvider>(
         builder: (context, auth, _) => MaterialApp(
