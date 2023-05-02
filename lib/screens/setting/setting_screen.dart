@@ -121,6 +121,9 @@ class SettingScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pushReplacementNamed(OnboardScreen.routeName);
                 Provider.of<AuthProvider>(context, listen: false).logout();
+                final navigationProvider =
+                    Provider.of<NavigationProvider>(context, listen: false);
+                navigationProvider.index = 0;
               },
               style: ElevatedButton.styleFrom(
                 splashFactory: NoSplash.splashFactory,

@@ -25,27 +25,24 @@ class InfoCourseWidget extends StatelessWidget {
             color: LetTutorColors.primaryBlue,
           ),
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: SizedBox(
-            height: courses.isEmpty ? 100 : 275,
-            child: courses.isEmpty
-                ? const Center(
-                    child: FreeContentWidget('No courses found'),
-                  )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: courses.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: CourseCardWidget(courses[index]),
-                      );
-                    },
-                  ),
-          ),
+        SizedBox(
+          height: courses.isEmpty ? 100 : 275,
+          child: courses.isEmpty
+              ? const Center(
+                  child: FreeContentWidget('No courses found'),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: courses.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: CourseCardWidget(courses[index]),
+                    );
+                  },
+                ),
         )
       ],
     );

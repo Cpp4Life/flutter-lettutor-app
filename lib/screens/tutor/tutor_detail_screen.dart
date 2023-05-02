@@ -326,26 +326,28 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                         ),
                         Container(
                           margin: _margin,
-                          child: Text(
-                            'Rating and Comment (${_feedbacks.length})',
-                            style: const TextStyle(
-                              color: LetTutorColors.primaryBlue,
-                            ),
-                          ),
-                        ),
-                        _feedbacks.isEmpty
-                            ? const FreeContentWidget('No Data')
-                            : Container(
-                                margin: _margin,
-                                child: ListView.builder(
-                                  itemCount: _feedbacks.length,
-                                  itemBuilder: (context, index) => RateCommentWidget(
-                                    _feedbacks[index],
-                                  ),
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Rating and Comment (${_feedbacks.length})',
+                                style: const TextStyle(
+                                  color: LetTutorColors.primaryBlue,
                                 ),
                               ),
+                              _feedbacks.isEmpty
+                                  ? const FreeContentWidget('No Data')
+                                  : ListView.builder(
+                                      itemCount: _feedbacks.length,
+                                      itemBuilder: (context, index) => RateCommentWidget(
+                                        _feedbacks[index],
+                                      ),
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                    ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   )
