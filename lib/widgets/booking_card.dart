@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:provider/provider.dart';
 
 import '../core/assets/index.dart';
@@ -16,6 +19,15 @@ class BookingCardWidget extends StatelessWidget {
     required this.booking,
     super.key,
   });
+
+  bool isEnabledMeetingBtn() {
+    final now = DateTime.now();
+    final start = DateTime.fromMillisecondsSinceEpoch(
+        booking.scheduleDetailInfo!.startPeriodTimestamp as int);
+    final end = DateTime.fromMillisecondsSinceEpoch(
+        booking.scheduleDetailInfo!.endPeriodTimestamp as int);
+    return now.isAfter(start) && now.isBefore(end);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +165,7 @@ class BookingCardWidget extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: LetTutorColors.greyScaleMediumGrey,
+                      color: LetTutorColors.paleGrey,
                     ),
                     borderRadius: const BorderRadius.horizontal(
                       left: Radius.circular(10),
@@ -175,16 +187,44 @@ class BookingCardWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: LetTutorColors.greyScaleMediumGrey,
+                    color: isEnabledMeetingBtn()
+                        ? LetTutorColors.primaryBlue
+                        : LetTutorColors.greyScaleMediumGrey,
                   ),
-                  color: LetTutorColors.greyScaleMediumGrey,
+                  color: isEnabledMeetingBtn()
+                      ? LetTutorColors.primaryBlue
+                      : LetTutorColors.greyScaleMediumGrey,
                   borderRadius: const BorderRadius.horizontal(
                     right: Radius.circular(10),
                   ),
                 ),
                 alignment: Alignment.center,
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: !isEnabledMeetingBtn()
+                      ? null
+                      : () async {
+                          final base64Decoded = base64.decode(
+                            base64.normalize(
+                              booking.studentMeetingLink!
+                                  .split('token=')[1]
+                                  .split(".")[1],
+                            ),
+                          );
+                          final url = utf8.decode(base64Decoded);
+                          final decodedResponse = json.decode(url);
+                          final String roomId = decodedResponse['room'];
+                          final String token =
+                              booking.studentMeetingLink!.split('token=')[1];
+
+                          final options = JitsiMeetingOptions(room: roomId)
+                            ..serverURL = 'https://meet.lettutor.com'
+                            ..audioOnly = true
+                            ..audioMuted = true
+                            ..token = token
+                            ..videoMuted = true;
+
+                          await JitsiMeet.joinMeeting(options);
+                        },
                   child: const Text(
                     'Go to meeting',
                     style: TextStyle(

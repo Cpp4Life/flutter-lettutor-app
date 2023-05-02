@@ -110,17 +110,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .split(".")[1],
                             ),
                           );
-                          final urlObject = utf8.decode(base64Decoded);
-                          final jsonRes = json.decode(urlObject);
-                          final String roomId = jsonRes['room'];
-                          final String tokenMeeting =
+                          final url = utf8.decode(base64Decoded);
+                          final decodedResponse = json.decode(url);
+                          final String roomId = decodedResponse['room'];
+                          final String token =
                               _upcomingClass!.studentMeetingLink!.split('token=')[1];
 
                           final options = JitsiMeetingOptions(room: roomId)
                             ..serverURL = 'https://meet.lettutor.com'
                             ..audioOnly = true
                             ..audioMuted = true
-                            ..token = tokenMeeting
+                            ..token = token
                             ..videoMuted = true;
 
                           await JitsiMeet.joinMeeting(options);
