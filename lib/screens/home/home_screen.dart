@@ -132,9 +132,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           side: const BorderSide(color: LetTutorColors.primaryBlue),
                         ),
-                        child: const Text(
-                          'Enter lesson room',
-                          style: TextStyle(
+                        child: Text(
+                          _upcomingClass == null ? 'Book a lesson' : 'Enter lesson room',
+                          style: const TextStyle(
                             color: LetTutorColors.primaryBlue,
                           ),
                         ),

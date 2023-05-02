@@ -93,7 +93,8 @@ class SettingScreen extends StatelessWidget {
               child: SettingButtonWidget(
                 title: 'Facebook',
                 iconPath: LetTutorSvg.facebookSetting,
-                onPressed: () {},
+                onPressed: () =>
+                    launchUrl(Uri.parse('https://www.facebook.com/lettutor.edu.vn/')),
               ),
             ),
             Container(
