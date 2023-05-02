@@ -140,6 +140,13 @@ class BookingCardWidget extends StatelessWidget {
                         }
                       },
                     );
+                  } else {
+                    TopSnackBar.show(
+                      context: context,
+                      message:
+                          'Cannot cancel meeting less than 2 hours to the starting point!',
+                      isSuccess: false,
+                    );
                   }
                 },
                 child: Container(
