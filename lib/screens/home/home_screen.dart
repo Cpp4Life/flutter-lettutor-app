@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -88,6 +89,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                           fontSize: LetTutorFontSizes.px14,
                         ),
+                      ),
+                      CountdownTimer(
+                        DateTime.fromMillisecondsSinceEpoch(
+                            _upcomingClass!.scheduleDetailInfo!.startPeriodTimestamp!),
                       ),
                       Text(
                         'Total lesson time is ${durationToString(_totalTimeInMinutes)}',
@@ -242,5 +247,71 @@ class _HomeScreenState extends State<HomeScreen> {
     final d = Duration(minutes: minutes);
     List<String> parts = d.toString().split(':');
     return '${parts[0].padLeft(2, '0')} hour(s) ${parts[1].padLeft(2, '0')} minutes';
+  }
+}
+
+class CountdownTimer extends StatefulWidget {
+  final DateTime start;
+
+  const CountdownTimer(this.start, {super.key});
+
+  @override
+  State<CountdownTimer> createState() => _CountdownTimerState();
+}
+
+class _CountdownTimerState extends State<CountdownTimer> {
+  Timer? _timer;
+  late Duration _remaining;
+
+  @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    _remaining = widget.start.difference(now);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startTimer();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer!.cancel();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+  }
+
+  void setCountDown() {
+    const reduceSecondsBy = 1;
+    if (mounted) {
+      setState(() {
+        final seconds = _remaining.inSeconds - reduceSecondsBy;
+        if (seconds < 0) {
+          _timer!.cancel();
+        } else {
+          _remaining = Duration(seconds: seconds);
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String strDigits(int n) => n.toString().padLeft(2, '0');
+    final days = strDigits(_remaining.inDays);
+    final hours = strDigits(_remaining.inHours.remainder(24));
+    final minutes = strDigits(_remaining.inMinutes.remainder(60));
+    final seconds = strDigits(_remaining.inSeconds.remainder(60));
+
+    return Text(
+      'starts in $days (d) $hours (h) $minutes (m) $seconds (s)',
+      style: const TextStyle(
+        color: Colors.yellow,
+        fontSize: LetTutorFontSizes.px14,
+        fontWeight: LetTutorFontWeights.medium,
+      ),
+    );
   }
 }
