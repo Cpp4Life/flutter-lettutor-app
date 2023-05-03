@@ -11,6 +11,7 @@ import '../../core/styles/index.dart';
 import '../../helpers/index.dart';
 import '../../models/index.dart' as model;
 import '../../providers/index.dart';
+import '../../services/index.dart';
 import '../../widgets/index.dart';
 
 class TutorDetailScreen extends StatefulWidget {
@@ -181,6 +182,10 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                                               context: context,
                                               message: e.toString(),
                                               isSuccess: false);
+                                          await Analytics.crashEvent(
+                                            'tutorDetailCatch',
+                                            exception: e.toString(),
+                                          );
                                         }
                                       },
                                       splashColor: Colors.transparent,
