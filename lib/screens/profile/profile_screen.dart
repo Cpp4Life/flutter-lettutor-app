@@ -115,6 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('PROFILE_SCREEN');
     void onSave() async {
       if (!mounted) {
         return;

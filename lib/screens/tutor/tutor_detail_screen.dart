@@ -86,6 +86,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('TUTOR_DETAIL_SCREEN');
     final tutorProvider = Provider.of<TutorProvider>(context);
 
     return Scaffold(

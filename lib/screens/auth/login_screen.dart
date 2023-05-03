@@ -80,6 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('LOGIN_SCREEN');
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBarWidget('Sign in'),

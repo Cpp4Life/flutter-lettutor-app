@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
+import '../../services/index.dart';
 import '../index.dart';
 
 class OnboardScreen extends StatelessWidget {
@@ -12,6 +14,7 @@ class OnboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('ONBOARD_SCREEN');
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

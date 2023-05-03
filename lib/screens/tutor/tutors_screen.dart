@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../core/styles/index.dart';
 import '../../models/index.dart';
 import '../../providers/index.dart';
+import '../../services/index.dart';
 import '../../widgets/index.dart';
 
 class TutorsScreen extends StatefulWidget {
@@ -63,6 +64,7 @@ class _TutorsScreenState extends State<TutorsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('TUTORS_SCREEN');
     return Column(
       children: [
         Container(

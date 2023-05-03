@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/index.dart';
+import '../../services/index.dart';
 import '../../widgets/index.dart';
 
 class UpcomingScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('UPCOMING_SCREEN');
     return FutureBuilder(
       future: _refreshUpcoming(context),
       builder: (context, snapshot) {

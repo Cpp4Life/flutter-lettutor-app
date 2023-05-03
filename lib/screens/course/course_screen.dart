@@ -7,6 +7,7 @@ import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
 import '../../models/index.dart';
 import '../../providers/index.dart';
+import '../../services/index.dart';
 
 class CourseScreen extends StatefulWidget {
   static const routeName = '/course';
@@ -46,6 +47,7 @@ class _CourseScreenState extends State<CourseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('COURSE_SCREEN');
     return DefaultTabController(
       length: 2,
       child: Container(

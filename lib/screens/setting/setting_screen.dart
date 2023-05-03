@@ -7,6 +7,7 @@ import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
 import '../../models/index.dart';
 import '../../providers/index.dart';
+import '../../services/index.dart';
 import '../../widgets/index.dart';
 import '../index.dart';
 
@@ -40,6 +41,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('SETTING_SCREEN');
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(20),

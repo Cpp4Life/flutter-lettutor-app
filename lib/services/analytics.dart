@@ -1,6 +1,7 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-abstract class Analytics {
+class Analytics {
   static Future crashEvent(
     String event, {
     String? exception,
@@ -12,5 +13,9 @@ abstract class Analytics {
       reason: exception,
       fatal: fatal,
     );
+  }
+
+  Future setTrackingScreen(String screenName) async {
+    await FirebaseAnalytics.instance.setCurrentScreen(screenName: screenName);
   }
 }

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../core/styles/index.dart';
 import '../../models/index.dart';
 import '../../providers/index.dart';
+import '../../services/index.dart';
 
 class CourseDetailScreen extends StatefulWidget {
   static const routeName = '/course-detail';
@@ -54,6 +55,8 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('COURSE_DETAIL_SCREEN');
+
     final size = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
     final width = size.width - padding.left - padding.right;

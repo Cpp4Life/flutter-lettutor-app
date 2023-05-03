@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/index.dart';
+import '../../../services/index.dart';
 import '../../../widgets/index.dart';
 import '../../../widgets/session_history_card.dart';
 
@@ -15,6 +16,7 @@ class SessionHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('SESSION_HISTORY_SCREEN');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBarWidget('Session History'),

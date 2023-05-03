@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../services/index.dart';
 import '../../../widgets/index.dart';
 
 class BookingHistoryScreen extends StatelessWidget {
@@ -9,6 +11,7 @@ class BookingHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('BOOKING_HISTORY_SCREEN');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBarWidget('Booking History'),

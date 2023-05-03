@@ -11,6 +11,7 @@ import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
 import '../../models/index.dart';
 import '../../providers/index.dart';
+import '../../services/index.dart';
 import '../../widgets/index.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -50,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('HOME_SCREEN');
     final navigationProvider = Provider.of<NavigationProvider>(context, listen: false);
 
     return SingleChildScrollView(

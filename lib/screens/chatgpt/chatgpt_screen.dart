@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/index.dart';
+import '../../services/index.dart';
 import '../../widgets/index.dart';
 
 class ChatGPTScreen extends StatelessWidget {
@@ -11,6 +12,7 @@ class ChatGPTScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('CHATGPT_SCREEN');
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Consumer<ChatProvider>(

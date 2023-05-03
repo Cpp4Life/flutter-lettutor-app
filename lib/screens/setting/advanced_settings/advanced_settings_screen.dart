@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/assets/index.dart';
 import '../../../core/styles/index.dart';
+import '../../../services/index.dart';
 import '../../../widgets/index.dart';
 
 class AdvancedSettingsScreen extends StatefulWidget {
@@ -25,6 +27,7 @@ class _AdvancedSettingsScreenState extends State<AdvancedSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('ADVANCED_SETTING_SCREEN');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBarWidget('Advanced Settings'),

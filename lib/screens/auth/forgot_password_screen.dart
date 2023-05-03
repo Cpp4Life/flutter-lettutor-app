@@ -88,6 +88,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('FORGET_PASSWORD_SCREEN');
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBarWidget('Forgot password'),

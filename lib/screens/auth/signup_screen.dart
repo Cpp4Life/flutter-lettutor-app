@@ -34,6 +34,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('SIGNUP_SCREEN');
+
     void handleRegister() async {
       final email = _emailCtrl.value.text;
       final password = _passwordCtrl.value.text;
