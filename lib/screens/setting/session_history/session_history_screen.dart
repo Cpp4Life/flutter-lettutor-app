@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/widgets/session_history_card.dart';
+import 'package:provider/provider.dart';
 
-import '../../../core/styles/index.dart';
+import '../../../providers/index.dart';
 import '../../../widgets/index.dart';
+import '../../../widgets/session_history_card.dart';
 
 class SessionHistoryScreen extends StatelessWidget {
   static const routeName = '/session-history';
+
+  final int page = 1;
+  final int perPage = 10;
 
   const SessionHistoryScreen({super.key});
 
@@ -26,79 +30,31 @@ class SessionHistoryScreen extends StatelessWidget {
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: ListView.builder(
-                  itemCount: 20,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: Card(
-                        elevation: 5,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            const SessionHistoryCardWidget(
-                              name: 'Dat Truong Gia',
-                              date: '09:00, 03/17/2023',
-                              duration: '00:12:38',
-                              review: 'Not feedback yet',
+                child: FutureBuilder(
+                  future: Provider.of<ScheduleProvider>(context, listen: false)
+                      .fetchAndSetSessionHistory(page: page, perPage: perPage),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (snapshot.error != null) {
+                      return const Center(
+                        child: FreeContentWidget('No available sessions'),
+                      );
+                    }
+                    return Consumer<ScheduleProvider>(
+                      builder: (context, provider, _) => ListView.builder(
+                        itemCount: provider.bookings.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            child: SessionHistoryCardWidget(
+                              booking: provider.bookings[index],
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 10),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      padding: const EdgeInsets.only(top: 10, bottom: 10),
-                                      decoration: BoxDecoration(
-                                        color: LetTutorColors.primaryBlue,
-                                        border: Border.all(
-                                          color: LetTutorColors.primaryBlue,
-                                        ),
-                                        borderRadius: const BorderRadius.horizontal(
-                                          left: Radius.circular(10),
-                                        ),
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: const Text(
-                                        'Give Feedback',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: LetTutorFontSizes.px14,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      padding: const EdgeInsets.only(top: 10, bottom: 10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: LetTutorColors.primaryBlue,
-                                        ),
-                                        borderRadius: const BorderRadius.horizontal(
-                                          right: Radius.circular(10),
-                                        ),
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: const Text(
-                                        'See Tutor Detail',
-                                        style: TextStyle(
-                                          color: LetTutorColors.primaryBlue,
-                                          fontSize: LetTutorFontSizes.px14,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
                     );
                   },

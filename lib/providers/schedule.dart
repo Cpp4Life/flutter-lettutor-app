@@ -8,6 +8,11 @@ import 'package:intl/intl.dart';
 import '../helpers/index.dart';
 import '../models/index.dart';
 
+enum Type {
+  upcoming,
+  session,
+}
+
 class ScheduleProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
   final String? _authToken;
@@ -97,12 +102,25 @@ class ScheduleProvider with ChangeNotifier {
     }
   }
 
-  Future fetchAndSetUpcomingClass({required int page, required int perPage}) async {
+  _handleFetch(
+      {required int page, required int perPage, required Type identifier}) async {
     try {
-      // * e.g: https://domain.com/booking/list/student?page=#&perPage=#&dateTimeLte=#&orderBy=meeting&sortBy=desc
       final now = DateTime.now().millisecondsSinceEpoch;
-      final url = Uri.parse(
-          '$_baseURL/booking/list/student?page=$page&perPage=$perPage&dateTimeGte=$now&orderBy=meeting&sortBy=asc');
+      Uri url;
+      switch (identifier) {
+        case Type.upcoming:
+          // * e.g: GET https://domain.com/booking/list/student?page=#&perPage=#&dateTimeGte=#&orderBy=meeting&sortBy=asc
+          url = Uri.parse(
+            '$_baseURL/booking/list/student?page=$page&perPage=$perPage&dateTimeGte=$now&orderBy=meeting&sortBy=asc',
+          );
+          break;
+        case Type.session:
+          // * e.g: GET https://domain.com/booking/list/student?page=#&perPage=#&dateTimeLte=#&orderBy=meeting&sortBy=desc
+          url = Uri.parse(
+            '$_baseURL/booking/list/student?page=$page&perPage=$perPage&dateTimeLte=$now&orderBy=meeting&sortBy=desc',
+          );
+          break;
+      }
       final headers = Http.getHeaders(token: _authToken as String);
       final response = await http.get(url, headers: headers);
       final decodedResponse = jsonDecode(response.body);
@@ -115,6 +133,14 @@ class ScheduleProvider with ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future fetchAndSetUpcomingClass({required int page, required int perPage}) async {
+    return _handleFetch(page: page, perPage: perPage, identifier: Type.upcoming);
+  }
+
+  fetchAndSetSessionHistory({required int page, required int perPage}) async {
+    return _handleFetch(page: page, perPage: perPage, identifier: Type.session);
   }
 
   void _updateBookedStatus(String scheduleDetailIds) {
