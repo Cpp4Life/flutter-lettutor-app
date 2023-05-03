@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../helpers/index.dart';
 import '../models/index.dart';
+import '../services/index.dart';
 
 class TestPreparationProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
@@ -27,6 +28,11 @@ class TestPreparationProvider with ChangeNotifier {
       _tests = Generic.fromJSON<List<TestPreparation>, TestPreparation>(decodedResponse);
       return [..._tests];
     } catch (error) {
+      await Analytics.crashEvent(
+        'fetchAndSetTests',
+        exception: error.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }

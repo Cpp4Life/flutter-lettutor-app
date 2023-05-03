@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../helpers/index.dart';
 import '../models/index.dart';
+import '../services/index.dart';
 
 class UserProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
@@ -25,6 +26,11 @@ class UserProvider with ChangeNotifier {
       }
       return Generic.fromJSON<User, void>(decodedResponse['user']);
     } catch (e) {
+      await Analytics.crashEvent(
+        'getUserInfo',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -60,6 +66,11 @@ class UserProvider with ChangeNotifier {
         throw HttpException('Failed to update user\'s profile! Please try again later');
       }
     } catch (e) {
+      await Analytics.crashEvent(
+        'updateUserInfo',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -84,6 +95,11 @@ class UserProvider with ChangeNotifier {
         throw HttpException('Oops! Cannot update your avatar.');
       }
     } catch (e) {
+      await Analytics.crashEvent(
+        'uploadAvatar',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -100,6 +116,11 @@ class UserProvider with ChangeNotifier {
       }
       return decodedResponse['total'];
     } catch (e) {
+      await Analytics.crashEvent(
+        'getTotalLessonTime',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -133,6 +154,11 @@ class UserProvider with ChangeNotifier {
 
       return upcomingLessons.isEmpty ? null : upcomingLessons.first;
     } catch (e) {
+      await Analytics.crashEvent(
+        'getUpcoming',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }

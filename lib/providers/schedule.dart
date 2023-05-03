@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../helpers/index.dart';
 import '../models/index.dart';
+import '../services/index.dart';
 
 enum Type {
   upcoming,
@@ -50,6 +51,11 @@ class ScheduleProvider with ChangeNotifier {
       _groupSchedule();
       notifyListeners();
     } catch (e) {
+      await Analytics.crashEvent(
+        'fetchAndSetSchedules',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -74,6 +80,11 @@ class ScheduleProvider with ChangeNotifier {
       await callback();
       notifyListeners();
     } catch (e) {
+      await Analytics.crashEvent(
+        'bookClass',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -98,6 +109,11 @@ class ScheduleProvider with ChangeNotifier {
       _bookingInfo.removeWhere((element) => element.id == scheduleDetailIds);
       notifyListeners();
     } catch (e) {
+      await Analytics.crashEvent(
+        'cancelBooking',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -131,6 +147,11 @@ class ScheduleProvider with ChangeNotifier {
       _bookingInfo = Generic.fromJSON<List<BookingInfo>, BookingInfo>(jsonList);
       notifyListeners();
     } catch (e) {
+      await Analytics.crashEvent(
+        '_handleFetch',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }

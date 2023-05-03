@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/index.dart';
 import '../models/index.dart';
+import '../services/index.dart';
 
 class AuthProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
@@ -67,6 +68,11 @@ class AuthProvider with ChangeNotifier {
       );
       prefs.setString('userData', userData);
     } catch (error) {
+      await Analytics.crashEvent(
+        '_authenticate',
+        exception: error.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -95,6 +101,11 @@ class AuthProvider with ChangeNotifier {
       }
       await callback();
     } catch (error) {
+      await Analytics.crashEvent(
+        'forgetPassword',
+        exception: error.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -139,6 +150,11 @@ class AuthProvider with ChangeNotifier {
       _autoLogout();
       return true;
     } catch (error) {
+      await Analytics.crashEvent(
+        'tryAutoLogin',
+        exception: error.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }

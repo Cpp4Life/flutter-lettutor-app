@@ -6,10 +6,11 @@ import 'package:http/http.dart' as http;
 
 import '../helpers/index.dart';
 import '../models/index.dart';
+import '../services/index.dart';
 
 class LearnTopicProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
-  List<LearnTopic> _learnTopics = [];
+  final List<LearnTopic> _learnTopics = [];
 
   List<LearnTopic> get learnTopics {
     return [..._learnTopics];
@@ -26,6 +27,11 @@ class LearnTopicProvider with ChangeNotifier {
       }
       return Generic.fromJSON<List<LearnTopic>, LearnTopic>(decodedResponse);
     } catch (error) {
+      await Analytics.crashEvent(
+        'fetchAndSetLearnTopics',
+        exception: error.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }

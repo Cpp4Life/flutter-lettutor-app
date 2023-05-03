@@ -6,6 +6,7 @@ import '../../../core/styles/index.dart';
 import '../../../helpers/index.dart';
 import '../../../models/index.dart';
 import '../../../providers/index.dart';
+import '../../../services/index.dart';
 
 class PeriodItemWidget extends StatefulWidget {
   final String id;
@@ -59,11 +60,19 @@ class _PeriodItemWidgetState extends State<PeriodItemWidget> {
                       message: e.toString(),
                       isSuccess: false,
                     );
+                    await Analytics.crashEvent(
+                      'periodItemCatch',
+                      exception: e.toString(),
+                    );
                   } catch (e) {
                     TopSnackBar.show(
                       context: context,
                       message: 'Oops! Something went wrong',
                       isSuccess: false,
+                    );
+                    await Analytics.crashEvent(
+                      'periodItemCatch',
+                      exception: e.toString(),
                     );
                   }
                 },

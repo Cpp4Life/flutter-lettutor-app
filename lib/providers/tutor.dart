@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../helpers/index.dart';
 import '../models/index.dart' as model;
+import '../services/index.dart';
 
 class TutorProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
@@ -40,6 +41,11 @@ class TutorProvider with ChangeNotifier {
           Generic.fromJSON<List<model.FavoriteTutor>, model.FavoriteTutor>(favoriteList);
       notifyListeners();
     } catch (error) {
+      await Analytics.crashEvent(
+        'fetchAndSetTutors',
+        exception: error.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -75,6 +81,11 @@ class TutorProvider with ChangeNotifier {
       _tutors = Generic.fromJSON<List<model.Tutor>, model.Tutor>(jsonList);
       notifyListeners();
     } catch (error) {
+      await Analytics.crashEvent(
+        'fetchAndSetTutorsWithFilters',
+        exception: error.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -91,6 +102,11 @@ class TutorProvider with ChangeNotifier {
       }
       return Generic.fromJSON<model.Tutor, void>(decodedResponse);
     } catch (error) {
+      await Analytics.crashEvent(
+        'searchTutorByID',
+        exception: error.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -114,7 +130,12 @@ class TutorProvider with ChangeNotifier {
       feedbacks.sort((f1, f2) => f2.createdAt!.millisecondsSinceEpoch
           .compareTo(f1.createdAt!.millisecondsSinceEpoch));
       return feedbacks;
-    } catch (e) {
+    } catch (error) {
+      await Analytics.crashEvent(
+        'getTutorFeedbacks',
+        exception: error.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -141,7 +162,12 @@ class TutorProvider with ChangeNotifier {
         _favoriteTutors.removeAt(index);
       }
       notifyListeners();
-    } catch (e) {
+    } catch (error) {
+      await Analytics.crashEvent(
+        'toggleFavorite',
+        exception: error.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }

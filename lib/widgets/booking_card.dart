@@ -11,6 +11,7 @@ import '../core/styles/index.dart';
 import '../helpers/index.dart';
 import '../models/index.dart';
 import '../providers/index.dart';
+import '../services/index.dart';
 
 class BookingCardWidget extends StatelessWidget {
   final BookingInfo booking;
@@ -148,6 +149,10 @@ class BookingCardWidget extends StatelessWidget {
                             context: context,
                             message: e.toString(),
                             isSuccess: false,
+                          );
+                          await Analytics.crashEvent(
+                            'bookingCardCatch',
+                            exception: e.toString(),
                           );
                         }
                       },

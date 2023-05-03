@@ -7,6 +7,7 @@ import '../../core/styles/index.dart';
 import '../../helpers/index.dart';
 import '../../models/index.dart';
 import '../../providers/index.dart';
+import '../../services/index.dart';
 import '../../widgets/index.dart';
 import '../index.dart';
 
@@ -59,12 +60,20 @@ class _LoginScreenState extends State<LoginScreen> {
         message: error.toString(),
         isSuccess: false,
       );
+      await Analytics.crashEvent(
+        'handleLogin',
+        exception: error.toString(),
+      );
     } catch (error) {
       debugPrint(error.toString());
       TopSnackBar.show(
         context: context,
         message: 'Failed to login! Please try again later',
         isSuccess: false,
+      );
+      await Analytics.crashEvent(
+        'handleLogin',
+        exception: error.toString(),
       );
     }
   }

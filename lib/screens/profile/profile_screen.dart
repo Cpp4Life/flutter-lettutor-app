@@ -13,6 +13,7 @@ import '../../core/styles/index.dart';
 import '../../helpers/index.dart';
 import '../../models/index.dart';
 import '../../providers/index.dart';
+import '../../services/index.dart';
 import '../../widgets/index.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -149,12 +150,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           message: e.toString(),
           isSuccess: false,
         );
+        await Analytics.crashEvent(
+          'onSave',
+          exception: e.toString(),
+        );
       } catch (error) {
         debugPrint(error.toString());
         TopSnackBar.show(
           context: context,
           message: 'Failed to update user\'s profile! Please try again later',
           isSuccess: false,
+        );
+        await Analytics.crashEvent(
+          'onSave',
+          exception: error.toString(),
         );
       }
     }
@@ -198,12 +207,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           message: e.toString(),
           isSuccess: false,
         );
+        await Analytics.crashEvent(
+          'pickImageFromGallery',
+          exception: e.toString(),
+        );
       } catch (error) {
         debugPrint(error.toString());
         TopSnackBar.show(
           context: context,
           message: 'Failed to update your avatar! Please try again later',
           isSuccess: false,
+        );
+        await Analytics.crashEvent(
+          'pickImageFromGallery',
+          exception: error.toString(),
         );
       }
     }

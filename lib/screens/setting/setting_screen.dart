@@ -1,17 +1,42 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
+import '../../models/index.dart';
 import '../../providers/index.dart';
 import '../../widgets/index.dart';
 import '../index.dart';
 
-class SettingScreen extends StatelessWidget {
-  final EdgeInsets _margin = const EdgeInsets.only(bottom: 10);
-
+class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
+
+  @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
+  final EdgeInsets _margin = const EdgeInsets.only(bottom: 10);
+  User _user = User(
+    id: '',
+    email: '',
+    avatar: null,
+  );
+
+  @override
+  void initState() {
+    Provider.of<UserProvider>(context, listen: false).getUserInfo().then((user) => {
+          if (mounted)
+            {
+              setState(() {
+                _user = user;
+              })
+            }
+        });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +50,24 @@ class SettingScreen extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 20),
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  radius: 30,
-                  child: Image.asset(
-                    LetTutorImages.avatar,
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: CachedNetworkImage(
+                    imageUrl: _user.avatar ?? 'https://picsum.photos/200/300',
                     fit: BoxFit.cover,
+                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                        CircularProgressIndicator(value: downloadProgress.progress),
+                    errorWidget: (context, url, error) => Image.asset(
+                      LetTutorImages.avatar,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-                title: const Text(
-                  'Dat Truong Gia',
+                title: Text(
+                  _user.name ?? 'User',
                 ),
-                subtitle: const Text(
-                  'tgdat19@clc.fitus.edu.vn',
+                subtitle: Text(
+                  _user.email ?? 'example@email.com',
                 ),
               ),
             ),

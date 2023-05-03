@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../helpers/index.dart';
 import '../models/index.dart';
+import '../services/index.dart';
 
 class CourseProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
@@ -32,6 +33,11 @@ class CourseProvider with ChangeNotifier {
       return Generic.fromJSON<List<CourseCategory>, CourseCategory>(
           decodedResponse['rows']);
     } catch (e) {
+      await Analytics.crashEvent(
+        'fetchAndSetCourseCategory',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -66,6 +72,11 @@ class CourseProvider with ChangeNotifier {
       _courses = Generic.fromJSON<List<Course>, Course>(jsonList);
       notifyListeners();
     } catch (e) {
+      await Analytics.crashEvent(
+        'fetchAndSetCourses',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }
@@ -82,6 +93,11 @@ class CourseProvider with ChangeNotifier {
       }
       return Generic.fromJSON<Course, void>(decodedResponse['data']);
     } catch (e) {
+      await Analytics.crashEvent(
+        'findCourseById',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }

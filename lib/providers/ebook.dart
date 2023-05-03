@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../helpers/index.dart';
 import '../models/index.dart';
+import '../services/index.dart';
 
 class EbookProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
@@ -49,6 +50,11 @@ class EbookProvider with ChangeNotifier {
       _ebooks = Generic.fromJSON<List<Ebook>, Ebook>(jsonList);
       notifyListeners();
     } catch (e) {
+      await Analytics.crashEvent(
+        'fetchAndSetEbooks',
+        exception: e.toString(),
+        fatal: true,
+      );
       rethrow;
     }
   }

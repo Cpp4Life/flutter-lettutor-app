@@ -2,6 +2,8 @@ import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'index.dart';
+
 class OpenAIService {
   final List<Map<String, String>> _history = [];
 
@@ -45,6 +47,11 @@ class OpenAIService {
       _history.add(assistantInput);
       return content;
     } catch (error) {
+      await Analytics.crashEvent(
+        'getResponse',
+        exception: error.toString(),
+        fatal: true,
+      );
       debugPrint(error.toString());
       return 'Oops! Something went wrong';
     }
