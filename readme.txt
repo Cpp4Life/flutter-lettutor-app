@@ -10,3 +10,7 @@
 ------------------------------------------
 |    Mar 17, 2023    |        1.1        |
 ------------------------------------------
+|    May 04, 2023    |        1.2        |
+------------------------------------------
+
+- Video for Milestone 2: https://drive.google.com/file/d/1fuOpAapK95nHMgp29hB4A9VdQGPNHXaJ/view?usp=share_link
