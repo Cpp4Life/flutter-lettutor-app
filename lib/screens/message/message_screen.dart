@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../core/assets/assets.dart';
-import '../../core/styles/styles.dart';
+import '../../core/assets/index.dart';
+import '../../core/styles/index.dart';
 import '../../widgets/index.dart';
 
 class MessageScreen extends StatelessWidget {
@@ -15,7 +15,9 @@ class MessageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SearchBarWidget('Search Message'),
+        const SearchBarWidget(
+          title: 'Search Message',
+        ),
         _messages == 0
             ? const FreeContentWidget('No recent chat')
             : Expanded(

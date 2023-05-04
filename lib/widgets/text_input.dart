@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/styles/styles.dart';
+import '../core/styles/index.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final String? label;
@@ -23,6 +23,7 @@ class TextFieldWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       child: TextField(
+        controller: controller,
         keyboardType: keyboardType,
         obscureText: obscureText,
         decoration: InputDecoration(

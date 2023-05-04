@@ -37,6 +37,25 @@ dependencies:
   flutter_svg: ^2.0.2
   video_player: ^2.6.0
   chewie: ^1.4.0
+  flutter_dotenv: ^5.0.2
+  top_snackbar_flutter: ^3.0.0+1
+  http: ^0.13.5
+  provider: ^6.0.5
+  shared_preferences: ^2.1.0
+  cached_network_image: ^3.2.3
+  uuid: ^3.0.7
+  url_launcher: ^6.1.10
+  flutter_datetime_picker: ^1.5.1
+  intl: ^0.18.1
+  image_picker: ^0.8.7+4
+  path: ^1.8.2
+  chat_gpt_sdk: ^2.1.2
+  animated_text_kit: ^4.2.2
+  jumping_dot: ^0.0.6
+  jitsi_meet: ^4.0.0
+  firebase_crashlytics: ^3.1.2
+  firebase_core: ^2.10.0
+  firebase_analytics: ^10.2.1
 
 dev_dependencies:
   flutter_test:
@@ -106,3 +125,4 @@ flutter:
   assets:
     - assets/images/
     - assets/svg/
+    - .env

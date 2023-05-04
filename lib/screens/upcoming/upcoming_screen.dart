@@ -1,93 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../core/styles/styles.dart';
+import '../../providers/index.dart';
+import '../../services/index.dart';
 import '../../widgets/index.dart';
 
-class UpcomingScreen extends StatelessWidget {
+class UpcomingScreen extends StatefulWidget {
   static const routeName = '/upcoming';
 
   const UpcomingScreen({super.key});
 
   @override
+  State<UpcomingScreen> createState() => _UpcomingScreenState();
+}
+
+class _UpcomingScreenState extends State<UpcomingScreen> {
+  final int _perPage = 10;
+  final int _page = 1;
+
+  Future _refreshUpcoming(BuildContext context) async {
+    await Provider.of<ScheduleProvider>(context, listen: false)
+        .fetchAndSetUpcomingClass(page: _page, perPage: _perPage);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: ListView.builder(
-        itemCount: 20,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: Card(
-              elevation: 5,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-              child: Column(
-                children: [
-                  const BookingCardWidget(
-                    name: 'Dat Truong Gia',
-                    date: '2023-16-03',
-                    startTime: '08:30',
-                    endTime: '11:30',
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.only(top: 10, bottom: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: LetTutorColors.greyScaleMediumGrey,
-                              ),
-                              borderRadius: const BorderRadius.horizontal(
-                                left: Radius.circular(10),
-                              ),
-                            ),
-                            alignment: Alignment.center,
-                            child: const Text(
-                              'Cancel',
-                              style: TextStyle(
-                                color: LetTutorColors.secondaryDarkBlue,
-                                fontSize: LetTutorFontSizes.px14,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.only(top: 10, bottom: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: LetTutorColors.greyScaleMediumGrey,
-                              ),
-                              color: LetTutorColors.greyScaleMediumGrey,
-                              borderRadius: const BorderRadius.horizontal(
-                                right: Radius.circular(10),
-                              ),
-                            ),
-                            alignment: Alignment.center,
-                            child: const Text(
-                              'Go to meeting',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: LetTutorFontSizes.px14,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+    context.read<Analytics>().setTrackingScreen('UPCOMING_SCREEN');
+    return FutureBuilder(
+      future: _refreshUpcoming(context),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
           );
-        },
-      ),
+        }
+        if (snapshot.error != null) {
+          return const Center(
+            child: FreeContentWidget('No available upcoming class'),
+          );
+        }
+        return RefreshIndicator(
+          onRefresh: () => _refreshUpcoming(context),
+          child: Consumer<ScheduleProvider>(
+            builder: (context, provider, _) => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: provider.bookings.isEmpty
+                  ? const Center(
+                      child: FreeContentWidget('No available bookings'),
+                    )
+                  : ListView.builder(
+                      itemCount: provider.bookings.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          child: Card(
+                            elevation: 5,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: BookingCardWidget(
+                              booking: provider.bookings[index],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

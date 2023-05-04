@@ -1,16 +1,59 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart' as intl;
+import 'package:jitsi_meet/jitsi_meet.dart';
+import 'package:provider/provider.dart';
 
-import '../../core/assets/assets.dart';
-import '../../core/styles/styles.dart';
+import '../../core/assets/index.dart';
+import '../../core/styles/index.dart';
+import '../../models/index.dart';
+import '../../providers/index.dart';
+import '../../services/index.dart';
 import '../../widgets/index.dart';
-import '../index.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _totalTimeInMinutes = 0;
+  BookingInfo? _upcomingClass;
+  bool _isLoading = true;
+  bool _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      fetchTotalLessonTimeAndUpcomingClass();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  void fetchTotalLessonTimeAndUpcomingClass() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final totalTime = await userProvider.getTotalLessonTime();
+    final upcoming = await userProvider.getUpcoming();
+    if (mounted) {
+      setState(() {
+        _totalTimeInMinutes = totalTime;
+        _upcomingClass = upcoming;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    context.read<Analytics>().setTrackingScreen('HOME_SCREEN');
+    final navigationProvider = Provider.of<NavigationProvider>(context, listen: false);
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -18,55 +61,99 @@ class HomeScreen extends StatelessWidget {
             height: 200,
             width: double.infinity,
             color: LetTutorColors.primaryBlue,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Upcoming lesson',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: LetTutorFontSizes.px20,
+            child: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Upcoming lesson',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: LetTutorFontSizes.px20,
+                        ),
+                      ),
+                      Text(
+                        _upcomingClass == null
+                            ? 'There is no upcoming class'
+                            : intl.DateFormat('E, dd MMM yyyy, HH:mm - ').format(
+                                  DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
+                                      .scheduleDetailInfo!.startPeriodTimestamp!),
+                                ) +
+                                intl.DateFormat('HH:mm').format(
+                                  DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
+                                      .scheduleDetailInfo!.endPeriodTimestamp!),
+                                ),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: LetTutorFontSizes.px14,
+                        ),
+                      ),
+                      if (_upcomingClass != null)
+                        CountdownTimer(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              _upcomingClass!.scheduleDetailInfo!.startPeriodTimestamp!),
+                        ),
+                      Text(
+                        'Total lesson time is ${durationToString(_totalTimeInMinutes)}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: LetTutorFontSizes.px14,
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_upcomingClass == null) {
+                            navigationProvider.index = 3;
+                            return;
+                          }
+
+                          final base64Decoded = base64.decode(
+                            base64.normalize(
+                              _upcomingClass!.studentMeetingLink!
+                                  .split('token=')[1]
+                                  .split(".")[1],
+                            ),
+                          );
+                          final url = utf8.decode(base64Decoded);
+                          final decodedResponse = json.decode(url);
+                          final String roomId = decodedResponse['room'];
+                          final String token =
+                              _upcomingClass!.studentMeetingLink!.split('token=')[1];
+
+                          final options = JitsiMeetingOptions(room: roomId)
+                            ..serverURL = 'https://meet.lettutor.com'
+                            ..audioOnly = true
+                            ..audioMuted = true
+                            ..token = token
+                            ..videoMuted = true;
+
+                          await JitsiMeet.joinMeeting(options);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          side: const BorderSide(color: LetTutorColors.primaryBlue),
+                        ),
+                        child: Text(
+                          _upcomingClass == null ? 'Book a lesson' : 'Enter lesson room',
+                          style: const TextStyle(
+                            color: LetTutorColors.primaryBlue,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                const Text(
-                  'Fri, 17 Mar 23 10:00 - 12:00',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: LetTutorFontSizes.px14,
-                  ),
-                ),
-                const Text(
-                  'Total lesson time is 11 hours 45 minutes',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: LetTutorFontSizes.px14,
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(MeetingScreen.routeName);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    side: const BorderSide(color: LetTutorColors.primaryBlue),
-                  ),
-                  child: const Text(
-                    'Enter lesson room',
-                    style: TextStyle(
-                      color: LetTutorColors.primaryBlue,
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
           Column(
             children: [
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 15, 15, 15),
+                padding: const EdgeInsets.only(left: 20, right: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -88,7 +175,9 @@ class HomeScreen extends StatelessWidget {
                     Directionality(
                       textDirection: TextDirection.rtl,
                       child: TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          navigationProvider.index = 3;
+                        },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
                           splashFactory: NoSplash.splashFactory,
@@ -109,21 +198,46 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(left: 15, right: 15),
-                child: ListView.builder(
-                  itemCount: recommendedTutors.length,
-                  itemBuilder: (context, index) {
-                    return RecommendedTutorCardWidget(
-                      name: recommendedTutors[index]['name'] as String,
-                      avatar: '',
-                      intro: recommendedTutors[index]['intro'] as String,
-                      tags: recommendedTutors[index]['tags'] as List<String>,
-                    );
-                  },
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                ),
+              FutureBuilder(
+                future: Provider.of<TutorProvider>(context, listen: false)
+                    .fetchAndSetTutors(page: 1, perPage: 9),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.error != null) {
+                    return const FreeContentWidget('No available tutors');
+                  }
+                  return Consumer<TutorProvider>(
+                    builder: (context, provider, child) => provider.favoriteTutors.isEmpty
+                        ? const FreeContentWidget('No available tutors')
+                        : Container(
+                            margin: const EdgeInsets.only(left: 15, right: 15),
+                            child: ListView.builder(
+                              itemCount: provider.favoriteTutors.length,
+                              itemBuilder: (context, index) {
+                                return RecommendedTutorCardWidget(
+                                  id: provider.favoriteTutors[index].secondInfo!.id,
+                                  key: ValueKey(
+                                      provider.favoriteTutors[index].secondInfo!.id),
+                                  name: provider.favoriteTutors[index].secondInfo!.name
+                                      as String,
+                                  avatar:
+                                      provider.favoriteTutors[index].secondInfo!.avatar,
+                                  bio: provider.favoriteTutors[index].tutorInfo!.bio
+                                      as String,
+                                  specialties: provider
+                                      .favoriteTutors[index].tutorInfo!.specialties
+                                      ?.split(',') as List<String>,
+                                  rating:
+                                      provider.favoriteTutors[index].tutorInfo!.rating,
+                                );
+                              },
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                            ),
+                          ),
+                  );
+                },
               )
             ],
           ),
@@ -131,37 +245,76 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+  String durationToString(int minutes) {
+    final d = Duration(minutes: minutes);
+    List<String> parts = d.toString().split(':');
+    return '${parts[0].padLeft(2, '0')} hour(s) ${parts[1].padLeft(2, '0')} minutes';
+  }
 }
 
-const recommendedTutors = [
-  {
-    "name": "Abby",
-    "tags": ["english"],
-    "intro":
-        "I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.",
-  },
-  {
-    "name": "Selena Phan",
-    "tags": ["english", "Vietnamese"],
-    "intro":
-        "I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.",
-  },
-  {
-    "name": "Kathy Huynh",
-    "tags": ["English", "Vietnamese"],
-    "intro":
-        "I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.",
-  },
-  {
-    "name": "Jovieline",
-    "tags": [
-      "english",
-      "Vietnamese",
-      "Basic French",
-      "Basic German",
-      "Basic Mandarin Chinese"
-    ],
-    "intro":
-        "I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.",
-  },
-];
+class CountdownTimer extends StatefulWidget {
+  final DateTime start;
+
+  const CountdownTimer(this.start, {super.key});
+
+  @override
+  State<CountdownTimer> createState() => _CountdownTimerState();
+}
+
+class _CountdownTimerState extends State<CountdownTimer> {
+  Timer? _timer;
+  late Duration _remaining;
+
+  @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    _remaining = widget.start.difference(now);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startTimer();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer!.cancel();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+  }
+
+  void setCountDown() {
+    const reduceSecondsBy = 1;
+    if (mounted) {
+      setState(() {
+        final seconds = _remaining.inSeconds - reduceSecondsBy;
+        if (seconds < 0) {
+          _timer!.cancel();
+        } else {
+          _remaining = Duration(seconds: seconds);
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String strDigits(int n) => n.toString().padLeft(2, '0');
+    final days = strDigits(_remaining.inDays);
+    final hours = strDigits(_remaining.inHours.remainder(24));
+    final minutes = strDigits(_remaining.inMinutes.remainder(60));
+    final seconds = strDigits(_remaining.inSeconds.remainder(60));
+
+    return Text(
+      'starts in $days (d) $hours (h) $minutes (m) $seconds (s)',
+      style: const TextStyle(
+        color: Colors.yellow,
+        fontSize: LetTutorFontSizes.px14,
+        fontWeight: LetTutorFontWeights.medium,
+      ),
+    );
+  }
+}

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../core/styles/styles.dart';
-import '../models/course.dart';
-import 'index.dart';
+import '../../core/styles/index.dart';
+import '../index.dart';
 
-class InfoCourseWidget extends StatelessWidget {
+class InfoChipWidget extends StatelessWidget {
   final String title;
-  final List<Course> courses;
+  final List<String> tags;
 
-  const InfoCourseWidget({
+  const InfoChipWidget({
     required this.title,
-    required this.courses,
+    required this.tags,
     super.key,
   });
 
@@ -29,16 +28,16 @@ class InfoCourseWidget extends StatelessWidget {
           margin: const EdgeInsets.only(top: 5),
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: SizedBox(
-            height: 250,
+            height: 35,
             child: ListView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.zero,
               scrollDirection: Axis.horizontal,
-              itemCount: courses.length,
+              itemCount: tags.length,
               itemBuilder: (context, index) {
                 return Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: CourseCardWidget(courses[index]),
+                  margin: const EdgeInsets.only(right: 5),
+                  child: ChipTagWidget(tags[index]),
                 );
               },
             ),

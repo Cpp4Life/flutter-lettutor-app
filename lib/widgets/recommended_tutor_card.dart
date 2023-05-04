@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 
-import '../core/assets/assets.dart';
-import '../core/styles/styles.dart';
+import '../core/styles/index.dart';
 import '../screens/tutor/tutor_detail_screen.dart';
 import 'index.dart';
 
 class RecommendedTutorCardWidget extends StatelessWidget {
+  final String id;
   final String name;
-  final String intro;
-  final String avatar;
-  final List<String> tags;
+  final String bio;
+  final List<String> specialties;
+  final String? avatar;
+  final double? rating;
 
   const RecommendedTutorCardWidget({
+    Key? key,
+    required this.id,
     required this.name,
-    required this.intro,
+    required this.bio,
     required this.avatar,
-    required this.tags,
-    super.key,
-  });
+    required this.specialties,
+    required this.rating,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,40 +28,37 @@ class RecommendedTutorCardWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context).pushNamed(TutorDetailScreen.routeName);
+          Navigator.of(context).pushNamed(
+            TutorDetailScreen.routeName,
+            arguments: id,
+          );
         },
         child: Card(
           elevation: 4,
           child: Container(
             padding: const EdgeInsets.all(10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   margin: const EdgeInsets.only(bottom: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.only(right: 10, top: 10),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          radius: 30,
-                          child: Image.asset(
-                            LetTutorImages.avatar,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                      CachedImageNetworkWidget(avatar),
                       Expanded(
                         child: Column(
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  name,
-                                  style: const TextStyle(
-                                    fontSize: LetTutorFontSizes.px16,
+                                Container(
+                                  margin: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    name,
+                                    style: const TextStyle(
+                                      fontSize: LetTutorFontSizes.px16,
+                                    ),
                                   ),
                                 ),
                                 IconButton(
@@ -67,26 +67,28 @@ class RecommendedTutorCardWidget extends StatelessWidget {
                                   onPressed: () {},
                                   splashColor: Colors.transparent,
                                   icon: const Icon(
-                                    Icons.favorite_border_outlined,
-                                    color: LetTutorColors.primaryBlue,
+                                    Icons.favorite,
+                                    color: LetTutorColors.primaryRed,
                                   ),
                                 ),
                               ],
                             ),
                             Container(
                               margin: const EdgeInsets.only(bottom: 5),
-                              child: const RatingWidget(),
+                              child: RatingWidget(
+                                count: rating == null ? 0 : rating!.round(),
+                              ),
                             ),
                             SizedBox(
                               height: 35,
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: tags.length,
+                                itemCount: specialties.length,
                                 itemBuilder: (context, index) {
                                   return Container(
                                     margin: const EdgeInsets.only(right: 5),
-                                    child: ChipTagWidget(tags[index]),
+                                    child: ChipTagWidget(specialties[index]),
                                   );
                                 },
                               ),
@@ -98,7 +100,7 @@ class RecommendedTutorCardWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  intro,
+                  bio,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 4,
                   style: const TextStyle(

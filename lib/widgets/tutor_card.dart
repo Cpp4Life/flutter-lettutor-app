@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 
-import '../core/assets/assets.dart';
-import '../core/styles/styles.dart';
+import '../core/styles/index.dart';
 import '../screens/tutor/tutor_detail_screen.dart';
 import 'index.dart';
 
 class TutorCardWidget extends StatelessWidget {
+  final String id;
   final String name;
-  final String intro;
-  final String avatar;
-  final List<String> tags;
+  final String bio;
+  final List<String> specialties;
+  final String? avatar;
+  final double? rating;
 
   const TutorCardWidget({
+    Key? key,
+    required this.id,
     required this.name,
-    required this.intro,
+    required this.bio,
     required this.avatar,
-    required this.tags,
-    super.key,
-  });
+    required this.specialties,
+    required this.rating,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,51 +28,50 @@ class TutorCardWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context).pushNamed(TutorDetailScreen.routeName);
+          Navigator.of(context).pushNamed(
+            TutorDetailScreen.routeName,
+            arguments: id,
+          );
         },
         child: Card(
           elevation: 4,
           child: Container(
             padding: const EdgeInsets.all(10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   margin: const EdgeInsets.only(bottom: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.only(right: 10, top: 10),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          radius: 30,
-                          child: Image.asset(
-                            LetTutorImages.avatar,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                      CachedImageNetworkWidget(avatar),
                       Expanded(
                         child: Column(
                           children: [
                             Row(
                               children: [
-                                Text(
-                                  name,
-                                  style: const TextStyle(
-                                    fontSize: LetTutorFontSizes.px16,
+                                Container(
+                                  margin: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    name,
+                                    style: const TextStyle(
+                                      fontSize: LetTutorFontSizes.px16,
+                                    ),
                                   ),
                                 ),
                                 const Spacer(),
-                                const Text(
-                                  '5.00',
-                                  style: TextStyle(
+                                Text(
+                                  rating == null ? '0' : rating!.round().toString(),
+                                  style: const TextStyle(
                                     fontSize: LetTutorFontSizes.px16,
                                     color: LetTutorColors.primaryRed,
                                     fontWeight: LetTutorFontWeights.medium,
                                   ),
                                 ),
-                                const StarWidget(),
+                                const StarWidget(
+                                  isFilled: true,
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -77,11 +79,11 @@ class TutorCardWidget extends StatelessWidget {
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: tags.length,
+                                itemCount: specialties.length,
                                 itemBuilder: (context, index) {
                                   return Container(
                                     margin: const EdgeInsets.only(right: 5),
-                                    child: ChipTagWidget(tags[index]),
+                                    child: ChipTagWidget(specialties[index]),
                                   );
                                 },
                               ),
@@ -93,7 +95,8 @@ class TutorCardWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  intro,
+                  bio,
+                  textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 4,
                   style: const TextStyle(
