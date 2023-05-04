@@ -55,6 +55,8 @@ class _SettingScreenState extends State<SettingScreen> {
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: CachedNetworkImage(
+                    width: 50,
+                    height: 50,
                     imageUrl: _user.avatar ?? 'https://picsum.photos/200/300',
                     fit: BoxFit.cover,
                     progressIndicatorBuilder: (context, url, downloadProgress) =>
@@ -73,24 +75,24 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
               ),
             ),
-            Container(
-              margin: _margin,
-              child: SettingButtonWidget(
-                title: 'View Feedbacks',
-                iconPath: LetTutorSvg.user,
-                onPressed: () =>
-                    Navigator.of(context).pushNamed(ViewFeedbacksScreen.routeName),
-              ),
-            ),
-            Container(
-              margin: _margin,
-              child: SettingButtonWidget(
-                title: 'Booking History',
-                iconPath: LetTutorSvg.list,
-                onPressed: () =>
-                    Navigator.of(context).pushNamed(BookingHistoryScreen.routeName),
-              ),
-            ),
+            // Container(
+            //   margin: _margin,
+            //   child: SettingButtonWidget(
+            //     title: 'View Feedbacks',
+            //     iconPath: LetTutorSvg.user,
+            //     onPressed: () =>
+            //         Navigator.of(context).pushNamed(ViewFeedbacksScreen.routeName),
+            //   ),
+            // ),
+            // Container(
+            //   margin: _margin,
+            //   child: SettingButtonWidget(
+            //     title: 'Booking History',
+            //     iconPath: LetTutorSvg.list,
+            //     onPressed: () =>
+            //         Navigator.of(context).pushNamed(BookingHistoryScreen.routeName),
+            //   ),
+            // ),
             Container(
               margin: _margin,
               child: SettingButtonWidget(

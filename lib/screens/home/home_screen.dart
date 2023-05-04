@@ -92,10 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: LetTutorFontSizes.px14,
                         ),
                       ),
-                      CountdownTimer(
-                        DateTime.fromMillisecondsSinceEpoch(
-                            _upcomingClass!.scheduleDetailInfo!.startPeriodTimestamp!),
-                      ),
+                      if (_upcomingClass != null)
+                        CountdownTimer(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              _upcomingClass!.scheduleDetailInfo!.startPeriodTimestamp!),
+                        ),
                       Text(
                         'Total lesson time is ${durationToString(_totalTimeInMinutes)}',
                         style: const TextStyle(
