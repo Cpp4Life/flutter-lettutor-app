@@ -71,17 +71,22 @@ class _TabsScreenState extends State<TabsScreen> {
                   onPressed: () {
                     Navigator.of(context).pushNamed(ProfileScreen.routeName);
                   },
-                  icon: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: CachedNetworkImage(
-                      imageUrl: _user.avatar ?? 'https://picsum.photos/200/300',
-                      fit: BoxFit.cover,
-                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                          CircularProgressIndicator(value: downloadProgress.progress),
-                      errorWidget: (context, url, error) => Image.asset(
-                        LetTutorImages.avatar,
-                        fit: BoxFit.cover,
+                  icon: CachedNetworkImage(
+                    imageUrl: _user.avatar ?? 'https://picsum.photos/200/300',
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
                       ),
+                    ),
+                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                        CircularProgressIndicator(value: downloadProgress.progress),
+                    errorWidget: (context, url, error) => Image.asset(
+                      LetTutorImages.avatar,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
