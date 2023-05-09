@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../core/assets/index.dart';
 import '../core/styles/index.dart';
-import '../models/index.dart';
 import '../providers/index.dart';
 import '../widgets/index.dart';
 import 'index.dart';
@@ -20,10 +19,6 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   late List<Map<String, Object>> _pages;
-  User _user = User(
-    id: '',
-    avatar: null,
-  );
 
   @override
   void initState() {
@@ -35,18 +30,13 @@ class _TabsScreenState extends State<TabsScreen> {
       {'page': const ChatGPTScreen(), 'title': 'ChatGPT'},
       {'page': const SettingScreen(), 'title': 'Settings'},
     ];
-    Provider.of<UserProvider>(context, listen: false).getUserInfo().then((value) {
-      if (mounted) {
-        setState(() {
-          _user = value;
-        });
-      }
-    });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<AuthProvider>().user;
     final provider = Provider.of<NavigationProvider>(context);
 
     return Scaffold(
@@ -72,7 +62,7 @@ class _TabsScreenState extends State<TabsScreen> {
                     Navigator.of(context).pushNamed(ProfileScreen.routeName);
                   },
                   icon: CachedNetworkImage(
-                    imageUrl: _user.avatar ?? 'https://picsum.photos/200/300',
+                    imageUrl: user.avatar ?? 'https://picsum.photos/200/300',
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,

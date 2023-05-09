@@ -5,7 +5,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
-import '../../models/index.dart';
 import '../../providers/index.dart';
 import '../../services/index.dart';
 import '../../widgets/index.dart';
@@ -20,22 +19,9 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   final EdgeInsets _margin = const EdgeInsets.only(bottom: 10);
-  User _user = User(
-    id: '',
-    email: '',
-    avatar: null,
-  );
 
   @override
   void initState() {
-    Provider.of<UserProvider>(context, listen: false).getUserInfo().then((user) => {
-          if (mounted)
-            {
-              setState(() {
-                _user = user;
-              })
-            }
-        });
     super.initState();
   }
 
@@ -48,32 +34,48 @@ class _SettingScreenState extends State<SettingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              child: ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: CachedNetworkImage(
-                    width: 50,
-                    height: 50,
-                    imageUrl: _user.avatar ?? 'https://picsum.photos/200/300',
-                    fit: BoxFit.cover,
-                    progressIndicatorBuilder: (context, url, downloadProgress) =>
-                        CircularProgressIndicator(value: downloadProgress.progress),
-                    errorWidget: (context, url, error) => Image.asset(
-                      LetTutorImages.avatar,
-                      fit: BoxFit.cover,
+            FutureBuilder(
+              future: Provider.of<UserProvider>(context, listen: false).getUserInfo(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.error != null) {
+                  return Container();
+                }
+                return Consumer<UserProvider>(
+                  builder: (context, provider, child) => Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: CachedNetworkImage(
+                          width: 50,
+                          height: 50,
+                          imageUrl:
+                              provider.user.avatar ?? 'https://picsum.photos/200/300',
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              CircularProgressIndicator(value: downloadProgress.progress),
+                          errorWidget: (context, url, error) => Image.asset(
+                            LetTutorImages.avatar,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      title: Text(
+                        provider.user.name!,
+                      ),
+                      subtitle: Text(
+                        provider.user.email!,
+                      ),
                     ),
                   ),
-                ),
-                title: Text(
-                  _user.name ?? 'User',
-                ),
-                subtitle: Text(
-                  _user.email ?? 'example@email.com',
-                ),
-              ),
+                );
+              },
             ),
             // Container(
             //   margin: _margin,

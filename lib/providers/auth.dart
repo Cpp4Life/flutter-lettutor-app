@@ -31,6 +31,10 @@ class AuthProvider with ChangeNotifier {
     return null;
   }
 
+  User get user {
+    return _user!;
+  }
+
   _authenticate(
       String email, String password, String urlSegment, Function callback) async {
     try {

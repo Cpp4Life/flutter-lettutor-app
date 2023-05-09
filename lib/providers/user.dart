@@ -11,8 +11,13 @@ import '../services/index.dart';
 class UserProvider with ChangeNotifier {
   final String _baseURL = dotenv.env['BASE_URL'] as String;
   final String? _authToken;
+  User? _user;
 
   UserProvider(this._authToken);
+
+  User get user {
+    return _user!;
+  }
 
   Future<User> getUserInfo() async {
     try {
@@ -24,7 +29,9 @@ class UserProvider with ChangeNotifier {
       if (response.statusCode != 200) {
         throw HttpException(decodedResponse['message']);
       }
-      return Generic.fromJSON<User, void>(decodedResponse['user']);
+      _user = Generic.fromJSON<User, void>(decodedResponse['user']);
+      notifyListeners();
+      return _user!;
     } catch (e) {
       await Analytics.crashEvent(
         'getUserInfo',
