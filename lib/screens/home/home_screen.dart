@@ -69,29 +69,30 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Upcoming lesson',
-                        style: TextStyle(
+                      Text(
+                        _upcomingClass != null
+                            ? 'Upcoming lesson'
+                            : 'Welcome to LetTutor!',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: LetTutorFontSizes.px20,
                         ),
                       ),
-                      Text(
-                        _upcomingClass == null
-                            ? 'There is no upcoming class'
-                            : intl.DateFormat('E, dd MMM yyyy, HH:mm - ').format(
-                                  DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
-                                      .scheduleDetailInfo!.startPeriodTimestamp!),
-                                ) +
-                                intl.DateFormat('HH:mm').format(
-                                  DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
-                                      .scheduleDetailInfo!.endPeriodTimestamp!),
-                                ),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: LetTutorFontSizes.px14,
+                      if (_upcomingClass != null)
+                        Text(
+                          intl.DateFormat('E, dd MMM yyyy, HH:mm - ').format(
+                                DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
+                                    .scheduleDetailInfo!.startPeriodTimestamp!),
+                              ) +
+                              intl.DateFormat('HH:mm').format(
+                                DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
+                                    .scheduleDetailInfo!.endPeriodTimestamp!),
+                              ),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: LetTutorFontSizes.px14,
+                          ),
                         ),
-                      ),
                       if (_upcomingClass != null)
                         CountdownTimer(
                           DateTime.fromMillisecondsSinceEpoch(
