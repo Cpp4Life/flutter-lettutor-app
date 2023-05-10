@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_upcomingClass == null) {
-                            navigationProvider.index = 3;
+                            navigationProvider.moveToTab(3);
                             return;
                           }
 
@@ -177,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       textDirection: TextDirection.rtl,
                       child: TextButton.icon(
                         onPressed: () {
-                          navigationProvider.index = 3;
+                          navigationProvider.moveToTab(3);
                         },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,

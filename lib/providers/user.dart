@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 import '../helpers/index.dart';
 import '../models/index.dart';
@@ -16,7 +17,7 @@ class UserProvider with ChangeNotifier {
   UserProvider(this._authToken);
 
   User get user {
-    return _user!;
+    return _user ?? User(id: const Uuid().v4());
   }
 
   Future<User> getUserInfo() async {

@@ -67,10 +67,10 @@ class _SettingScreenState extends State<SettingScreen> {
                         ),
                       ),
                       title: Text(
-                        provider.user.name!,
+                        provider.user.name ?? '',
                       ),
                       subtitle: Text(
-                        provider.user.email!,
+                        provider.user.email ?? '',
                       ),
                     ),
                   ),
@@ -162,7 +162,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 Provider.of<AuthProvider>(context, listen: false).logout();
                 final navigationProvider =
                     Provider.of<NavigationProvider>(context, listen: false);
-                navigationProvider.index = 0;
+                navigationProvider.moveToTab(0, isLogout: true);
               },
               style: ElevatedButton.styleFrom(
                 splashFactory: NoSplash.splashFactory,

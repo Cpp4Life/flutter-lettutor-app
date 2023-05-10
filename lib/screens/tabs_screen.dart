@@ -86,7 +86,7 @@ class _TabsScreenState extends State<TabsScreen> {
       ),
       body: SafeArea(child: _pages[provider.index]['page'] as Widget),
       bottomNavigationBar: BottomNavigationBar(
-        onTap: (value) => provider.index = value,
+        onTap: (value) => provider.moveToTab(value),
         selectedItemColor: LetTutorColors.primaryBlue,
         unselectedItemColor: LetTutorColors.greyScaleDarkGrey,
         currentIndex: provider.index,
