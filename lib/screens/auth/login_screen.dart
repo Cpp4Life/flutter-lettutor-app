@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/assets/index.dart';
@@ -73,6 +75,51 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       await Analytics.crashEvent(
         'handleLogin',
+        exception: error.toString(),
+      );
+    }
+  }
+
+  void handleGoogleLogin() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignInAccount? account = await googleSignIn.signIn();
+    if (account == null) return;
+
+    try {
+      final GoogleSignInAuthentication googleAuth = await account.authentication;
+      final AuthCredential authCredential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      if (!mounted) return;
+      await Provider.of<AuthProvider>(context, listen: false).googleLogin(
+        authCredential.accessToken!,
+        () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
+        },
+      );
+    } on HttpException catch (error) {
+      if (!mounted) return;
+      TopSnackBar.show(
+        context: context,
+        message: error.toString(),
+        isSuccess: false,
+      );
+      await Analytics.crashEvent(
+        'handleGoogleLogin',
+        exception: error.toString(),
+      );
+    } catch (error) {
+      if (!mounted) return;
+      TopSnackBar.show(
+        context: context,
+        message: 'Failed to login! Please try again later',
+        isSuccess: false,
+      );
+      await Analytics.crashEvent(
+        'handleGoogleLogin',
         exception: error.toString(),
       );
     }
@@ -174,11 +221,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    SocialLoginWidget(svgSource: LetTutorSvg.facebookAuth),
-                    SocialLoginWidget(svgSource: LetTutorSvg.google),
-                    SocialLoginWidget(svgSource: LetTutorSvg.smartPhone),
-                    SocialLoginWidget(svgSource: LetTutorSvg.apple),
+                  children: [
+                    const SocialLoginWidget(svgSource: LetTutorSvg.facebookAuth),
+                    SocialLoginWidget(
+                      svgSource: LetTutorSvg.google,
+                      onPressed: handleGoogleLogin,
+                    ),
+                    const SocialLoginWidget(svgSource: LetTutorSvg.smartPhone),
+                    const SocialLoginWidget(svgSource: LetTutorSvg.apple),
                   ],
                 ),
                 Container(

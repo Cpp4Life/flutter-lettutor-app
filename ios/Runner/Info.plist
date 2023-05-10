@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>lettutor_app</string>
+	<string>LetTutor</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -58,5 +58,16 @@
 	<string>$(PRODUCT_NAME) LetTutor needs access to your camera for meetings.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) LetTutor needs access to your microphone for meetings.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.399002733706-e5mmi0qj6apon68auhegc764jutn70m1</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

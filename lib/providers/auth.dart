@@ -35,6 +35,23 @@ class AuthProvider with ChangeNotifier {
     return _user!;
   }
 
+  _saveToSharedPreference(dynamic decodedResponse) async {
+    _user = Generic.fromJSON<User, void>(decodedResponse['user']);
+    _accessToken = Generic.fromJSON<Token, void>(decodedResponse['tokens']['access']);
+    _refreshToken = Generic.fromJSON<Token, void>(decodedResponse['tokens']['refresh']);
+    final prefs = await SharedPreferences.getInstance();
+    final userData = jsonEncode(
+      {
+        'accessToken': _accessToken?.token,
+        'accessTokenExp': _accessToken?.expires?.toIso8601String(),
+        'refreshToken': _refreshToken?.token,
+        'refreshTokenExp': _refreshToken?.expires?.toIso8601String(),
+        'userID': _user?.id,
+      },
+    );
+    prefs.setString('userData', userData);
+  }
+
   _authenticate(
       String email, String password, String urlSegment, Function callback) async {
     try {
@@ -55,22 +72,9 @@ class AuthProvider with ChangeNotifier {
       if (response.statusCode == 400 || response.statusCode == 500) {
         throw HttpException(decodedResponse['message']);
       }
-      _user = Generic.fromJSON<User, void>(decodedResponse['user']);
-      _accessToken = Generic.fromJSON<Token, void>(decodedResponse['tokens']['access']);
-      _refreshToken = Generic.fromJSON<Token, void>(decodedResponse['tokens']['refresh']);
       await callback();
       notifyListeners();
-      final prefs = await SharedPreferences.getInstance();
-      final userData = jsonEncode(
-        {
-          'accessToken': _accessToken?.token,
-          'accessTokenExp': _accessToken?.expires?.toIso8601String(),
-          'refreshToken': _refreshToken?.token,
-          'refreshTokenExp': _refreshToken?.expires?.toIso8601String(),
-          'userID': _user?.id,
-        },
-      );
-      prefs.setString('userData', userData);
+      _saveToSharedPreference(decodedResponse);
     } catch (error) {
       await Analytics.crashEvent(
         '_authenticate',
@@ -87,6 +91,34 @@ class AuthProvider with ChangeNotifier {
 
   register(String email, String password, Function callback) async {
     return _authenticate(email, password, 'register', callback);
+  }
+
+  _oauth(String accessToken, String urlSegment, Function callback) async {
+    try {
+      // * e.g: POST https://domain.com/auth/facebook
+      // * e.g: POST https://domain.com/auth/google
+      final url = Uri.parse('$_baseURL/auth/$urlSegment');
+      final body = {'access_token': accessToken};
+      final response = await http.post(url, body: body);
+      final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      if (response.statusCode != 200) {
+        throw HttpException(decodedResponse['message']);
+      }
+      await callback();
+      notifyListeners();
+      _saveToSharedPreference(decodedResponse);
+    } catch (error) {
+      await Analytics.crashEvent(
+        '_oauth',
+        exception: error.toString(),
+        fatal: true,
+      );
+      rethrow;
+    }
+  }
+
+  googleLogin(String accessToken, Function callback) async {
+    return _oauth(accessToken, 'google', callback);
   }
 
   forgetPassword(String email, Function callback) async {

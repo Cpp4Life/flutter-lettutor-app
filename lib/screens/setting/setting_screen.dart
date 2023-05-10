@@ -155,7 +155,10 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed(OnboardScreen.routeName);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  OnboardScreen.routeName,
+                  (Route<dynamic> route) => false,
+                );
                 Provider.of<AuthProvider>(context, listen: false).logout();
                 final navigationProvider =
                     Provider.of<NavigationProvider>(context, listen: false);

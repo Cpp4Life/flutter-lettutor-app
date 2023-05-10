@@ -68,7 +68,7 @@ class _TabsScreenState extends State<TabsScreen> {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                           image: imageProvider,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fill,
                         ),
                       ),
                     ),
