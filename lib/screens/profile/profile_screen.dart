@@ -131,13 +131,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
 
         await Provider.of<UserProvider>(context, listen: false).updateUserInfo(
-          _user.name as String,
-          _user.country as String,
-          _user.birthday as String,
-          _user.level as String,
-          _user.learnTopics!.map((e) => e.id.toString()).toList(),
-          _user.testPreparations!.map((e) => e.id.toString()).toList(),
-          () {
+          name: _user.name,
+          country: _user.country,
+          birthday: _user.birthday,
+          level: _user.level,
+          learnTopics: _user.learnTopics!.map((e) => e.id.toString()).toList(),
+          testPreparations: _user.testPreparations!.map((e) => e.id.toString()).toList(),
+          callback: () {
             TopSnackBar.show(
               context: context,
               message: 'Successfully updated profile! Oh-hoo~~',

@@ -42,30 +42,34 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future updateUserInfo(
-    String name,
-    String country,
-    String birthday,
-    String level,
-    List<String> learnTopics,
-    List<String> testPreparations,
-    Function callback,
-  ) async {
+  Future updateUserInfo({
+    String? name,
+    String? country,
+    String? birthday,
+    String? level,
+    List<String>? learnTopics,
+    List<String>? testPreparations,
+    required Function callback,
+  }) async {
     try {
       // * e.g: PUT https://domain.com/user/info
       final url = Uri.parse('$_baseURL/user/info');
       final headers = Http.getHeaders(token: _authToken as String);
+
+      final body = {};
+      if (name != null) body.addEntries({'name': name}.entries);
+      if (country != null) body.addEntries({'country': country}.entries);
+      if (birthday != null) body.addEntries({'birthday': birthday}.entries);
+      if (level != null) body.addEntries({'level': level}.entries);
+      if (learnTopics != null) body.addEntries({'learnTopics': learnTopics}.entries);
+      if (testPreparations != null) {
+        body.addEntries({'testPreparations': testPreparations}.entries);
+      }
+
       final response = await http.put(
         url,
         headers: headers,
-        body: json.encode({
-          'name': name,
-          'country': country,
-          'birthday': birthday,
-          'level': level,
-          'learnTopics': learnTopics,
-          'testPreparations': testPreparations,
-        }),
+        body: json.encode(body),
       );
       if (response.statusCode == 200) {
         await callback();
