@@ -121,6 +121,10 @@ class AuthProvider with ChangeNotifier {
     return _oauth(accessToken, 'google', callback);
   }
 
+  facebookLogin(String accessToken, Function callback) async {
+    return _oauth(accessToken, 'facebook', callback);
+  }
+
   forgetPassword(String email, Function callback) async {
     try {
       // * e.g: https://domain.com/user/forgotPassword

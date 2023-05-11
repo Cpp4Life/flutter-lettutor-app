@@ -51,6 +51,8 @@
 	<array>
 		<string>https</string>
 		<string>file</string>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) LetTutor needs access to your gallery</string>
@@ -66,8 +68,15 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.399002733706-e5mmi0qj6apon68auhegc764jutn70m1</string>
+				<string>fb546710167621979</string>
 			</array>
 		</dict>
 	</array>
+	<key>FacebookAppID</key>
+	<string>546710167621979</string>
+	<key>FacebookClientToken</key>
+	<string>ea148bf48fb0b91d92422d817289b016</string>
+	<key>FacebookDisplayName</key>
+	<string>LetTutor</string>
 </dict>
 </plist>

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
@@ -115,11 +116,52 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       TopSnackBar.show(
         context: context,
-        message: 'Failed to login! Please try again later',
+        message: 'Failed to login with Google! Please try again later',
         isSuccess: false,
       );
       await Analytics.crashEvent(
         'handleGoogleLogin',
+        exception: error.toString(),
+      );
+    }
+  }
+
+  void handleFacebookLogin() async {
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+    if (loginResult.status != LoginStatus.success) return;
+
+    final AccessToken? accessToken = loginResult.accessToken;
+    if (accessToken == null) return;
+
+    try {
+      if (!mounted) return;
+      await Provider.of<AuthProvider>(context, listen: false).facebookLogin(
+        accessToken.token,
+        () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
+        },
+      );
+    } on HttpException catch (error) {
+      if (!mounted) return;
+      TopSnackBar.show(
+        context: context,
+        message: error.toString(),
+        isSuccess: false,
+      );
+      await Analytics.crashEvent(
+        'handleFacebookLogin',
+        exception: error.toString(),
+      );
+    } catch (error) {
+      if (!mounted) return;
+      TopSnackBar.show(
+        context: context,
+        message: 'Failed to login with Facebook! Please try again later',
+        isSuccess: false,
+      );
+      await Analytics.crashEvent(
+        'handleFacebookLogin',
         exception: error.toString(),
       );
     }
@@ -222,7 +264,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SocialLoginWidget(svgSource: LetTutorSvg.facebookAuth),
+                    SocialLoginWidget(
+                      svgSource: LetTutorSvg.facebookAuth,
+                      onPressed: handleFacebookLogin,
+                    ),
                     SocialLoginWidget(
                       svgSource: LetTutorSvg.google,
                       onPressed: handleGoogleLogin,

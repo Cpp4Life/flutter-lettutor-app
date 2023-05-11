@@ -131,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
 
         await Provider.of<UserProvider>(context, listen: false).updateUserInfo(
-          name: _user.name,
+          name: _nameCtrl.text,
           country: _user.country,
           birthday: _user.birthday,
           level: _user.level,
