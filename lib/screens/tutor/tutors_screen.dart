@@ -20,59 +20,136 @@ class TutorsScreen extends StatefulWidget {
 
 class _TutorsScreenState extends State<TutorsScreen> {
   final TextEditingController _searchCtrl = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  final List<dynamic> _specialties = [];
+  late List<Tutor> _tutors = [];
+  final int _perPage = 12;
+  int _page = 1;
   String _searchResult = '';
   String _selectedSpecialty = '';
-  final List<dynamic> _specialties = [];
+  bool _isLoadMore = false;
+  bool _isLoading = true;
+  Timer? _debounce;
 
   @override
   void initState() {
+    _scrollController.addListener(loadMore);
     _specialties.add(LearnTopic(id: 1, key: '', name: 'All'));
-    Provider.of<LearnTopicProvider>(context, listen: false).fetchAndSetLearnTopics().then(
-      (value) {
-        if (mounted) {
-          setState(() {
-            _specialties.addAll(value);
-          });
-        }
-      },
-    );
-    Provider.of<TestPreparationProvider>(context, listen: false).fetchAndSetTests().then(
-      (value) {
-        Timer(const Duration(seconds: 1), () {
-          if (mounted) {
-            setState(() {
-              _specialties.addAll(value);
-            });
-          }
-        });
-      },
-    );
+    fetchSpecialties();
     super.initState();
   }
 
   @override
   void dispose() {
     _searchCtrl.dispose();
+    _scrollController.removeListener(loadMore);
+    _scrollController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
-  void handleChange(String value) {
-    setState(() {
-      _searchResult = value;
+  void handleSearch(String value) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        _searchResult = value;
+        _tutors = [];
+        _page = 1;
+        _isLoading = true;
+      });
     });
+  }
+
+  void fetchSpecialties() async {
+    try {
+      final learnTopics = await Provider.of<LearnTopicProvider>(context, listen: false)
+          .fetchAndSetLearnTopics();
+      if (!mounted) return;
+      final testPreps = await Provider.of<TestPreparationProvider>(context, listen: false)
+          .fetchAndSetTests();
+
+      if (mounted) {
+        setState(() {
+          _specialties.addAll(learnTopics);
+          _specialties.addAll(testPreps);
+        });
+      }
+    } on HttpException catch (error) {
+      await Analytics.crashEvent(
+        'fetchSpecialtiesHttpExceptionCatch',
+        exception: error.toString(),
+        fatal: true,
+      );
+    } catch (error) {
+      await Analytics.crashEvent(
+        'fetchSpecialtiesCatch',
+        exception: error.toString(),
+        fatal: true,
+      );
+    }
+  }
+
+  void fetchTutorsWithFilters() async {
+    try {
+      final tutorProvider = Provider.of<TutorProvider>(context, listen: false);
+      await tutorProvider.fetchAndSetTutorsWithFilters(
+        page: _page,
+        perPage: _perPage,
+        specialties: [_selectedSpecialty],
+        search: _searchResult,
+      );
+      final response = tutorProvider.tutors;
+      if (mounted) {
+        setState(() {
+          _tutors.addAll(response);
+          _isLoading = false;
+          _isLoadMore = false;
+        });
+      }
+    } on HttpException catch (error) {
+      await Analytics.crashEvent(
+        'fetchTutorsWithFiltersHttpExceptionCatch',
+        exception: error.toString(),
+        fatal: true,
+      );
+    } catch (error) {
+      await Analytics.crashEvent(
+        'fetchTutorsWithFiltersCatch',
+        exception: error.toString(),
+        fatal: true,
+      );
+    }
+  }
+
+  void loadMore() {
+    if (_scrollController.position.extentAfter < _page * _perPage) {
+      setState(() {
+        _isLoadMore = true;
+      });
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(const Duration(milliseconds: 100), () {
+        _page++;
+        fetchTutorsWithFilters();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('TUTORS_SCREEN');
+
+    if (_isLoading) {
+      fetchTutorsWithFilters();
+    }
+
     return Column(
-      children: [
+      children: <Widget>[
         Container(
           margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
           child: SearchBarWidget(
             title: 'Search Tutors',
             controller: _searchCtrl,
-            onChanged: handleChange,
+            onChanged: handleSearch,
           ),
         ),
         Container(
@@ -93,47 +170,41 @@ class _TutorsScreenState extends State<TutorsScreen> {
             ),
           ),
         ),
-        FutureBuilder(
-          future: Provider.of<TutorProvider>(context, listen: false)
-              .fetchAndSetTutorsWithFilters(
-            page: 1,
-            perPage: 12,
-            specialties: [_selectedSpecialty],
-            search: _searchResult,
-          ),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.error != null) {
-              return const FreeContentWidget('No available tutors');
-            }
-            return Consumer<TutorProvider>(
-              builder: (context, tutorsData, child) => tutorsData.tutors.isEmpty
-                  ? const FreeContentWidget('No available tutors')
-                  : Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 15, right: 15),
-                        child: ListView.builder(
-                          itemCount: tutorsData.tutors.length,
+        _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 15, right: 15),
+                  child: _tutors.isEmpty
+                      ? const FreeContentWidget('No available tutors')
+                      : ListView.builder(
+                          controller: _scrollController,
+                          itemCount: _tutors.length,
                           itemBuilder: (context, index) {
                             return TutorCardWidget(
-                              key: ValueKey(tutorsData.tutors[index].id),
-                              id: tutorsData.tutors[index].userId as String,
-                              name: tutorsData.tutors[index].name as String,
-                              avatar: tutorsData.tutors[index].avatar,
-                              bio: tutorsData.tutors[index].bio as String,
-                              specialties: tutorsData.tutors[index].specialties
-                                  ?.split(',') as List<String>,
-                              rating: tutorsData.tutors[index].rating,
+                              key: ValueKey(_tutors[index].id),
+                              id: _tutors[index].userId as String,
+                              name: _tutors[index].name as String,
+                              avatar: _tutors[index].avatar,
+                              bio: _tutors[index].bio as String,
+                              specialties:
+                                  _tutors[index].specialties?.split(',') as List<String>,
+                              rating: _tutors[index].rating,
                             );
                           },
                           shrinkWrap: true,
                         ),
-                      ),
-                    ),
-            );
-          },
-        )
+                ),
+              ),
+        if (_isLoadMore)
+          const SizedBox(
+            height: 48,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
       ],
     );
   }
@@ -143,6 +214,9 @@ class _TutorsScreenState extends State<TutorsScreen> {
       onTap: () {
         setState(() {
           _selectedSpecialty = chip.key;
+          _tutors = [];
+          _page = 1;
+          _isLoading = true;
         });
       },
       child: Chip(
