@@ -137,6 +137,14 @@ class LetTutorApp extends StatelessWidget {
             AdvancedSettingsScreen.routeName: (context) => const AdvancedSettingsScreen(),
             ProfileScreen.routeName: (context) => const ProfileScreen(),
             ChatGPTScreen.routeName: (context) => const ChatGPTScreen(),
+            PDFViewerScreen.routeName: (context) {
+              final args =
+                  ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+              return PDFViewerScreen(
+                title: args['title'] as String,
+                url: args['url'] as String,
+              );
+            },
           },
         ),
       ),

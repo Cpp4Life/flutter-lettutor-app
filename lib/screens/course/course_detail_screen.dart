@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/styles/index.dart';
 import '../../models/index.dart';
 import '../../providers/index.dart';
 import '../../services/index.dart';
+import '../index.dart';
 
 class CourseDetailScreen extends StatefulWidget {
   static const routeName = '/course-detail';
@@ -274,9 +274,15 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                         shrinkWrap: true,
                                         physics: const NeverScrollableScrollPhysics(),
                                         itemBuilder: (_, index) => GestureDetector(
-                                          onTap: () => launchUrl(
-                                            Uri.parse(_course.topics![index].nameFile!),
-                                          ),
+                                          onTap: () {
+                                            Navigator.of(context).pushNamed(
+                                              PDFViewerScreen.routeName,
+                                              arguments: {
+                                                'title': _course.topics![index].name,
+                                                'url': _course.topics![index].nameFile,
+                                              },
+                                            );
+                                          },
                                           child: Card(
                                             shape: RoundedRectangleBorder(
                                               side: const BorderSide(

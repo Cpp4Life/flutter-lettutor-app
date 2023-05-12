@@ -4,6 +4,7 @@ export 'auth/signup_screen.dart';
 export 'chatgpt/chatgpt_screen.dart';
 export 'course/course_detail_screen.dart';
 export 'course/course_screen.dart';
+export 'course/pdf_viewer_screen.dart';
 export 'home/home_screen.dart';
 export 'meeting/meeting_screen.dart';
 export 'message/message_screen.dart';
