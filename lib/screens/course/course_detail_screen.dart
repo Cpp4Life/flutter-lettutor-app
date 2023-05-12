@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/styles/index.dart';
 import '../../models/index.dart';
@@ -272,53 +273,58 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                         itemCount: _course.topics!.length,
                                         shrinkWrap: true,
                                         physics: const NeverScrollableScrollPhysics(),
-                                        itemBuilder: (_, index) => Card(
-                                          shape: RoundedRectangleBorder(
-                                            side: const BorderSide(
-                                              color: LetTutorColors.greyScaleLightGrey,
-                                              width: 1,
-                                            ),
-                                            borderRadius: BorderRadius.circular(10),
+                                        itemBuilder: (_, index) => GestureDetector(
+                                          onTap: () => launchUrl(
+                                            Uri.parse(_course.topics![index].nameFile!),
                                           ),
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 10,
-                                              vertical: 10,
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                              side: const BorderSide(
+                                                color: LetTutorColors.greyScaleLightGrey,
+                                                width: 1,
+                                              ),
+                                              borderRadius: BorderRadius.circular(10),
                                             ),
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  width: 50,
-                                                  height: 50,
-                                                  margin:
-                                                      const EdgeInsets.only(right: 10),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(10),
-                                                    color: Colors.indigo[200],
-                                                  ),
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    (index + 1).toString(),
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: LetTutorFontSizes.px24,
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                horizontal: 10,
+                                                vertical: 10,
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    width: 50,
+                                                    height: 50,
+                                                    margin:
+                                                        const EdgeInsets.only(right: 10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(10),
+                                                      color: Colors.indigo[200],
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      (index + 1).toString(),
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: LetTutorFontSizes.px24,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    _course.topics![index].name!,
-                                                    style: const TextStyle(
-                                                      fontSize: LetTutorFontSizes.px16,
-                                                      fontWeight:
-                                                          LetTutorFontWeights.bold,
+                                                  Expanded(
+                                                    child: Text(
+                                                      _course.topics![index].name!,
+                                                      style: const TextStyle(
+                                                        fontSize: LetTutorFontSizes.px16,
+                                                        fontWeight:
+                                                            LetTutorFontWeights.bold,
+                                                      ),
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
                                                     ),
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                )
-                                              ],
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
