@@ -20,17 +20,17 @@ class EbookProvider with ChangeNotifier {
 
   EbookProvider(this._authToken, this._ebooks);
 
-  Future fetchAndSetEbooks({
+  Future fetchAndSetEbooksWithPagination({
     required int page,
     required int size,
     String q = '',
     String categoryId = '',
   }) async {
     try {
-      // * e.g: https://domain.com/e-book?page=1&size=100
-      // * e.g: https://domain.com/e-book?page=1&size=100&q=""
-      // * e.g: https://domain.com/e-book?page=1&size=100&categoryId[]=""
-      // * e.g: https://domain.com/e-book?page=1&size=100&q=""&categoryId[]=""
+      // * e.g: GET https://domain.com/e-book?page=#&size=#
+      // * e.g: GET https://domain.com/e-book?page=#&size=#&q=""
+      // * e.g: GET https://domain.com/e-book?page=#&size=#&categoryId[]=""
+      // * e.g: GET https://domain.com/e-book?page=#&size=#&q=""&categoryId[]=""
       String urlBuilder = '$_baseURL/e-book?page=$page&size=$size';
       if (q.isNotEmpty) {
         urlBuilder += '&q=$q';
