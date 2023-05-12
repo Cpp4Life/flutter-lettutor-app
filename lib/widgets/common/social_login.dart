@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../core/styles/index.dart';
+import '../../core/styles/index.dart';
 
 class SocialLoginWidget extends StatelessWidget {
   final String svgSource;

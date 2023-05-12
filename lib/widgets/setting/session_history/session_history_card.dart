@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-import '../core/assets/index.dart';
-import '../core/styles/index.dart';
-import '../models/index.dart';
-import 'index.dart';
+import '../../../core/assets/index.dart';
+import '../../../core/styles/index.dart';
+import '../../../models/index.dart';
+import '../../index.dart';
 
 class SessionHistoryCardWidget extends StatelessWidget {
   final BookingInfo booking;

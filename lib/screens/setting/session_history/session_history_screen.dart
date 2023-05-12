@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/index.dart';
 import '../../../services/index.dart';
 import '../../../widgets/index.dart';
-import '../../../widgets/session_history_card.dart';
+import '../../../widgets/setting/session_history/session_history_card.dart';
 
 class SessionHistoryScreen extends StatelessWidget {
   static const routeName = '/session-history';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../core/styles/index.dart';
-import '../screens/tutor/tutor_detail_screen.dart';
-import 'index.dart';
+import '../../core/styles/index.dart';
+import '../../screens/tutor/tutor_detail_screen.dart';
+import '../index.dart';
 
 class RecommendedTutorCardWidget extends StatelessWidget {
   final String id;

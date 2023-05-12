@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../core/assets/index.dart';
-import 'index.dart';
+import '../../core/assets/index.dart';
+import '../index.dart';
 
 class MeetingBarWidget extends StatelessWidget {
   const MeetingBarWidget({super.key});

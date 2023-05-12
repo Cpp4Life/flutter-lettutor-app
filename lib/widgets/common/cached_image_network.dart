@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../core/assets/index.dart';
-import '../services/index.dart';
+import '../../core/assets/index.dart';
+import '../../services/index.dart';
 
 class CachedImageNetworkWidget extends StatelessWidget {
   final String? imageUrl;
@@ -32,7 +32,7 @@ class CachedImageNetworkWidget extends StatelessWidget {
             progressIndicatorBuilder: (context, url, downloadProgress) =>
                 CircularProgressIndicator(value: downloadProgress.progress),
             errorWidget: (context, url, error) {
-              recordError(error);
+              // recordError(error);
               return Image.asset(
                 LetTutorImages.avatar,
                 fit: BoxFit.cover,

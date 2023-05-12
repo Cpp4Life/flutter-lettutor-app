@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../core/assets/index.dart';
 import '../core/styles/index.dart';
+import '../helpers/index.dart';
 import '../providers/index.dart';
-import '../widgets/index.dart';
 import 'index.dart';
 
 class TabsScreen extends StatefulWidget {

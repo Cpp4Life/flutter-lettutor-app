@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../core/assets/index.dart';
+import '../../core/assets/index.dart';
 
 class StarWidget extends StatelessWidget {
   final bool isFilled;
