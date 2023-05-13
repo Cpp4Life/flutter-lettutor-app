@@ -15,9 +15,11 @@ import '../services/index.dart';
 
 class BookingCardWidget extends StatelessWidget {
   final BookingInfo booking;
+  final Function(String) onRemove;
 
   const BookingCardWidget({
     required this.booking,
+    required this.onRemove,
     super.key,
   });
 
@@ -144,6 +146,7 @@ class BookingCardWidget extends StatelessWidget {
                               );
                             },
                           );
+                          onRemove(booking.id);
                         } on HttpException catch (e) {
                           TopSnackBar.show(
                             context: context,
