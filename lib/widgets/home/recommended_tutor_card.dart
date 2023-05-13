@@ -11,6 +11,7 @@ class RecommendedTutorCardWidget extends StatelessWidget {
   final List<String> specialties;
   final String? avatar;
   final double? rating;
+  final bool? isFavorite;
 
   const RecommendedTutorCardWidget({
     Key? key,
@@ -20,6 +21,7 @@ class RecommendedTutorCardWidget extends StatelessWidget {
     required this.avatar,
     required this.specialties,
     required this.rating,
+    required this.isFavorite,
   }) : super(key: key);
 
   @override
@@ -66,8 +68,10 @@ class RecommendedTutorCardWidget extends StatelessWidget {
                                   constraints: const BoxConstraints(),
                                   onPressed: () {},
                                   splashColor: Colors.transparent,
-                                  icon: const Icon(
-                                    Icons.favorite,
+                                  icon: Icon(
+                                    isFavorite!
+                                        ? Icons.favorite
+                                        : Icons.favorite_border_rounded,
                                     color: LetTutorColors.primaryRed,
                                   ),
                                 ),

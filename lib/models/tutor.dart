@@ -152,7 +152,7 @@ class Tutor {
     price = json['price'];
     isOnline = json['isOnline'];
     user = json['User'] == null ? null : Generic.fromJSON<User, void>(json['User']);
-    isFavorite = json['isFavorite'];
+    isFavorite = json['isFavorite'] ?? false;
     avgRating = json['avgRating'];
     totalFeedback = json['totalFeedback'];
   }
