@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 class LetTutorFontSizes {
   static const double px40 = 40;
+  static const double px26 = 26;
   static const double px24 = 24;
   static const double px20 = 20;
+  static const double px18 = 18;
   static const double px16 = 16;
-  static const double px26 = 26;
   static const double px14 = 14;
   static const double px12 = 12;
   static const double px10 = 10;

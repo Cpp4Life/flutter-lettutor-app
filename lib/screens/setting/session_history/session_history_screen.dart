@@ -17,16 +17,17 @@ class SessionHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('SESSION_HISTORY_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWidget('Session History'),
+      appBar: CustomAppBarWidget(lang.sessionHistory),
       body: SafeArea(
         child: Column(
           children: [
             Container(
               margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
-              child: const SearchBarWidget(
-                title: 'Search session history',
+              child: SearchBarWidget(
+                title: lang.sessionSearchHint,
               ),
             ),
             Expanded(

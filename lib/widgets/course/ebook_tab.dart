@@ -11,8 +11,9 @@ import '../index.dart';
 class EbookTabWidget extends StatefulWidget {
   final List<CourseCategory> categories;
   final Map<String, String> levels;
+  final Language lang;
 
-  const EbookTabWidget(this.categories, this.levels, {super.key});
+  const EbookTabWidget(this.categories, this.levels, this.lang, {super.key});
 
   @override
   State<EbookTabWidget> createState() => _EbookTabWidgetState();
@@ -121,7 +122,7 @@ class _EbookTabWidgetState extends State<EbookTabWidget> {
         Container(
           margin: const EdgeInsets.only(top: 15),
           child: SearchBarWidget(
-            title: 'Search ebook',
+            title: widget.lang.ebookSearchHint,
             controller: _ebookCtrl,
             onChanged: handleSearch,
           ),

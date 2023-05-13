@@ -1,3 +1,4 @@
+export 'app.dart';
 export 'auth.dart';
 export 'chat.dart';
 export 'course.dart';

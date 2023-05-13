@@ -35,6 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('SIGNUP_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
 
     void handleRegister() async {
       final email = _emailCtrl.value.text;
@@ -120,7 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWidget('Sign up'),
+      appBar: CustomAppBarWidget(lang.signUp),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -129,20 +130,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Email *'),
+                Text(lang.email),
                 TextFieldWidget(
                   hintText: 'example@email.com',
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailCtrl,
                 ),
-                const Text('Password *'),
+                Text(lang.password),
                 TextFieldWidget(
                   obscureText: true,
                   hintText: '********',
                   keyboardType: TextInputType.text,
                   controller: _passwordCtrl,
                 ),
-                const Text('Confirm password *'),
+                Text(lang.confirmPassword),
                 TextFieldWidget(
                   obscureText: true,
                   hintText: '********',
@@ -162,9 +163,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  child: const Text(
-                    'Register',
-                    style: TextStyle(
+                  child: Text(
+                    lang.signUp,
+                    style: const TextStyle(
                       fontWeight: LetTutorFontWeights.medium,
                       color: Colors.white,
                     ),
@@ -173,9 +174,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
-                  child: const Text(
-                    'Or continue with',
-                    style: TextStyle(
+                  child: Text(
+                    lang.registerWith,
+                    style: const TextStyle(
                       fontSize: LetTutorFontSizes.px12,
                       color: LetTutorColors.greyScaleDarkGrey,
                     ),
@@ -195,13 +196,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   margin: const EdgeInsets.only(top: 25),
                   child: Text.rich(
                     TextSpan(
-                      text: 'Already have an account? ',
+                      text: lang.alreadyHaveAccount,
                       style: const TextStyle(
                         fontSize: LetTutorFontSizes.px12,
                       ),
                       children: <InlineSpan>[
                         TextSpan(
-                          text: 'Log In',
+                          text: lang.login,
                           style: const TextStyle(
                             fontSize: LetTutorFontSizes.px14,
                             color: LetTutorColors.primaryBlue,

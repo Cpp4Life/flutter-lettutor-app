@@ -138,6 +138,7 @@ class _TutorsScreenState extends State<TutorsScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('TUTORS_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
 
     if (_isLoading) {
       fetchTutorsWithFilters();
@@ -148,7 +149,7 @@ class _TutorsScreenState extends State<TutorsScreen> {
         Container(
           margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
           child: SearchBarWidget(
-            title: 'Search Tutors',
+            title: lang.tutorSearchHint,
             controller: _searchCtrl,
             onChanged: handleSearch,
           ),

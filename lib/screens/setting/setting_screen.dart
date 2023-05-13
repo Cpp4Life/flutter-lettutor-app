@@ -28,6 +28,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('SETTING_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -98,7 +99,7 @@ class _SettingScreenState extends State<SettingScreen> {
             Container(
               margin: _margin,
               child: SettingButtonWidget(
-                title: 'Session History',
+                title: lang.sessionHistory,
                 iconPath: LetTutorSvg.history,
                 onPressed: () =>
                     Navigator.of(context).pushNamed(SessionHistoryScreen.routeName),
@@ -107,7 +108,7 @@ class _SettingScreenState extends State<SettingScreen> {
             Container(
               margin: _margin,
               child: SettingButtonWidget(
-                title: 'Advanced Settings',
+                title: lang.advancedSettings,
                 iconPath: LetTutorSvg.settingProfile,
                 onPressed: () =>
                     Navigator.of(context).pushNamed(AdvancedSettingsScreen.routeName),
@@ -119,7 +120,7 @@ class _SettingScreenState extends State<SettingScreen> {
             Container(
               margin: _margin,
               child: SettingButtonWidget(
-                title: 'Our Website',
+                title: lang.ourWebsite,
                 iconPath: LetTutorSvg.network,
                 onPressed: () => launchUrl(Uri.parse('https://lettutor.com')),
               ),
@@ -127,7 +128,7 @@ class _SettingScreenState extends State<SettingScreen> {
             Container(
               margin: _margin,
               child: SettingButtonWidget(
-                title: 'Facebook',
+                title: lang.facebook,
                 iconPath: LetTutorSvg.facebookSetting,
                 onPressed: () =>
                     launchUrl(Uri.parse('https://www.facebook.com/lettutor.edu.vn/')),
@@ -136,13 +137,13 @@ class _SettingScreenState extends State<SettingScreen> {
             Container(
               alignment: Alignment.centerRight,
               margin: const EdgeInsets.only(top: 40),
-              child: const Text.rich(
+              child: Text.rich(
                 TextSpan(
-                  text: 'Version',
-                  style: TextStyle(
+                  text: lang.version,
+                  style: const TextStyle(
                     color: LetTutorColors.greyScaleDarkGrey,
                   ),
-                  children: <InlineSpan>[
+                  children: const <InlineSpan>[
                     TextSpan(
                       text: ' 1.0.0',
                       style: TextStyle(
@@ -172,9 +173,9 @@ class _SettingScreenState extends State<SettingScreen> {
                   borderRadius: BorderRadius.circular(50),
                 ),
               ),
-              child: const Text(
-                'Log out',
-                style: TextStyle(
+              child: Text(
+                lang.logout,
+                style: const TextStyle(
                   fontWeight: LetTutorFontWeights.medium,
                 ),
               ),

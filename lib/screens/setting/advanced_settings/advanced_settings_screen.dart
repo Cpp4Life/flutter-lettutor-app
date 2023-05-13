@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/assets/index.dart';
 import '../../../core/styles/index.dart';
+import '../../../providers/index.dart';
 import '../../../services/index.dart';
 import '../../../widgets/index.dart';
 
@@ -28,9 +29,10 @@ class _AdvancedSettingsScreenState extends State<AdvancedSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('ADVANCED_SETTING_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWidget('Advanced Settings'),
+      appBar: CustomAppBarWidget(lang.advancedSettings),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),

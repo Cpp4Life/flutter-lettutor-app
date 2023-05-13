@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
+import '../../providers/index.dart';
 import '../../services/index.dart';
 import '../index.dart';
 
@@ -14,6 +15,8 @@ class OnboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = Provider.of<AppProvider>(context).language;
+
     context.read<Analytics>().setTrackingScreen('ONBOARD_SCREEN');
     return Scaffold(
       backgroundColor: Colors.white,
@@ -51,11 +54,11 @@ class OnboardScreen extends StatelessWidget {
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                child: const Text(
-                  'English\nLanguage Teaching',
-                  style: TextStyle(
+                child: Text(
+                  lang.intro,
+                  style: const TextStyle(
                     color: LetTutorColors.secondaryDarkBlue,
-                    fontWeight: LetTutorFontWeights.medium,
+                    fontWeight: LetTutorFontWeights.regular,
                     fontSize: LetTutorFontSizes.px24,
                   ),
                 ),
@@ -87,8 +90,7 @@ class OnboardScreen extends StatelessWidget {
                       LetTutorSvg.leftArrow,
                       color: Colors.white,
                     ),
-                    label: const Text("Get Started"),
-                    //.........
+                    label: Text(lang.nextButton),
                   ),
                 ),
               ),

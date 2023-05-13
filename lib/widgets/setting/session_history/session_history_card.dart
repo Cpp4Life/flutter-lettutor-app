@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/assets/index.dart';
 import '../../../core/styles/index.dart';
 import '../../../models/index.dart';
+import '../../../providers/index.dart';
 import '../../index.dart';
 
 class SessionHistoryCardWidget extends StatelessWidget {
@@ -17,6 +19,7 @@ class SessionHistoryCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = Provider.of<AppProvider>(context).language;
     return Card(
       elevation: 5,
       shape: const RoundedRectangleBorder(
@@ -100,7 +103,7 @@ class SessionHistoryCardWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Mark: ${booking.scoreByTutor != null ? booking.scoreByTutor.toString() : 'Tutor hasn\'t marked yet'}',
+                        '${lang.mark} ${booking.scoreByTutor != null ? booking.scoreByTutor.toString() : lang.noMarking}',
                         style: const TextStyle(
                           color: LetTutorColors.secondaryDarkBlue,
                           fontSize: LetTutorFontSizes.px12,
@@ -129,9 +132,9 @@ class SessionHistoryCardWidget extends StatelessWidget {
                       ),
                     ),
                     alignment: Alignment.center,
-                    child: const Text(
-                      'Give Feedback',
-                      style: TextStyle(
+                    child: Text(
+                      lang.feedback,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: LetTutorFontSizes.px14,
                       ),
@@ -151,9 +154,9 @@ class SessionHistoryCardWidget extends StatelessWidget {
                       ),
                     ),
                     alignment: Alignment.center,
-                    child: const Text(
-                      'See Tutor Detail',
-                      style: TextStyle(
+                    child: Text(
+                      lang.sessionRecord,
+                      style: const TextStyle(
                         color: LetTutorColors.primaryBlue,
                         fontSize: LetTutorFontSizes.px14,
                       ),

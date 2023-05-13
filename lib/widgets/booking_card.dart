@@ -34,6 +34,8 @@ class BookingCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = Provider.of<AppProvider>(context).language;
+
     return Column(
       children: [
         ListTile(
@@ -131,7 +133,7 @@ class BookingCardWidget extends StatelessWidget {
                   if (start.isAfter(now) && now.difference(start).inHours.abs() >= 2) {
                     ConfirmModal.show(
                       context: context,
-                      title: 'Are you sure to cancel meeting?',
+                      title: lang.cancelConfirmMessage,
                       actionTitle: 'Yes',
                       callback: () async {
                         try {
@@ -141,7 +143,7 @@ class BookingCardWidget extends StatelessWidget {
                             () {
                               TopSnackBar.show(
                                 context: context,
-                                message: 'Cancel meeting successfully',
+                                message: lang.cancelSuccessfully,
                                 isSuccess: true,
                               );
                             },
@@ -163,8 +165,7 @@ class BookingCardWidget extends StatelessWidget {
                   } else {
                     TopSnackBar.show(
                       context: context,
-                      message:
-                          'Cannot cancel meeting less than 2 hours to the starting point!',
+                      message: lang.cancelFailed,
                       isSuccess: false,
                     );
                   }
@@ -180,9 +181,9 @@ class BookingCardWidget extends StatelessWidget {
                     ),
                   ),
                   alignment: Alignment.center,
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(
+                  child: Text(
+                    lang.cancel,
+                    style: const TextStyle(
                       color: LetTutorColors.primaryRed,
                       fontSize: LetTutorFontSizes.px14,
                     ),
@@ -233,9 +234,9 @@ class BookingCardWidget extends StatelessWidget {
 
                           await JitsiMeet.joinMeeting(options);
                         },
-                  child: const Text(
-                    'Go to meeting',
-                    style: TextStyle(
+                  child: Text(
+                    lang.goToMeeting,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: LetTutorFontSizes.px14,
                     ),

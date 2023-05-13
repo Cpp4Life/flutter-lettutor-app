@@ -11,8 +11,9 @@ import '../index.dart';
 class CourseTabWidget extends StatefulWidget {
   final List<CourseCategory> categories;
   final Map<String, String> levels;
+  final Language lang;
 
-  const CourseTabWidget(this.categories, this.levels, {super.key});
+  const CourseTabWidget(this.categories, this.levels, this.lang, {super.key});
 
   @override
   State<CourseTabWidget> createState() => _CourseTabWidgetState();
@@ -122,7 +123,7 @@ class _CourseTabWidgetState extends State<CourseTabWidget> {
         Container(
           margin: const EdgeInsets.only(top: 15),
           child: SearchBarWidget(
-            title: 'Search course',
+            title: widget.lang.courseSearchHint,
             controller: _courseCtrl,
             onChanged: handleSearch,
           ),

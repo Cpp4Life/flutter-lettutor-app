@@ -57,6 +57,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('COURSE_DETAIL_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
 
     final size = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
@@ -131,9 +132,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      "About Course",
-                                      style: TextStyle(
+                                    Text(
+                                      lang.aboutCourse,
+                                      style: const TextStyle(
                                         fontSize: LetTutorFontSizes.px26,
                                         fontWeight: LetTutorFontWeights.bold,
                                       ),
@@ -149,15 +150,15 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                 ),
                               ),
                               Container(
-                                margin: const EdgeInsets.only(bottom: 15),
+                                margin: const EdgeInsets.only(bottom: 5),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
                                       margin: const EdgeInsets.only(bottom: 10),
-                                      child: const Text(
-                                        "Overview",
-                                        style: TextStyle(
+                                      child: Text(
+                                        lang.overview,
+                                        style: const TextStyle(
                                           fontSize: LetTutorFontSizes.px26,
                                           fontWeight: LetTutorFontWeights.bold,
                                         ),
@@ -167,23 +168,28 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                       margin: const EdgeInsets.only(bottom: 10),
                                       child: Column(
                                         children: [
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              const Icon(Icons.help_outline),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 10, bottom: 10),
-                                                child: const Text(
-                                                  "Why take this course?",
-                                                  style: TextStyle(
-                                                    fontSize: LetTutorFontSizes.px16,
-                                                    color:
-                                                        LetTutorColors.secondaryDarkBlue,
+                                          Container(
+                                            margin: const EdgeInsets.only(bottom: 10),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                const Icon(Icons.help_outline),
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                    left: 10,
                                                   ),
-                                                ),
-                                              )
-                                            ],
+                                                  child: Text(
+                                                    lang.whyThisCourse,
+                                                    style: const TextStyle(
+                                                      fontSize: LetTutorFontSizes.px16,
+                                                      color: LetTutorColors
+                                                          .secondaryDarkBlue,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                           Text(
                                             _course.reason!,
@@ -199,23 +205,26 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                       margin: const EdgeInsets.only(bottom: 10),
                                       child: Column(
                                         children: [
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              const Icon(Icons.help_outline),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 10, bottom: 10),
-                                                child: const Text(
-                                                  "What will you be able to do?",
-                                                  style: TextStyle(
-                                                    fontSize: LetTutorFontSizes.px16,
-                                                    color:
-                                                        LetTutorColors.secondaryDarkBlue,
+                                          Container(
+                                            margin: const EdgeInsets.only(bottom: 10),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                const Icon(Icons.help_outline),
+                                                Container(
+                                                  margin: const EdgeInsets.only(left: 10),
+                                                  child: Text(
+                                                    lang.whatYouGet,
+                                                    style: const TextStyle(
+                                                      fontSize: LetTutorFontSizes.px16,
+                                                      color: LetTutorColors
+                                                          .secondaryDarkBlue,
+                                                    ),
                                                   ),
-                                                ),
-                                              )
-                                            ],
+                                                )
+                                              ],
+                                            ),
                                           ),
                                           Text(
                                             _course.purpose!,
@@ -235,9 +244,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      "Level",
-                                      style: TextStyle(
+                                    Text(
+                                      lang.level,
+                                      style: const TextStyle(
                                         fontSize: LetTutorFontSizes.px26,
                                         fontWeight: LetTutorFontWeights.bold,
                                       ),
@@ -259,9 +268,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                   children: [
                                     Container(
                                       margin: const EdgeInsets.only(bottom: 7),
-                                      child: const Text(
-                                        "Topic",
-                                        style: TextStyle(
+                                      child: Text(
+                                        lang.courseTopics,
+                                        style: const TextStyle(
                                           fontSize: LetTutorFontSizes.px26,
                                           fontWeight: LetTutorFontWeights.bold,
                                         ),
@@ -372,9 +381,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                       color: LetTutorColors.primaryBlue,
                                     ),
                                   ),
-                                  const Text(
-                                    "topics",
-                                    style: TextStyle(
+                                  Text(
+                                    lang.courseTopics,
+                                    style: const TextStyle(
                                       fontSize: LetTutorFontSizes.px20,
                                       color: LetTutorColors.primaryBlue,
                                     ),
@@ -395,9 +404,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                       color: LetTutorColors.secondaryDarkBlue,
                                     ),
                                   ),
-                                  const Text(
-                                    "tutor",
-                                    style: TextStyle(
+                                  Text(
+                                    lang.courseTutor,
+                                    style: const TextStyle(
                                       fontSize: LetTutorFontSizes.px16,
                                       color: LetTutorColors.secondaryDarkBlue,
                                     ),

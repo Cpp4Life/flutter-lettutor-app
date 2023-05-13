@@ -170,10 +170,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('LOGIN_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWidget('Sign in'),
+      appBar: CustomAppBarWidget(lang.loginScreenTitle),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -202,13 +203,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                const Text('Email'),
+                Text(lang.email),
                 TextFieldWidget(
                   controller: _emailCtrl,
                   hintText: 'example@email.com',
                   keyboardType: TextInputType.emailAddress,
                 ),
-                const Text('Password'),
+                Text(lang.password),
                 TextFieldWidget(
                   obscureText: true,
                   controller: _passwordCtrl,
@@ -223,9 +224,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     onTap: () {
                       Navigator.of(context).pushNamed(ForgotPasswordScreen.routeName);
                     },
-                    child: const Text(
-                      'Forgot Password?',
-                      style: TextStyle(
+                    child: Text(
+                      lang.forgotPassword,
+                      style: const TextStyle(
                         color: LetTutorColors.primaryBlue,
                         fontSize: LetTutorFontSizes.px12,
                       ),
@@ -242,9 +243,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  child: const Text(
-                    'Log In',
-                    style: TextStyle(
+                  child: Text(
+                    lang.login,
+                    style: const TextStyle(
                       fontWeight: LetTutorFontWeights.medium,
                       color: Colors.white,
                     ),
@@ -253,9 +254,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
-                  child: const Text(
-                    'Or continue with',
-                    style: TextStyle(
+                  child: Text(
+                    lang.continueWith,
+                    style: const TextStyle(
                       fontSize: LetTutorFontSizes.px12,
                       color: LetTutorColors.greyScaleDarkGrey,
                     ),
@@ -281,13 +282,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   margin: const EdgeInsets.only(top: 25),
                   child: Text.rich(
                     TextSpan(
-                      text: 'Don\'t have account? ',
+                      text: lang.doNotHaveAccount,
                       style: const TextStyle(
                         fontSize: LetTutorFontSizes.px12,
                       ),
                       children: <InlineSpan>[
                         TextSpan(
-                          text: 'Sign up',
+                          text: lang.signUp,
                           style: const TextStyle(
                             fontSize: LetTutorFontSizes.px14,
                             color: LetTutorColors.primaryBlue,

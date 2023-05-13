@@ -22,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late Language _lang;
   int _totalTimeInMinutes = 0;
   BookingInfo? _upcomingClass;
   bool _isLoading = true;
@@ -53,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('HOME_SCREEN');
     final navigationProvider = Provider.of<NavigationProvider>(context, listen: false);
+    _lang = Provider.of<AppProvider>(context).language;
 
     return SingleChildScrollView(
       child: Column(
@@ -71,11 +73,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Text(
                         _upcomingClass != null
-                            ? 'Upcoming lesson'
-                            : 'Welcome to LetTutor!',
+                            ? _lang.upcomingLesson
+                            : _lang.welcomeMessage,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: LetTutorFontSizes.px20,
+                          fontSize: LetTutorFontSizes.px18,
                         ),
                       ),
                       if (_upcomingClass != null)
@@ -97,9 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         CountdownTimer(
                           DateTime.fromMillisecondsSinceEpoch(
                               _upcomingClass!.scheduleDetailInfo!.startPeriodTimestamp!),
+                          _lang,
                         ),
                       Text(
-                        'Total lesson time is ${durationToString(_totalTimeInMinutes)}',
+                        '${_lang.totalLessonTime} ${durationToString(_totalTimeInMinutes)}',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: LetTutorFontSizes.px14,
@@ -142,7 +145,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           side: const BorderSide(color: LetTutorColors.primaryBlue),
                         ),
                         child: Text(
-                          _upcomingClass == null ? 'Book a lesson' : 'Enter lesson room',
+                          _upcomingClass == null
+                              ? _lang.bookButtonTitle
+                              : 'Enter lesson room',
                           style: const TextStyle(
                             color: LetTutorColors.primaryBlue,
                           ),
@@ -166,9 +171,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      child: const Text(
-                        'Recommended Tutors',
-                        style: TextStyle(
+                      child: Text(
+                        _lang.recommendedTutor,
+                        style: const TextStyle(
                           fontSize: LetTutorFontSizes.px14,
                         ),
                       ),
@@ -187,9 +192,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           LetTutorSvg.next,
                           color: LetTutorColors.primaryBlue,
                         ),
-                        label: const Text(
-                          'See all',
-                          style: TextStyle(
+                        label: Text(
+                          _lang.seeAll,
+                          style: const TextStyle(
                             color: LetTutorColors.primaryBlue,
                             fontSize: LetTutorFontSizes.px14,
                           ),
@@ -245,14 +250,17 @@ class _HomeScreenState extends State<HomeScreen> {
   String durationToString(int minutes) {
     final d = Duration(minutes: minutes);
     List<String> parts = d.toString().split(':');
-    return '${parts[0].padLeft(2, '0')} hour(s) ${parts[1].padLeft(2, '0')} minutes';
+    final hourText = _lang is Vietnamese ? 'giờ' : 'hour(s)';
+    final minText = _lang is Vietnamese ? 'phút' : 'minute(s)';
+    return '${parts[0].padLeft(2, '0')} $hourText ${parts[1].padLeft(2, '0')} $minText';
   }
 }
 
 class CountdownTimer extends StatefulWidget {
   final DateTime start;
+  final Language lang;
 
-  const CountdownTimer(this.start, {super.key});
+  const CountdownTimer(this.start, this.lang, {super.key});
 
   @override
   State<CountdownTimer> createState() => _CountdownTimerState();
@@ -304,8 +312,10 @@ class _CountdownTimerState extends State<CountdownTimer> {
     final minutes = strDigits(_remaining.inMinutes.remainder(60));
     final seconds = strDigits(_remaining.inSeconds.remainder(60));
 
+    final startText = widget.lang is Vietnamese ? 'bắt đầu trong' : 'starts in';
+
     return Text(
-      'starts in $days (d) $hours (h) $minutes (m) $seconds (s)',
+      '$startText $days (d) $hours (h) $minutes (m) $seconds (s)',
       style: const TextStyle(
         color: Colors.yellow,
         fontSize: LetTutorFontSizes.px14,
