@@ -102,6 +102,7 @@ class _TutorsScreenState extends State<TutorsScreen> {
       if (mounted) {
         setState(() {
           _tutors.addAll(response);
+          _tutors = _tutors.toSet().toList(); // remove duplicates
           _isLoading = false;
           _isLoadMore = false;
         });

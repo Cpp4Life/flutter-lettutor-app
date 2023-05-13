@@ -156,6 +156,14 @@ class Tutor {
     avgRating = json['avgRating'];
     totalFeedback = json['totalFeedback'];
   }
+
+  @override
+  bool operator ==(other) {
+    return (other is Tutor) && (other.id == id);
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 // Only use for home screen to show favorite tutors
