@@ -182,7 +182,11 @@ class FavoriteTutor {
     secondId = json['secondId'];
     createdAt = strToDateTime(json['createdAt']);
     updatedAt = strToDateTime(json['updatedAt']);
-    secondInfo = Generic.fromJSON<Tutor, void>(json['secondInfo']);
-    tutorInfo = Generic.fromJSON<Tutor, void>(json['secondInfo']['tutorInfo']);
+    secondInfo = json['secondInfo'] == null
+        ? null
+        : Generic.fromJSON<Tutor, void>(json['secondInfo']);
+    tutorInfo = json['secondInfo'] == null || json['secondInfo']['tutorInfo'] == null
+        ? null
+        : Generic.fromJSON<Tutor, void>(json['secondInfo']['tutorInfo']);
   }
 }
