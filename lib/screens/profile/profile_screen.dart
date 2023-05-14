@@ -139,11 +139,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return;
         }
 
+        if (_phoneCtrl.text.isEmpty) {
+          TopSnackBar.show(
+            context: context,
+            message: 'Phone number cannot be empty!',
+            isSuccess: false,
+          );
+          return;
+        }
+
+        if (!RegEx.isValidPhone(_phoneCtrl.text)) {
+          TopSnackBar.show(
+            context: context,
+            message: 'Enter a valid phone number!',
+            isSuccess: false,
+          );
+          return;
+        }
+
         await Provider.of<UserProvider>(context, listen: false).updateUserInfo(
           name: _nameCtrl.text,
           country: _user.country,
           birthday: _user.birthday,
           level: _user.level,
+          phone: _phoneCtrl.text,
           learnTopics: _user.learnTopics!.map((e) => e.id.toString()).toList(),
           testPreparations: _user.testPreparations!.map((e) => e.id.toString()).toList(),
           callback: () {
@@ -384,7 +403,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       TextField(
                         controller: _phoneCtrl,
                         keyboardType: TextInputType.phone,
-                        enabled: !_user.isPhoneActivated!,
+                        enabled: _user.isPhoneActivated == null
+                            ? true
+                            : !_user.isPhoneActivated!,
                         onChanged: (value) {},
                         decoration: InputDecoration(
                           isDense: true,

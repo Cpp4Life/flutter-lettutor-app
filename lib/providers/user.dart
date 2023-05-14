@@ -48,6 +48,7 @@ class UserProvider with ChangeNotifier {
     String? country,
     String? birthday,
     String? level,
+    String? phone,
     List<String>? learnTopics,
     List<String>? testPreparations,
     required Function callback,
@@ -62,6 +63,7 @@ class UserProvider with ChangeNotifier {
       if (country != null) body.addEntries({'country': country}.entries);
       if (birthday != null) body.addEntries({'birthday': birthday}.entries);
       if (level != null) body.addEntries({'level': level}.entries);
+      if (phone != null) body.addEntries({'phone': phone}.entries);
       if (learnTopics != null) body.addEntries({'learnTopics': learnTopics}.entries);
       if (testPreparations != null) {
         body.addEntries({'testPreparations': testPreparations}.entries);
