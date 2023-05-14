@@ -99,6 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         CountdownTimer(
                           DateTime.fromMillisecondsSinceEpoch(
                               _upcomingClass!.scheduleDetailInfo!.startPeriodTimestamp!),
+                          DateTime.fromMillisecondsSinceEpoch(
+                              _upcomingClass!.scheduleDetailInfo!.endPeriodTimestamp!),
                           _lang,
                         ),
                       Text(
@@ -250,44 +252,56 @@ class _HomeScreenState extends State<HomeScreen> {
   String durationToString(int minutes) {
     final d = Duration(minutes: minutes);
     List<String> parts = d.toString().split(':');
-    final hourText = _lang is Vietnamese ? 'giờ' : 'hour(s)';
-    final minText = _lang is Vietnamese ? 'phút' : 'minute(s)';
+    final hourText = _lang is Vietnamese ? 'giờ' : 'hours';
+    final minText = _lang is Vietnamese ? 'phút' : 'minutes';
     return '${parts[0].padLeft(2, '0')} $hourText ${parts[1].padLeft(2, '0')} $minText';
   }
 }
 
 class CountdownTimer extends StatefulWidget {
   final DateTime start;
+  final DateTime end;
   final Language lang;
 
-  const CountdownTimer(this.start, this.lang, {super.key});
+  const CountdownTimer(this.start, this.end, this.lang, {super.key});
 
   @override
   State<CountdownTimer> createState() => _CountdownTimerState();
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
-  Timer? _timer;
+  Timer? _countDownTimer;
+  Timer? _countUpTimer;
   late Duration _remaining;
+  late Duration _accumulator;
+  late Duration _totalLessonTime;
 
   @override
   void initState() {
     super.initState();
     final now = DateTime.now();
     _remaining = widget.start.difference(now);
+    _accumulator = Duration.zero;
+    _totalLessonTime = widget.end.difference(widget.start);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      startTimer();
+      startCountDownTimer();
     });
   }
 
   @override
   void dispose() {
     super.dispose();
-    _timer!.cancel();
+    _countDownTimer?.cancel();
+    _countUpTimer?.cancel();
   }
 
-  void startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+  void startCountDownTimer() {
+    _countDownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+  }
+
+  void startCountUpTimer() {
+    _accumulator = DateTime.now().difference(widget.start);
+    _countUpTimer = Timer.periodic(const Duration(seconds: 1), (_) => setCountUp());
   }
 
   void setCountDown() {
@@ -296,9 +310,24 @@ class _CountdownTimerState extends State<CountdownTimer> {
       setState(() {
         final seconds = _remaining.inSeconds - reduceSecondsBy;
         if (seconds < 0) {
-          _timer!.cancel();
+          _countDownTimer!.cancel();
+          startCountUpTimer();
         } else {
           _remaining = Duration(seconds: seconds);
+        }
+      });
+    }
+  }
+
+  void setCountUp() {
+    const increaseSecondsBy = 1;
+    if (mounted) {
+      setState(() {
+        final seconds = _accumulator.inSeconds + increaseSecondsBy;
+        if (seconds > _totalLessonTime.inSeconds) {
+          _countUpTimer!.cancel();
+        } else {
+          _accumulator = Duration(seconds: seconds);
         }
       });
     }
@@ -307,15 +336,19 @@ class _CountdownTimerState extends State<CountdownTimer> {
   @override
   Widget build(BuildContext context) {
     String strDigits(int n) => n.toString().padLeft(2, '0');
-    final days = strDigits(_remaining.inDays);
-    final hours = strDigits(_remaining.inHours.remainder(24));
-    final minutes = strDigits(_remaining.inMinutes.remainder(60));
-    final seconds = strDigits(_remaining.inSeconds.remainder(60));
+    Duration timer = _remaining.inSeconds > 0 ? _remaining : _accumulator;
+    final days = strDigits(timer.inDays);
+    final hours = strDigits(timer.inHours.remainder(24));
+    final minutes = strDigits(timer.inMinutes.remainder(60));
+    final seconds = strDigits(timer.inSeconds.remainder(60));
 
     final startText = widget.lang is Vietnamese ? 'bắt đầu trong' : 'starts in';
+    final happenText =
+        widget.lang is Vietnamese ? 'đang diễn ra trong' : 'meeting running in';
+    final remindText = _remaining.inSeconds > 0 ? startText : happenText;
 
     return Text(
-      '$startText $days (d) $hours (h) $minutes (m) $seconds (s)',
+      '$remindText $days (d) $hours (h) $minutes (m) $seconds (s)',
       style: const TextStyle(
         color: Colors.yellow,
         fontSize: LetTutorFontSizes.px14,

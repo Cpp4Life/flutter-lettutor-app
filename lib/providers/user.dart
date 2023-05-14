@@ -160,8 +160,7 @@ class UserProvider with ChangeNotifier {
       );
 
       upcomingLessons = upcomingLessons
-          .where(
-              (element) => element.scheduleDetailInfo!.startPeriodTimestamp! > dateTime)
+          .where((element) => element.scheduleDetailInfo!.endPeriodTimestamp! > dateTime)
           .toList();
 
       return upcomingLessons.isEmpty ? null : upcomingLessons.first;
