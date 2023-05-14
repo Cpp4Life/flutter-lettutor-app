@@ -6,9 +6,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:lettutor_app/models/index.dart';
 import 'package:provider/provider.dart';
 
+import 'models/index.dart';
 import 'providers/index.dart';
 import 'screens/index.dart';
 import 'services/index.dart';
@@ -17,7 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await _setupFirebase();
-  await AppProvider.init();
+  await _initAppConfig();
   runApp(const LetTutorApp());
 }
 
@@ -31,6 +31,10 @@ Future<void> _setupFirebase() async {
     FirebaseCrashlytics.instance.recordError(error, stack);
     return true;
   };
+}
+
+Future<void> _initAppConfig() async {
+  await AppProvider.init();
 }
 
 class LetTutorApp extends StatelessWidget {

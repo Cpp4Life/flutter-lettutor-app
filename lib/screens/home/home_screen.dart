@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(
                           _upcomingClass == null
                               ? _lang.bookButtonTitle
-                              : 'Enter lesson room',
+                              : _lang.enterLessonRoom,
                           style: const TextStyle(
                             color: LetTutorColors.primaryBlue,
                           ),

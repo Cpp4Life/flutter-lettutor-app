@@ -1,6 +1,6 @@
 enum Locale {
-  vi,
   en,
+  vi,
 }
 
 abstract class Language {
@@ -39,6 +39,7 @@ abstract class Language {
   get upcomingLesson;
   get recommendedTutor;
   get seeAll;
+  get enterLessonRoom;
 
   // Course
   get courseTitle;
@@ -100,4 +101,14 @@ abstract class Language {
   get noMarking;
   get feedback;
   get sessionRecord;
+
+  // Profile
+  get profileTitle;
+  get birthday;
+  get phone;
+  get country;
+  get wantToLearn;
+  get countryHint;
+  get levelHint;
+  get phoneHint;
 }

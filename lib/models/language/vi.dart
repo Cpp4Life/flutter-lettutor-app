@@ -36,10 +36,10 @@ class Vietnamese implements Language {
   @override
   get signUp => 'Đăng ký';
 
+  // Forgot password
   @override
   get forgotPasswordTitle => 'Quên mật khẩu';
 
-  // Forgot password
   @override
   get instruction =>
       'Nhập địa chỉ email của bạn. Chúng tôi sẽ gửi cho bạn một đường link để đặt lại mật khẩu.';
@@ -82,6 +82,9 @@ class Vietnamese implements Language {
   @override
   get seeAll => 'Tất cả';
 
+  @override
+  get enterLessonRoom => 'Vào phòng học';
+
   // Course
   @override
   get courseSearchHint => 'Tìm kiếm khoá học';
@@ -106,7 +109,7 @@ class Vietnamese implements Language {
   get courseTutor => 'Gia sư';
 
   @override
-  get level => 'Đối tượng';
+  get level => 'Trình độ';
 
   @override
   get overview => 'Tổng quan';
@@ -224,4 +227,29 @@ class Vietnamese implements Language {
 
   @override
   get sessionRecord => 'Xem lại buổi học';
+
+  // Profile
+  @override
+  get birthday => 'Ngày sinh';
+
+  @override
+  get country => 'Quốc gia';
+
+  @override
+  get countryHint => 'Vui lòng chọn quốc gia';
+
+  @override
+  get levelHint => 'Trình độ';
+
+  @override
+  get phone => 'Số điện thoại';
+
+  @override
+  get profileTitle => 'Hồ sơ';
+
+  @override
+  get wantToLearn => 'Muốn học';
+
+  @override
+  get phoneHint => 'Cập nhật số điện thoại';
 }

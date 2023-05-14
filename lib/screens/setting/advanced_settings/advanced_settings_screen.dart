@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/assets/index.dart';
 import '../../../core/styles/index.dart';
+import '../../../models/index.dart';
 import '../../../providers/index.dart';
 import '../../../services/index.dart';
 import '../../../widgets/index.dart';
@@ -18,18 +20,11 @@ class AdvancedSettingsScreen extends StatefulWidget {
 }
 
 class _AdvancedSettingsScreenState extends State<AdvancedSettingsScreen> {
-  int _selected = 0;
-
-  void handleSelected(int index) {
-    setState(() {
-      _selected = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('ADVANCED_SETTING_SCREEN');
-    final lang = Provider.of<AppProvider>(context).language;
+    final appProvider = Provider.of<AppProvider>(context);
+    final lang = appProvider.language;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBarWidget(lang.advancedSettings),
@@ -38,7 +33,16 @@ class _AdvancedSettingsScreenState extends State<AdvancedSettingsScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: PopupMenuButton(
             elevation: 0,
-            onSelected: handleSelected,
+            onSelected: (value) async {
+              final prefs = await SharedPreferences.getInstance();
+              if (value == 0) {
+                appProvider.setLanguageTo = English();
+                prefs.setString('language', Locale.en.name);
+              } else {
+                appProvider.setLanguageTo = Vietnamese();
+                prefs.setString('language', Locale.vi.name);
+              }
+            },
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: 0,
@@ -83,7 +87,7 @@ class _AdvancedSettingsScreenState extends State<AdvancedSettingsScreen> {
                   style: TextStyle(fontSize: LetTutorFontSizes.px16),
                 ),
                 Text(
-                  _selected == 0 ? 'English' : 'Tiếng Việt',
+                  lang.locale == Locale.en ? 'English' : 'Tiếng Việt',
                   style: const TextStyle(
                     fontSize: LetTutorFontSizes.px14,
                   ),

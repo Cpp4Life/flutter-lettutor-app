@@ -2,63 +2,63 @@ import '../index.dart';
 
 class English implements Language {
   @override
-  Locale locale = Locale.vi;
+  Locale locale = Locale.en;
 
   // Onboard
   @override
-  get intro => 'Tìm kiếm\nGia sư Online Tốt nhất';
+  get intro => 'English\nLanguage Teaching';
 
   @override
-  get nextButton => '!Bắt đầu';
+  get nextButton => 'Get Started';
 
   // Login
   @override
-  get loginScreenTitle => 'Đăng nhập';
+  get loginScreenTitle => 'Sign in';
 
   @override
-  get email => 'Địa chỉ E-mail *';
+  get email => 'Email *';
 
   @override
-  get password => 'Mật khẩu *';
+  get password => 'Password *';
 
   @override
-  get forgotPassword => 'Quên mật khẩu?';
+  get forgotPassword => 'Forgot Password?';
 
   @override
-  get login => 'Đăng nhập';
+  get login => 'Log In';
 
   @override
-  get continueWith => 'Hoặc đăng nhập với';
+  get continueWith => 'Or continue with';
 
   @override
-  get doNotHaveAccount => 'Chưa có tài khoản? ';
+  get doNotHaveAccount => 'Don\'t have account? ';
 
   @override
-  get signUp => 'Đăng ký';
-
-  @override
-  get forgotPasswordTitle => 'Quên mật khẩu';
+  get signUp => 'Sign up';
 
   // Forgot password
   @override
+  get forgotPasswordTitle => 'Forgot password';
+
+  @override
   get instruction =>
-      'Nhập địa chỉ email của bạn. Chúng tôi sẽ gửi cho bạn một đường link để đặt lại mật khẩu.';
+      'Enter your email address and we\'ll send you a link to reset your password';
 
   @override
-  get emailHint => 'Nhập địa chỉ email';
+  get emailHint => 'Enter your email';
 
   @override
-  get send => 'Gửi';
+  get send => 'Send';
 
   // Sign up
   @override
-  get confirmPassword => 'Xác nhận mật khẩu *';
+  get confirmPassword => 'Confirm password *';
 
   @override
-  get registerWith => 'Hoặc đăng ký vói';
+  get registerWith => 'Or continue with';
 
   @override
-  get alreadyHaveAccount => 'Đã có tài khoản? ';
+  get alreadyHaveAccount => 'Already have an account? ';
 
   // Home
   @override
@@ -81,6 +81,9 @@ class English implements Language {
 
   @override
   get seeAll => 'See all';
+
+  @override
+  get enterLessonRoom => 'Enter lesson room';
 
   // Course
   @override
@@ -224,4 +227,29 @@ class English implements Language {
 
   @override
   get sessionRecord => 'Watch Record';
+
+  // Profile
+  @override
+  get birthday => 'Birthday';
+
+  @override
+  get country => 'Country';
+
+  @override
+  get countryHint => 'Please select your country';
+
+  @override
+  get levelHint => 'Please select your level';
+
+  @override
+  get phone => 'Phone number';
+
+  @override
+  get profileTitle => 'Profile';
+
+  @override
+  get wantToLearn => 'Want to Learn';
+
+  @override
+  get phoneHint => 'Phone Number';
 }

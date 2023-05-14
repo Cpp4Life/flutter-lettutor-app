@@ -1,5 +1,4 @@
 const countries = {
-  'UN': 'Please select your country',
   'AF': 'Afghanistan',
   'AX': 'Åland Islands',
   'AL': 'Albania',

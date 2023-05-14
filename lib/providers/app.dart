@@ -10,11 +10,18 @@ class AppProvider with ChangeNotifier {
     return _language;
   }
 
-  static set updateChange(String value) {}
+  set setLanguageTo(Language lang) {
+    _language = lang;
+    notifyListeners();
+  }
 
-  static init() async {
+  static Future init() async {
     final prefs = await SharedPreferences.getInstance();
-    final lang = prefs.get('language');
-    _language = lang == Locale.vi ? Vietnamese() : Vietnamese();
+    if (!prefs.containsKey('language')) {
+      _language = English();
+      return;
+    }
+    final lang = prefs.getString('language');
+    _language = (lang == Locale.vi.name ? Vietnamese() : English());
   }
 }
