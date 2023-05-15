@@ -83,7 +83,7 @@ class Vietnamese implements Language {
   get seeAll => 'Tất cả';
 
   @override
-  get enterLessonRoom => 'Vào phòng học';
+  get enterLessonRoom => 'Vào lớp học';
 
   // Course
   @override

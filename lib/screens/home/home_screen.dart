@@ -336,21 +336,21 @@ class _CountdownTimerState extends State<CountdownTimer> {
   @override
   Widget build(BuildContext context) {
     String strDigits(int n) => n.toString().padLeft(2, '0');
-    Duration timer = _remaining.inSeconds > 0 ? _remaining : _accumulator;
+    bool isCountDown = _remaining.inSeconds > 0 ? true : false;
+    Duration timer = isCountDown ? _remaining : _accumulator;
     final days = strDigits(timer.inDays);
     final hours = strDigits(timer.inHours.remainder(24));
     final minutes = strDigits(timer.inMinutes.remainder(60));
     final seconds = strDigits(timer.inSeconds.remainder(60));
 
     final startText = widget.lang is Vietnamese ? 'bắt đầu trong' : 'starts in';
-    final happenText =
-        widget.lang is Vietnamese ? 'đang diễn ra trong' : 'meeting running in';
-    final remindText = _remaining.inSeconds > 0 ? startText : happenText;
+    final classTimeText = widget.lang is Vietnamese ? 'giờ học' : 'class time';
+    final remindText = isCountDown ? startText : classTimeText;
 
     return Text(
-      '$remindText $days (d) $hours (h) $minutes (m) $seconds (s)',
-      style: const TextStyle(
-        color: Colors.yellow,
+      '($remindText $days:$hours:$minutes:$seconds)',
+      style: TextStyle(
+        color: isCountDown ? Colors.yellow : const Color.fromRGBO(144, 238, 144, 1),
         fontSize: LetTutorFontSizes.px14,
         fontWeight: LetTutorFontWeights.medium,
       ),
