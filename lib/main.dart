@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'firebase_options.dart';
 import 'models/index.dart';
 import 'providers/index.dart';
 import 'screens/index.dart';
@@ -21,7 +22,9 @@ void main() async {
 }
 
 Future<void> _setupFirebase() async {
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
