@@ -2,16 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../config/index.dart';
 import '../helpers/index.dart';
 import '../models/index.dart';
 import '../services/index.dart';
 
 class AuthProvider with ChangeNotifier {
-  final String _baseURL = dotenv.env['BASE_URL'] as String;
+  final String _baseURL = Config.baseUrl;
   User? _user;
   Token? _accessToken;
   Token? _refreshToken;

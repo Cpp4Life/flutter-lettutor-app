@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
+import '../config/index.dart';
 import '../helpers/index.dart';
 import '../models/index.dart';
 import '../services/index.dart';
 
 class TestPreparationProvider with ChangeNotifier {
-  final String _baseURL = dotenv.env['BASE_URL'] as String;
+  final String _baseURL = Config.baseUrl;
   List<TestPreparation> _tests = [];
 
   List<TestPreparation> get tests {
