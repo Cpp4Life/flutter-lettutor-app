@@ -59,7 +59,7 @@ class Generic {
         return FavoriteTutor.fromJSON(json) as T;
       }
       return json;
-    } catch (error, stackTrace) {
+    } catch (error) {
       rethrow;
     }
   }

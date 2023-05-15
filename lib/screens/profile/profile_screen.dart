@@ -299,7 +299,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: 15,
                             height: 15,
                             fit: BoxFit.cover,
-                            color: Colors.white,
+                            colorFilter: const ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.srcIn,
+                            ),
                           ),
                         ),
                       ),

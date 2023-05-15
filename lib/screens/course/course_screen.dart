@@ -87,7 +87,10 @@ class _CourseScreenState extends State<CourseScreen> {
               icon,
               width: 24,
               height: 24,
-              color: LetTutorColors.greyScaleDarkGrey,
+              colorFilter: const ColorFilter.mode(
+                LetTutorColors.greyScaleDarkGrey,
+                BlendMode.srcIn,
+              ),
             ),
           ),
           Text(

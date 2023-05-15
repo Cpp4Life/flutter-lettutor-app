@@ -192,7 +192,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         icon: SvgPicture.asset(
                           LetTutorSvg.next,
-                          color: LetTutorColors.primaryBlue,
+                          colorFilter: const ColorFilter.mode(
+                            LetTutorColors.primaryBlue,
+                            BlendMode.srcIn,
+                          ),
                         ),
                         label: Text(
                           _lang.seeAll,

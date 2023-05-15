@@ -28,7 +28,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
   final int _page = 1;
   final int _perPage = 12;
   model.Tutor _tutor = model.Tutor(id: '');
-  List<model.Feedback> _feedbacks = [];
+  final List<model.Feedback> _feedbacks = [];
   ChewieController? _chewieController;
   bool _isInit = true;
   bool _isLoading = true;
@@ -240,7 +240,10 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                                   SvgPicture.asset(
                                     LetTutorSvg.startMessaging,
                                     fit: BoxFit.cover,
-                                    color: LetTutorColors.primaryBlue,
+                                    colorFilter: const ColorFilter.mode(
+                                      LetTutorColors.primaryBlue,
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
                                   Text(
                                     lang.message,
@@ -256,7 +259,10 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                                   SvgPicture.asset(
                                     LetTutorSvg.report,
                                     fit: BoxFit.cover,
-                                    color: LetTutorColors.primaryBlue,
+                                    colorFilter: const ColorFilter.mode(
+                                      LetTutorColors.primaryBlue,
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
                                   Text(
                                     lang.report,
