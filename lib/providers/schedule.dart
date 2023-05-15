@@ -165,14 +165,14 @@ class ScheduleProvider with ChangeNotifier {
   }
 
   void _updateBookedStatus(String scheduleDetailIds) {
-    _schedules.forEach((schedule) {
+    for (var schedule in _schedules) {
       final idx = schedule.scheduleDetails!
           .indexWhere((element) => element.id == scheduleDetailIds);
       if (idx != -1) {
         schedule.scheduleDetails![idx].isBooked = true;
-        return;
+        continue;
       }
-    });
+    }
   }
 
   void _removeOutDatedSchedule() {
@@ -190,7 +190,7 @@ class ScheduleProvider with ChangeNotifier {
     final List<Schedule> newSchedule = [];
 
     // get all periods of a day
-    _schedules.forEach((element) {
+    for (var element in _schedules) {
       final startTime = DateTime.fromMillisecondsSinceEpoch(element.startTimestamp!);
       final formattedDate = DateFormat('yyyy-MM-dd').format(startTime);
       if (timestamp.containsKey(formattedDate)) {
@@ -199,7 +199,7 @@ class ScheduleProvider with ChangeNotifier {
         timestamp[formattedDate] = List.from(element.scheduleDetails!);
         newSchedule.add(element);
       }
-    });
+    }
 
     // combine all periods into the same day
     timestamp.forEach((key, value) {

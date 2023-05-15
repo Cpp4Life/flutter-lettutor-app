@@ -14,7 +14,10 @@ class StarWidget extends StatelessWidget {
       isFilled ? LetTutorSvg.filledStar : LetTutorSvg.borderStar,
       width: 20,
       height: 20,
-      color: Colors.yellow[700],
+      colorFilter: ColorFilter.mode(
+        Colors.yellow[700] as Color,
+        BlendMode.srcIn,
+      ),
     );
   }
 }

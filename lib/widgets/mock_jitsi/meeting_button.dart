@@ -15,7 +15,10 @@ class MeetingButtonWidget extends StatelessWidget {
       width: 25,
       child: SvgPicture.asset(
         iconPath,
-        color: Colors.grey[100],
+        colorFilter: ColorFilter.mode(
+          Colors.grey[100] as Color,
+          BlendMode.srcIn,
+        ),
       ),
     );
   }

@@ -14,13 +14,19 @@ class NavItem {
         svgSource,
         height: 20,
         width: 20,
-        color: LetTutorColors.primaryBlue,
+        colorFilter: const ColorFilter.mode(
+          LetTutorColors.primaryBlue,
+          BlendMode.srcIn,
+        ),
       ),
       icon: SvgPicture.asset(
         svgSource,
         height: 20,
         width: 20,
-        color: LetTutorColors.greyScaleDarkGrey,
+        colorFilter: const ColorFilter.mode(
+          LetTutorColors.greyScaleDarkGrey,
+          BlendMode.srcIn,
+        ),
       ),
       label: label,
     );

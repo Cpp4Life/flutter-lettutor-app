@@ -88,7 +88,10 @@ class OnboardScreen extends StatelessWidget {
                     },
                     icon: SvgPicture.asset(
                       LetTutorSvg.leftArrow,
-                      color: Colors.white,
+                      colorFilter: const ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
+                      ),
                     ),
                     label: Text(lang.nextButton),
                   ),
