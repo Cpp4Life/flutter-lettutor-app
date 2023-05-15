@@ -379,6 +379,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             });
                           },
                           locale: f_date_picker.LocaleType.en,
+                          theme: const f_date_picker.DatePickerTheme(
+                            backgroundColor: LetTutorColors.greyScaleLightGrey,
+                          ),
                         );
                       },
                       child: Text(
