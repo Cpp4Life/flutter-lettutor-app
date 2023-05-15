@@ -1,17 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as f_date_picker;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 import '../../constants/index.dart';
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
 import '../../helpers/index.dart';
-import '../../models/index.dart';
+import '../../models/index.dart' as model;
 import '../../providers/index.dart';
 import '../../services/index.dart';
 import '../../widgets/index.dart';
@@ -28,12 +28,12 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _phoneCtrl = TextEditingController();
-  final List<LearnTopic> _allTopics = [];
-  final List<TestPreparation> _allTests = [];
+  final List<model.LearnTopic> _allTopics = [];
+  final List<model.TestPreparation> _allTests = [];
   final FocusNode _nameFocusNode = FocusNode();
   final List<DropdownMenuItem<String>> _countriesList = [];
   final List<DropdownMenuItem<String>> _levelsList = [];
-  User _user = User(
+  model.User _user = model.User(
     id: '',
     name: '',
     email: '',
@@ -46,7 +46,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     testPreparations: [],
   );
   bool _isInit = true;
-  late Language _lang;
+  late model.Language _lang;
+  DateTime _birthday = DateTime.now();
 
   @override
   void initState() {
@@ -92,6 +93,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _user = value;
           _nameCtrl.text = _user.name ?? '';
           _phoneCtrl.text = _user.phone ?? '';
+          _birthday =
+              _user.birthday != null ? DateTime.parse(_user.birthday!) : DateTime.now();
         });
       });
       Provider.of<LearnTopicProvider>(context, listen: false)
@@ -173,7 +176,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           },
         );
-      } on HttpException catch (e) {
+      } on model.HttpException catch (e) {
         TopSnackBar.show(
           context: context,
           message: e.toString(),
@@ -230,7 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _phoneCtrl.text = _user.phone ?? '';
           });
         });
-      } on HttpException catch (e) {
+      } on model.HttpException catch (e) {
         TopSnackBar.show(
           context: context,
           message: e.toString(),
@@ -365,22 +368,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         splashFactory: NoSplash.splashFactory,
                       ),
                       onPressed: () {
-                        f_date_picker.DatePicker.showDatePicker(
-                          context,
-                          showTitleActions: true,
-                          minTime: DateTime(1950, 1, 1),
-                          maxTime: DateTime(2030, 12, 31),
-                          currentTime: _user.birthday != null
-                              ? DateTime.parse(_user.birthday!)
-                              : DateTime.now(),
-                          onConfirm: (date) {
-                            setState(() {
-                              _user.birthday = DateFormat('yyyy-MM-dd').format(date);
-                            });
-                          },
-                          locale: f_date_picker.LocaleType.en,
-                          theme: const f_date_picker.DatePickerTheme(
-                            backgroundColor: LetTutorColors.greyScaleLightGrey,
+                        BottomModalSheet.show(
+                          context: context,
+                          title: _lang.birthday,
+                          widget: ScrollDatePicker(
+                            selectedDate: _birthday,
+                            minimumDate: DateTime(1950, 1, 1),
+                            maximumDate: DateTime(2030, 12, 31),
+                            locale: Locale(_lang.locale.name),
+                            options: const DatePickerOptions(
+                              itemExtent: 40.0,
+                              isLoop: false,
+                            ),
+                            scrollViewOptions: const DatePickerScrollViewOptions(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            ),
+                            onDateTimeChanged: (DateTime value) {
+                              setState(() {
+                                _birthday = value;
+                                _user.birthday =
+                                    DateFormat('yyyy-MM-dd').format(_birthday);
+                              });
+                            },
                           ),
                         );
                       },
@@ -498,7 +507,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            skillsAndLevels<LearnTopic>(
+                            skillsAndLevels<model.LearnTopic>(
                               allTypes: _allTopics,
                               userTypes: _user.learnTopics!,
                             ),
@@ -511,7 +520,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            skillsAndLevels<TestPreparation>(
+                            skillsAndLevels<model.TestPreparation>(
                               allTypes: _allTests,
                               userTypes: _user.testPreparations!,
                             ),
