@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
+import 'models/index.dart';
 import 'providers/index.dart';
 import 'screens/index.dart';
 import 'services/index.dart';
@@ -16,6 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await _setupFirebase();
+  await _initAppConfig();
   runApp(const LetTutorApp());
 }
 
@@ -31,11 +33,14 @@ Future<void> _setupFirebase() async {
   };
 }
 
+Future<void> _initAppConfig() async {
+  await AppProvider.init();
+}
+
 class LetTutorApp extends StatelessWidget {
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
-
   const LetTutorApp({super.key});
 
   // This widget is the root of your application.
@@ -43,6 +48,9 @@ class LetTutorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (context) => AppProvider(),
+        ),
         ChangeNotifierProvider(
           create: (context) => AuthProvider(),
         ),
@@ -100,7 +108,9 @@ class LetTutorApp extends StatelessWidget {
         builder: (context, auth, _) => MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
-            fontFamily: 'Poppins',
+            fontFamily: Provider.of<AppProvider>(context).language is Vietnamese
+                ? 'Roboto'
+                : 'Poppins',
           ),
           navigatorObservers: [
             FirebaseAnalyticsObserver(analytics: analytics),
@@ -137,6 +147,14 @@ class LetTutorApp extends StatelessWidget {
             AdvancedSettingsScreen.routeName: (context) => const AdvancedSettingsScreen(),
             ProfileScreen.routeName: (context) => const ProfileScreen(),
             ChatGPTScreen.routeName: (context) => const ChatGPTScreen(),
+            PDFViewerScreen.routeName: (context) {
+              final args =
+                  ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+              return PDFViewerScreen(
+                title: args['title'] as String,
+                url: args['url'] as String,
+              );
+            },
           },
         ),
       ),

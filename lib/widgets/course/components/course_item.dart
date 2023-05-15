@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/core/styles/index.dart';
 
 import '../../../core/assets/index.dart';
+import '../../../core/styles/index.dart';
 import '../../../screens/index.dart';
 
 class CourseItemWidget extends StatelessWidget {

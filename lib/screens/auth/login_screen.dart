@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/assets/index.dart';
@@ -78,13 +81,100 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void handleGoogleLogin() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignInAccount? account = await googleSignIn.signIn();
+    if (account == null) return;
+
+    try {
+      final GoogleSignInAuthentication googleAuth = await account.authentication;
+      final AuthCredential authCredential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      if (!mounted) return;
+      await Provider.of<AuthProvider>(context, listen: false).googleLogin(
+        authCredential.accessToken!,
+        () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
+        },
+      );
+    } on HttpException catch (error) {
+      if (!mounted) return;
+      TopSnackBar.show(
+        context: context,
+        message: error.toString(),
+        isSuccess: false,
+      );
+      await Analytics.crashEvent(
+        'handleGoogleLogin',
+        exception: error.toString(),
+      );
+    } catch (error) {
+      if (!mounted) return;
+      TopSnackBar.show(
+        context: context,
+        message: 'Failed to login with Google! Please try again later',
+        isSuccess: false,
+      );
+      await Analytics.crashEvent(
+        'handleGoogleLogin',
+        exception: error.toString(),
+      );
+    }
+  }
+
+  void handleFacebookLogin() async {
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+    if (loginResult.status != LoginStatus.success) return;
+
+    final AccessToken? accessToken = loginResult.accessToken;
+    if (accessToken == null) return;
+
+    try {
+      if (!mounted) return;
+      await Provider.of<AuthProvider>(context, listen: false).facebookLogin(
+        accessToken.token,
+        () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
+        },
+      );
+    } on HttpException catch (error) {
+      if (!mounted) return;
+      TopSnackBar.show(
+        context: context,
+        message: error.toString(),
+        isSuccess: false,
+      );
+      await Analytics.crashEvent(
+        'handleFacebookLogin',
+        exception: error.toString(),
+      );
+    } catch (error) {
+      if (!mounted) return;
+      TopSnackBar.show(
+        context: context,
+        message: 'Failed to login with Facebook! Please try again later',
+        isSuccess: false,
+      );
+      await Analytics.crashEvent(
+        'handleFacebookLogin',
+        exception: error.toString(),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('LOGIN_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWidget('Sign in'),
+      appBar: CustomAppBarWidget(lang.loginScreenTitle),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -113,13 +203,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                const Text('Email'),
+                Text(lang.email),
                 TextFieldWidget(
                   controller: _emailCtrl,
                   hintText: 'example@email.com',
                   keyboardType: TextInputType.emailAddress,
                 ),
-                const Text('Password'),
+                Text(lang.password),
                 TextFieldWidget(
                   obscureText: true,
                   controller: _passwordCtrl,
@@ -134,9 +224,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     onTap: () {
                       Navigator.of(context).pushNamed(ForgotPasswordScreen.routeName);
                     },
-                    child: const Text(
-                      'Forgot Password?',
-                      style: TextStyle(
+                    child: Text(
+                      lang.forgotPassword,
+                      style: const TextStyle(
                         color: LetTutorColors.primaryBlue,
                         fontSize: LetTutorFontSizes.px12,
                       ),
@@ -153,9 +243,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  child: const Text(
-                    'Log In',
-                    style: TextStyle(
+                  child: Text(
+                    lang.login,
+                    style: const TextStyle(
                       fontWeight: LetTutorFontWeights.medium,
                       color: Colors.white,
                     ),
@@ -164,9 +254,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
-                  child: const Text(
-                    'Or continue with',
-                    style: TextStyle(
+                  child: Text(
+                    lang.continueWith,
+                    style: const TextStyle(
                       fontSize: LetTutorFontSizes.px12,
                       color: LetTutorColors.greyScaleDarkGrey,
                     ),
@@ -174,11 +264,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    SocialLoginWidget(svgSource: LetTutorSvg.facebookAuth),
-                    SocialLoginWidget(svgSource: LetTutorSvg.google),
-                    SocialLoginWidget(svgSource: LetTutorSvg.smartPhone),
-                    SocialLoginWidget(svgSource: LetTutorSvg.apple),
+                  children: [
+                    SocialLoginWidget(
+                      svgSource: LetTutorSvg.facebookAuth,
+                      onPressed: handleFacebookLogin,
+                    ),
+                    SocialLoginWidget(
+                      svgSource: LetTutorSvg.google,
+                      onPressed: handleGoogleLogin,
+                    ),
+                    const SocialLoginWidget(svgSource: LetTutorSvg.smartPhone),
+                    const SocialLoginWidget(svgSource: LetTutorSvg.apple),
                   ],
                 ),
                 Container(
@@ -186,13 +282,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   margin: const EdgeInsets.only(top: 25),
                   child: Text.rich(
                     TextSpan(
-                      text: 'Don\'t have account? ',
+                      text: lang.doNotHaveAccount,
                       style: const TextStyle(
                         fontSize: LetTutorFontSizes.px12,
                       ),
                       children: <InlineSpan>[
                         TextSpan(
-                          text: 'Sign up',
+                          text: lang.signUp,
                           style: const TextStyle(
                             fontSize: LetTutorFontSizes.px14,
                             color: LetTutorColors.primaryBlue,

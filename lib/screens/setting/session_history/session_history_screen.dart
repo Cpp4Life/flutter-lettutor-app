@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/index.dart';
 import '../../../services/index.dart';
 import '../../../widgets/index.dart';
-import '../../../widgets/session_history_card.dart';
+import '../../../widgets/setting/session_history/session_history_card.dart';
 
 class SessionHistoryScreen extends StatelessWidget {
   static const routeName = '/session-history';
@@ -17,16 +17,17 @@ class SessionHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('SESSION_HISTORY_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWidget('Session History'),
+      appBar: CustomAppBarWidget(lang.sessionHistory),
       body: SafeArea(
         child: Column(
           children: [
             Container(
               margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
-              child: const SearchBarWidget(
-                title: 'Search session history',
+              child: SearchBarWidget(
+                title: lang.sessionSearchHint,
               ),
             ),
             Expanded(

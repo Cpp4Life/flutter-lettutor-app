@@ -88,6 +88,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('TUTOR_DETAIL_SCREEN');
     final tutorProvider = Provider.of<TutorProvider>(context);
+    final lang = Provider.of<AppProvider>(context).language;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -221,9 +222,9 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                                 borderRadius: BorderRadius.circular(50),
                               ),
                             ),
-                            child: const Text(
-                              'Booking',
-                              style: TextStyle(
+                            child: Text(
+                              lang.bookingTutorButton,
+                              style: const TextStyle(
                                 fontWeight: LetTutorFontWeights.medium,
                               ),
                             ),
@@ -241,9 +242,9 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                                     fit: BoxFit.cover,
                                     color: LetTutorColors.primaryBlue,
                                   ),
-                                  const Text(
-                                    'Message',
-                                    style: TextStyle(
+                                  Text(
+                                    lang.message,
+                                    style: const TextStyle(
                                       fontSize: LetTutorFontSizes.px12,
                                       color: LetTutorColors.primaryBlue,
                                     ),
@@ -257,9 +258,9 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                                     fit: BoxFit.cover,
                                     color: LetTutorColors.primaryBlue,
                                   ),
-                                  const Text(
-                                    'Report',
-                                    style: TextStyle(
+                                  Text(
+                                    lang.report,
+                                    style: const TextStyle(
                                       fontSize: LetTutorFontSizes.px12,
                                       color: LetTutorColors.primaryBlue,
                                     ),
@@ -280,7 +281,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                         Container(
                           margin: _margin,
                           child: InfoChipWidget(
-                            title: 'Languages',
+                            title: lang.languages,
                             tags: languages.entries
                                 .where((element) =>
                                     _tutor.languages!.split(',').contains(element.key))
@@ -291,42 +292,42 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                         Container(
                           margin: _margin,
                           child: InfoTextWidget(
-                            title: 'Education',
+                            title: lang.education,
                             content: _tutor.education ?? '',
                           ),
                         ),
                         Container(
                           margin: _margin,
                           child: InfoTextWidget(
-                            title: 'Experience',
+                            title: lang.experience,
                             content: _tutor.experience ?? '',
                           ),
                         ),
                         Container(
                           margin: _margin,
                           child: InfoTextWidget(
-                            title: 'Interests',
+                            title: lang.interests,
                             content: _tutor.interests ?? '',
                           ),
                         ),
                         Container(
                           margin: _margin,
                           child: InfoTextWidget(
-                            title: 'Profession',
+                            title: lang.profession,
                             content: _tutor.profession ?? '',
                           ),
                         ),
                         Container(
                           margin: _margin,
                           child: InfoChipWidget(
-                            title: 'Specialties',
+                            title: lang.specialties,
                             tags: _tutor.specialties?.split(',') ?? [],
                           ),
                         ),
                         Container(
                           margin: _margin,
                           child: InfoCourseWidget(
-                            title: 'Course',
+                            title: lang.course,
                             courses: _tutor.user?.courses ?? [],
                           ),
                         ),
@@ -336,7 +337,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Rating and Comment (${_feedbacks.length})',
+                                '${lang.ratingAndComments} (${_feedbacks.length})',
                                 style: const TextStyle(
                                   color: LetTutorColors.primaryBlue,
                                 ),

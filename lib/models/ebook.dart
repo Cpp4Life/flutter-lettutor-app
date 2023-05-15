@@ -46,4 +46,12 @@ class Ebook {
         ? []
         : Generic.fromJSON<List<CourseCategory>, CourseCategory>(json['categories']);
   }
+
+  @override
+  bool operator ==(other) {
+    return (other is Ebook) && (other.id == id);
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

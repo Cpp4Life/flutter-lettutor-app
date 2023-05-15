@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/index.dart';
 import '../../providers/index.dart';
 import '../../services/index.dart';
 import '../../widgets/index.dart';
@@ -15,62 +18,130 @@ class UpcomingScreen extends StatefulWidget {
 }
 
 class _UpcomingScreenState extends State<UpcomingScreen> {
+  final ScrollController _scrollController = ScrollController();
   final int _perPage = 10;
-  final int _page = 1;
+  late List<BookingInfo> _upcoming = [];
+  int _page = 1;
+  bool _isLoadMore = false;
+  bool _isLoading = true;
+  Timer? _debounce;
 
-  Future _refreshUpcoming(BuildContext context) async {
-    await Provider.of<ScheduleProvider>(context, listen: false)
-        .fetchAndSetUpcomingClass(page: _page, perPage: _perPage);
+  @override
+  void initState() {
+    _scrollController.addListener(_loadMore);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _scrollController.removeListener(_loadMore);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _loadMore() {
+    if (_scrollController.position.extentAfter < _page * _perPage) {
+      setState(() {
+        _isLoadMore = true;
+      });
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(const Duration(milliseconds: 100), () {
+        setState(() {
+          _page++;
+          _refreshUpcoming();
+        });
+      });
+    }
+  }
+
+  Future _refreshUpcoming() async {
+    try {
+      final scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
+      await scheduleProvider.fetchAndSetUpcomingClass(page: _page, perPage: _perPage);
+      final response = scheduleProvider.bookings;
+
+      if (mounted) {
+        setState(() {
+          _upcoming.addAll(response);
+          _upcoming = _upcoming.toSet().toList(); // remove duplicates
+          _isLoading = false;
+          _isLoadMore = false;
+        });
+      }
+    } on HttpException catch (error) {
+      await Analytics.crashEvent(
+        '_refreshUpcomingHttpExceptionCatch',
+        exception: error.toString(),
+        fatal: true,
+      );
+    } catch (error) {
+      await Analytics.crashEvent(
+        '_refreshUpcomingCatch',
+        exception: error.toString(),
+        fatal: true,
+      );
+    }
+  }
+
+  void _onRemove(String id) {
+    setState(() {
+      _upcoming.removeWhere((element) => element.id == id);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('UPCOMING_SCREEN');
-    return FutureBuilder(
-      future: _refreshUpcoming(context),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (snapshot.error != null) {
-          return const Center(
-            child: FreeContentWidget('No available upcoming class'),
-          );
-        }
-        return RefreshIndicator(
-          onRefresh: () => _refreshUpcoming(context),
-          child: Consumer<ScheduleProvider>(
-            builder: (context, provider, _) => Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: provider.bookings.isEmpty
-                  ? const Center(
-                      child: FreeContentWidget('No available bookings'),
-                    )
-                  : ListView.builder(
-                      itemCount: provider.bookings.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          child: Card(
-                            elevation: 5,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                            child: BookingCardWidget(
-                              booking: provider.bookings[index],
-                            ),
+    if (_isLoading) _refreshUpcoming();
+
+    return Column(
+      children: <Widget>[
+        _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () => _refreshUpcoming(),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: _upcoming.isEmpty
+                        ? const Center(
+                            child: FreeContentWidget('No available bookings'),
+                          )
+                        : ListView.builder(
+                            controller: _scrollController,
+                            itemCount: _upcoming.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: const EdgeInsets.only(bottom: 10),
+                                child: Card(
+                                  elevation: 5,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                  ),
+                                  child: BookingCardWidget(
+                                    booking: _upcoming[index],
+                                    onRemove: _onRemove,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
+                  ),
+                ),
+              ),
+        if (_isLoadMore)
+          const SizedBox(
+            height: 48,
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
-          ),
-        );
-      },
+          )
+      ],
     );
   }
 }

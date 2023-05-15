@@ -89,10 +89,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('FORGET_PASSWORD_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWidget('Forgot password'),
+      appBar: CustomAppBarWidget(lang.forgotPasswordTitle),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -124,17 +125,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 const SizedBox(
                   height: 80,
                 ),
-                const Text(
-                  'Enter your email address and we\'ll send you a link to reset your password',
+                Text(
+                  lang.instruction,
                   textAlign: TextAlign.center,
-                  style: TextStyle(),
+                  style: const TextStyle(
+                    fontSize: LetTutorFontSizes.px14,
+                    color: LetTutorColors.greyScaleDarkGrey,
+                  ),
                 ),
                 const SizedBox(
                   height: 80,
                 ),
                 TextFieldWidget(
                   controller: _emailCtrl,
-                  hintText: 'Enter your mail',
+                  hintText: lang.emailHint,
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(
@@ -150,9 +154,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  child: const Text(
-                    'Send',
-                    style: TextStyle(
+                  child: Text(
+                    lang.send,
+                    style: const TextStyle(
+                      fontSize: LetTutorFontSizes.px14,
                       fontWeight: LetTutorFontWeights.medium,
                       color: Colors.white,
                     ),

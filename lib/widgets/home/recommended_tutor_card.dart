@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../core/styles/index.dart';
-import '../screens/tutor/tutor_detail_screen.dart';
-import 'index.dart';
+import '../../core/styles/index.dart';
+import '../../screens/tutor/tutor_detail_screen.dart';
+import '../index.dart';
 
-class TutorCardWidget extends StatelessWidget {
+class RecommendedTutorCardWidget extends StatelessWidget {
   final String id;
   final String name;
   final String bio;
   final List<String> specialties;
   final String? avatar;
   final double? rating;
+  final bool? isFavorite;
 
-  const TutorCardWidget({
+  const RecommendedTutorCardWidget({
     Key? key,
     required this.id,
     required this.name,
@@ -20,6 +21,7 @@ class TutorCardWidget extends StatelessWidget {
     required this.avatar,
     required this.specialties,
     required this.rating,
+    required this.isFavorite,
   }) : super(key: key);
 
   @override
@@ -50,6 +52,7 @@ class TutorCardWidget extends StatelessWidget {
                         child: Column(
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
                                   margin: const EdgeInsets.only(left: 5),
@@ -60,19 +63,25 @@ class TutorCardWidget extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const Spacer(),
-                                Text(
-                                  rating == null ? '0' : rating!.round().toString(),
-                                  style: const TextStyle(
-                                    fontSize: LetTutorFontSizes.px16,
+                                IconButton(
+                                  padding: const EdgeInsets.only(top: 5, right: 5),
+                                  constraints: const BoxConstraints(),
+                                  onPressed: () {},
+                                  splashColor: Colors.transparent,
+                                  icon: Icon(
+                                    isFavorite!
+                                        ? Icons.favorite
+                                        : Icons.favorite_border_rounded,
                                     color: LetTutorColors.primaryRed,
-                                    fontWeight: LetTutorFontWeights.medium,
                                   ),
                                 ),
-                                const StarWidget(
-                                  isFilled: true,
-                                ),
                               ],
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: RatingWidget(
+                                count: rating == null ? 0 : rating!.round(),
+                              ),
                             ),
                             SizedBox(
                               height: 35,
@@ -96,7 +105,6 @@ class TutorCardWidget extends StatelessWidget {
                 ),
                 Text(
                   bio,
-                  textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 4,
                   style: const TextStyle(

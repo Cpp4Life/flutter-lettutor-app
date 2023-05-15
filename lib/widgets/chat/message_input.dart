@@ -64,6 +64,7 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = Provider.of<AppProvider>(context).language;
     return Container(
       margin: const EdgeInsets.only(top: 10, bottom: 10),
       child: Column(
@@ -85,7 +86,7 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
                   cursorColor: Theme.of(context).colorScheme.secondary,
                   decoration: InputDecoration(
                     isDense: true,
-                    hintText: 'Type a message...',
+                    hintText: lang.typeMessageHint,
                     hintStyle: const TextStyle(
                       color: LetTutorColors.greyScaleDarkGrey,
                     ),

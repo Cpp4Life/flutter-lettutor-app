@@ -1,5 +1,4 @@
 const levels = {
-  'UN': 'Please select your level',
   'BEGINNER': 'Beginner',
   'HIGHER_BEGINNER': 'Higher Beginner',
   'PRE_INTERMEDIATE': 'Pre-Intermediate',

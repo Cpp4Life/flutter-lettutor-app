@@ -4,50 +4,29 @@ import 'package:provider/provider.dart';
 
 import '../core/assets/index.dart';
 import '../core/styles/index.dart';
-import '../models/index.dart';
+import '../helpers/index.dart';
 import '../providers/index.dart';
-import '../widgets/index.dart';
 import 'index.dart';
 
-class TabsScreen extends StatefulWidget {
+class TabsScreen extends StatelessWidget {
   static const routeName = '/home';
 
   const TabsScreen({super.key});
 
   @override
-  State<TabsScreen> createState() => _TabsScreenState();
-}
-
-class _TabsScreenState extends State<TabsScreen> {
-  late List<Map<String, Object>> _pages;
-  User _user = User(
-    id: '',
-    avatar: null,
-  );
-
-  @override
-  void initState() {
-    _pages = [
-      {'page': const HomeScreen(), 'title': 'Home'},
-      {'page': const CourseScreen(), 'title': 'Course'},
-      {'page': const UpcomingScreen(), 'title': 'Upcoming'},
-      {'page': const TutorsScreen(), 'title': 'Tutors'},
-      {'page': const ChatGPTScreen(), 'title': 'ChatGPT'},
-      {'page': const SettingScreen(), 'title': 'Settings'},
-    ];
-    Provider.of<UserProvider>(context, listen: false).getUserInfo().then((value) {
-      if (mounted) {
-        setState(() {
-          _user = value;
-        });
-      }
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final user = context.read<AuthProvider>().user;
     final provider = Provider.of<NavigationProvider>(context);
+    final lang = Provider.of<AppProvider>(context).language;
+
+    final pages = [
+      {'page': const HomeScreen(), 'title': lang.homeTitle},
+      {'page': const CourseScreen(), 'title': lang.courseTitle},
+      {'page': const UpcomingScreen(), 'title': lang.upcomingTitle},
+      {'page': const TutorsScreen(), 'title': lang.tutorList},
+      {'page': const ChatGPTScreen(), 'title': lang.chatGPTTitle},
+      {'page': const SettingScreen(), 'title': lang.settingsTitle},
+    ];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -56,7 +35,7 @@ class _TabsScreenState extends State<TabsScreen> {
         shadowColor: Colors.transparent,
         centerTitle: false,
         title: Text(
-          _pages[provider.index]['title'] as String,
+          pages[provider.index]['title'] as String,
           style: const TextStyle(
             color: LetTutorColors.secondaryDarkBlue,
             fontSize: LetTutorFontSizes.px16,
@@ -71,17 +50,22 @@ class _TabsScreenState extends State<TabsScreen> {
                   onPressed: () {
                     Navigator.of(context).pushNamed(ProfileScreen.routeName);
                   },
-                  icon: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: CachedNetworkImage(
-                      imageUrl: _user.avatar ?? 'https://picsum.photos/200/300',
-                      fit: BoxFit.cover,
-                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                          CircularProgressIndicator(value: downloadProgress.progress),
-                      errorWidget: (context, url, error) => Image.asset(
-                        LetTutorImages.avatar,
-                        fit: BoxFit.cover,
+                  icon: CachedNetworkImage(
+                    imageUrl: user.avatar ?? 'https://picsum.photos/200/300',
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.fill,
+                        ),
                       ),
+                    ),
+                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                        CircularProgressIndicator(value: downloadProgress.progress),
+                    errorWidget: (context, url, error) => Image.asset(
+                      LetTutorImages.avatar,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -89,9 +73,9 @@ class _TabsScreenState extends State<TabsScreen> {
             : [],
         automaticallyImplyLeading: false,
       ),
-      body: SafeArea(child: _pages[provider.index]['page'] as Widget),
+      body: SafeArea(child: pages[provider.index]['page'] as Widget),
       bottomNavigationBar: BottomNavigationBar(
-        onTap: (value) => provider.index = value,
+        onTap: (value) => provider.moveToTab(value),
         selectedItemColor: LetTutorColors.primaryBlue,
         unselectedItemColor: LetTutorColors.greyScaleDarkGrey,
         currentIndex: provider.index,
@@ -101,32 +85,32 @@ class _TabsScreenState extends State<TabsScreen> {
           NavItem.generateItem(
             context,
             svgSource: LetTutorSvg.home,
-            label: 'Home',
+            label: lang.homeTitle,
           ),
           NavItem.generateItem(
             context,
             svgSource: LetTutorSvg.course,
-            label: 'Course',
+            label: lang.courseTitle,
           ),
           NavItem.generateItem(
             context,
             svgSource: LetTutorSvg.upcoming,
-            label: 'Upcoming',
+            label: lang.upcomingTitle,
           ),
           NavItem.generateItem(
             context,
             svgSource: LetTutorSvg.tutor,
-            label: 'Tutors',
+            label: lang.tutorTitle,
           ),
           NavItem.generateItem(
             context,
             svgSource: LetTutorSvg.chatgpt,
-            label: 'ChatGPT',
+            label: lang.chatGPTTitle,
           ),
           NavItem.generateItem(
             context,
             svgSource: LetTutorSvg.settingNav,
-            label: 'Settings',
+            label: lang.settingsTitle,
           ),
         ],
       ),

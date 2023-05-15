@@ -152,10 +152,18 @@ class Tutor {
     price = json['price'];
     isOnline = json['isOnline'];
     user = json['User'] == null ? null : Generic.fromJSON<User, void>(json['User']);
-    isFavorite = json['isFavorite'];
+    isFavorite = json['isFavorite'] ?? false;
     avgRating = json['avgRating'];
     totalFeedback = json['totalFeedback'];
   }
+
+  @override
+  bool operator ==(other) {
+    return (other is Tutor) && (other.id == id);
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 // Only use for home screen to show favorite tutors
@@ -174,7 +182,11 @@ class FavoriteTutor {
     secondId = json['secondId'];
     createdAt = strToDateTime(json['createdAt']);
     updatedAt = strToDateTime(json['updatedAt']);
-    secondInfo = Generic.fromJSON<Tutor, void>(json['secondInfo']);
-    tutorInfo = Generic.fromJSON<Tutor, void>(json['secondInfo']['tutorInfo']);
+    secondInfo = json['secondInfo'] == null
+        ? null
+        : Generic.fromJSON<Tutor, void>(json['secondInfo']);
+    tutorInfo = json['secondInfo'] == null || json['secondInfo']['tutorInfo'] == null
+        ? null
+        : Generic.fromJSON<Tutor, void>(json['secondInfo']['tutorInfo']);
   }
 }
