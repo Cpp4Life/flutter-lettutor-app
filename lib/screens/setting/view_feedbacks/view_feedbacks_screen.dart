@@ -21,9 +21,9 @@ class ViewFeedbacksScreen extends StatelessWidget {
               children: [
                 Container(
                   margin: const EdgeInsets.only(bottom: 15),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
                         '5.0',
                         style: TextStyle(
