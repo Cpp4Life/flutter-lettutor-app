@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as f_date_picker;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -362,7 +362,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         splashFactory: NoSplash.splashFactory,
                       ),
                       onPressed: () {
-                        DatePicker.showDatePicker(
+                        f_date_picker.DatePicker.showDatePicker(
                           context,
                           showTitleActions: true,
                           minTime: DateTime(1950, 1, 1),
@@ -375,7 +375,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               _user.birthday = DateFormat('yyyy-MM-dd').format(date);
                             });
                           },
-                          locale: LocaleType.en,
+                          locale: f_date_picker.LocaleType.en,
                         );
                       },
                       child: Text(
