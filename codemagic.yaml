@@ -9,6 +9,8 @@ workflows:
       ios_signing:
         distribution_type: development
         bundle_identifier: com.example.lettutorApp
+      groups:
+        - secrets
       vars:
         APP_ID: 6449217938
       flutter: stable
@@ -18,6 +20,11 @@ workflows:
       cache_paths:
         - $FLUTTER_ROOT/.pub-cache
     scripts:
+      - name: Log environments
+        script: |
+          @echo $APP_STORE_CONNECT_KEY_IDENTIFIER
+          @echo $APP_STORE_CONNECT_ISSUER_ID
+          @echo $APP_STORE_CONNECT_PRIVATE_KEY
       - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
@@ -64,4 +71,7 @@ workflows:
           success: true
           failure: false
       app_store_connect:
-        auth: integration
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        submit_to_app_store: true
