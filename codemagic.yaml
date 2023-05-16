@@ -16,15 +16,12 @@ workflows:
       flutter: stable
       xcode: 14.2
       cocoapods: 1.12.1
-    cache:
-      cache_paths:
-        - $FLUTTER_ROOT/.pub-cache
     scripts:
       - name: Log environments
         script: |
           echo $APP_STORE_CONNECT_KEY_IDENTIFIER
           echo $APP_STORE_CONNECT_ISSUER_ID
-          echo $APP_STORE_CONNECT_PRIVATE_KEY
+          echo $APP_STORE_CONNECT_API_KEY
       - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
@@ -73,5 +70,5 @@ workflows:
       app_store_connect:
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        api_key: $APP_STORE_CONNECT_API_KEY
         submit_to_app_store: true
