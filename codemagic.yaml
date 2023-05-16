@@ -7,10 +7,10 @@ workflows:
       app_store_connect: HCMUS-19CLC-LETTUTOR
     environment:
       ios_signing:
-        distribution_type: development
+        distribution_type: app_store
         bundle_identifier: com.example.lettutorApp
       groups:
-        - secrets
+        - appstore_credentials
       vars:
         APP_ID: 6449217938
       flutter: stable
@@ -21,7 +21,7 @@ workflows:
         script: |
           echo $APP_STORE_CONNECT_KEY_IDENTIFIER
           echo $APP_STORE_CONNECT_ISSUER_ID
-          echo $APP_STORE_CONNECT_API_KEY
+          echo $APP_STORE_CONNECT_PRIVATE_KEY
       - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
@@ -70,5 +70,5 @@ workflows:
       app_store_connect:
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        api_key: $APP_STORE_CONNECT_API_KEY
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
         submit_to_app_store: true
