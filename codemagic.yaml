@@ -23,7 +23,6 @@ workflows:
           flutter packages pub get
       - name: Install pods
         script: |
-          ls -al
           cd ios
           rm -f Podfile.lock
           rm -rf Pods
