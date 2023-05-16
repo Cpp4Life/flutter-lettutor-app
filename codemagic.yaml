@@ -1,0 +1,69 @@
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    max_build_duration: 100
+    instance_type: mac_mini_m1
+    integrations:
+      app_store_connect: HCMUS-19CLC-LETTUTOR
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.example.lettutorApp
+      vars:
+        APP_ID: 6449217938
+      flutter: stable
+      xcode: 14.2
+      cocoapods: 1.12.1
+    cache:
+      cache_paths:
+        - $FLUTTER_ROOT/.pub-cache
+    scripts:
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles
+      - name: Get Flutter packages
+        script: |
+          flutter packages pub get
+      - name: Install pods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+      - name: Flutter build ios
+        script: |
+          flutter build ios --release --codesign
+      - name: Flutter build ipa and automatic versioning
+        script: |
+          flutter build ipa --release \
+            --build-name=1.0.0 \
+            --build-number=$(($(app-store-connect get-latest-app-store-build-number "$APP_ID") + 1)) \
+            --export-options-plist=/Users/builder/export_options.plist
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: "develop"
+          include: true
+          source: true
+        - pattern: "master"
+          include: true
+          source: true
+      cancel_previous_builds: true
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - "tgdat19@clc.fitus.edu.vn"
+          - "dattruong1220@gmail.com"
+        notify:
+          success: true
+          failure: false
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false
+        submit_to_app_store: true
