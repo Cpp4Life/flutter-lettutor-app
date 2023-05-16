@@ -7,7 +7,7 @@ workflows:
       app_store_connect: HCMUS-19CLC-LETTUTOR
     environment:
       ios_signing:
-        distribution_type: development
+        distribution_type: ad_hoc
         bundle_identifier: com.example.lettutorApp
       vars:
         APP_ID: 6449217938
@@ -65,5 +65,3 @@ workflows:
           failure: false
       app_store_connect:
         auth: integration
-        submit_to_testflight: false
-        submit_to_app_store: true
