@@ -44,41 +44,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       // empty validation
       if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-        TopSnackBar.show(
-          context: context,
-          message: 'Please fill in all fields',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, 'Please fill in all fields');
         return;
       }
 
       // email validation
       if (!RegEx.isValidEmail(email)) {
-        TopSnackBar.show(
-          context: context,
-          message: 'Please enter a valid email',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, 'Please enter a valid email');
         return;
       }
 
       // password validation
-      if (password.length < 8) {
-        TopSnackBar.show(
-          context: context,
-          message: 'Password must be at least 8 characters',
-          isSuccess: false,
-        );
+      if (password.length < 6) {
+        TopSnackBar.showError(context, 'Password must be at least 6 characters');
         return;
       }
 
       // confirm password validation
       if (confirmPassword != password) {
-        TopSnackBar.show(
-          context: context,
-          message: 'Passwords do not match',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, 'Passwords do not match');
         return;
       }
 
@@ -87,31 +71,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
           email,
           password,
           () {
-            TopSnackBar.show(
-              context: context,
-              message: 'Successfully registered an account',
-              isSuccess: true,
-            );
+            TopSnackBar.showSuccess(context, 'Successfully registered an account');
             Navigator.of(context).pop();
           },
         );
       } on HttpException catch (error) {
-        TopSnackBar.show(
-          context: context,
-          message: error.toString(),
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, error.toString());
         await Analytics.crashEvent(
           'handleRegister',
           exception: error.toString(),
         );
       } catch (error) {
         debugPrint(error.toString());
-        TopSnackBar.show(
-          context: context,
-          message: 'Failed to sign you up! Please try again later',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, 'Failed to sign you up! Please try again later');
         await Analytics.crashEvent(
           'handleRegister',
           exception: error.toString(),
@@ -131,20 +103,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(lang.email),
-                TextFieldWidget(
+                RoundedTextFieldWidget(
                   hintText: 'example@email.com',
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailCtrl,
                 ),
                 Text(lang.password),
-                TextFieldWidget(
+                RoundedTextFieldWidget(
                   obscureText: true,
                   hintText: '********',
                   keyboardType: TextInputType.text,
                   controller: _passwordCtrl,
                 ),
                 Text(lang.confirmPassword),
-                TextFieldWidget(
+                RoundedTextFieldWidget(
                   obscureText: true,
                   hintText: '********',
                   keyboardType: TextInputType.text,

@@ -147,6 +147,7 @@ class LetTutorApp extends StatelessWidget {
             ViewFeedbacksScreen.routeName: (context) => const ViewFeedbacksScreen(),
             SessionHistoryScreen.routeName: (context) => const SessionHistoryScreen(),
             AdvancedSettingsScreen.routeName: (context) => const AdvancedSettingsScreen(),
+            ChangePasswordScreen.routeName: (context) => const ChangePasswordScreen(),
             ProfileScreen.routeName: (context) => const ProfileScreen(),
             ChatGPTScreen.routeName: (context) => const ChatGPTScreen(),
             PDFViewerScreen.routeName: (context) {

@@ -32,21 +32,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     // empty validation
     if (email.isEmpty) {
-      TopSnackBar.show(
-        context: context,
-        message: 'Please enter your email',
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, 'Please enter your email');
       return;
     }
 
     // email validation
     if (!RegEx.isValidEmail(email)) {
-      TopSnackBar.show(
-        context: context,
-        message: 'Please enter a valid email',
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, 'Please enter a valid email');
       return;
     }
 
@@ -54,31 +46,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       Provider.of<AuthProvider>(context, listen: false).forgetPassword(
         email,
         () {
-          TopSnackBar.show(
-            context: context,
-            message: 'Email sent successfully',
-            isSuccess: true,
-          );
+          TopSnackBar.showSuccess(context, 'Email sent successfully');
           Navigator.of(context).pop();
         },
       );
     } on HttpException catch (error) {
-      TopSnackBar.show(
-        context: context,
-        message: error.toString(),
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, error.toString());
       await Analytics.crashEvent(
         'handleForgetPassword',
         exception: error.toString(),
       );
     } catch (error) {
       debugPrint(error.toString());
-      TopSnackBar.show(
-        context: context,
-        message: 'Failed to sign you up! Please try again later',
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, 'Failed to sign you up! Please try again later');
       await Analytics.crashEvent(
         'handleForgetPassword',
         exception: error.toString(),
@@ -136,7 +116,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 const SizedBox(
                   height: 80,
                 ),
-                TextFieldWidget(
+                RoundedTextFieldWidget(
                   controller: _emailCtrl,
                   hintText: lang.emailHint,
                   keyboardType: TextInputType.emailAddress,

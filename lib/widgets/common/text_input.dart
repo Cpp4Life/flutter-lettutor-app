@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 
 import '../../core/styles/index.dart';
 
-class TextFieldWidget extends StatelessWidget {
+class RoundedTextFieldWidget extends StatelessWidget {
   final String? label;
   final String? hintText;
   final TextInputType keyboardType;
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final bool obscureText;
 
-  const TextFieldWidget({
+  const RoundedTextFieldWidget({
     this.label,
     this.hintText,
     this.keyboardType = TextInputType.text,
     this.controller,
+    this.focusNode,
     this.obscureText = false,
     super.key,
   });
@@ -26,6 +28,7 @@ class TextFieldWidget extends StatelessWidget {
         controller: controller,
         keyboardType: keyboardType,
         obscureText: obscureText,
+        focusNode: focusNode,
         decoration: InputDecoration(
           isDense: true,
           hintText: hintText ?? '',

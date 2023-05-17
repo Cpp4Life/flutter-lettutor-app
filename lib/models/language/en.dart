@@ -215,6 +215,12 @@ class English implements Language {
   @override
   get sessionSearchHint => 'Search session history';
 
+  @override
+  get changePassword => 'Change Password';
+
+  @override
+  get newPassword => 'New password *';
+
   // Session card
   @override
   get mark => 'Mark';

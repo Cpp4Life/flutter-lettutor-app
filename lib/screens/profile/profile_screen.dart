@@ -134,29 +134,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
       try {
         if (_nameCtrl.text.isEmpty) {
-          TopSnackBar.show(
-            context: context,
-            message: 'Username cannot be empty!',
-            isSuccess: false,
-          );
+          TopSnackBar.showError(context, 'Username cannot be empty!');
           return;
         }
 
         if (_phoneCtrl.text.isEmpty) {
-          TopSnackBar.show(
-            context: context,
-            message: 'Phone number cannot be empty!',
-            isSuccess: false,
-          );
+          TopSnackBar.showError(context, 'Phone number cannot be empty!');
           return;
         }
 
         if (!RegEx.isValidPhone(_phoneCtrl.text)) {
-          TopSnackBar.show(
-            context: context,
-            message: 'Enter a valid phone number!',
-            isSuccess: false,
-          );
+          TopSnackBar.showError(context, 'Enter a valid phone number!');
           return;
         }
 
@@ -168,31 +156,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           phone: _phoneCtrl.text,
           learnTopics: _user.learnTopics!.map((e) => e.id.toString()).toList(),
           testPreparations: _user.testPreparations!.map((e) => e.id.toString()).toList(),
-          callback: () {
-            TopSnackBar.show(
-              context: context,
-              message: 'Successfully updated profile! Oh-hoo~~',
-              isSuccess: true,
-            );
-          },
+          callback: () =>
+              TopSnackBar.showSuccess(context, 'Successfully updated profile! Oh-hoo~~'),
         );
       } on model.HttpException catch (e) {
-        TopSnackBar.show(
-          context: context,
-          message: e.toString(),
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, e.toString());
         await Analytics.crashEvent(
           'onSave',
           exception: e.toString(),
         );
       } catch (error) {
         debugPrint(error.toString());
-        TopSnackBar.show(
-          context: context,
-          message: 'Failed to update user\'s profile! Please try again later',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(
+            context, 'Failed to update user\'s profile! Please try again later');
         await Analytics.crashEvent(
           'onSave',
           exception: error.toString(),
@@ -218,13 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         await userProvider.uploadAvatar(
           imageFile.path,
           fileName,
-          () {
-            TopSnackBar.show(
-              context: context,
-              message: 'Successfully updated avatar! Oh-hoo~~',
-              isSuccess: true,
-            );
-          },
+          () => TopSnackBar.showSuccess(context, 'Successfully updated avatar! Oh-hoo~~'),
         );
         userProvider.getUserInfo().then((value) {
           setState(() {
@@ -234,22 +204,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
         });
       } on model.HttpException catch (e) {
-        TopSnackBar.show(
-          context: context,
-          message: e.toString(),
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, e.toString());
         await Analytics.crashEvent(
           'pickImageFromGallery',
           exception: e.toString(),
         );
       } catch (error) {
         debugPrint(error.toString());
-        TopSnackBar.show(
-          context: context,
-          message: 'Failed to update your avatar! Please try again later',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(
+            context, 'Failed to update your avatar! Please try again later');
         await Analytics.crashEvent(
           'pickImageFromGallery',
           exception: error.toString(),

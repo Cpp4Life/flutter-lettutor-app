@@ -215,6 +215,12 @@ class Vietnamese implements Language {
   @override
   get sessionSearchHint => 'Tìm kiếm lịch sử buổi học';
 
+  @override
+  get changePassword => 'Đổi mật khẩu';
+
+  @override
+  get newPassword => 'Mật khẩu mới *';
+
   // Session card
   @override
   get mark => 'Điểm số:';

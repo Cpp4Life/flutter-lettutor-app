@@ -175,4 +175,32 @@ class UserProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future changePassword(String oldPassword, String newPassword, Function callback) async {
+    try {
+      // * e.g: POST https://domain.com/auth/change-password
+      final url = Uri.parse('$_baseURL/auth/change-password');
+      final headers = Http.getHeaders(token: _authToken as String);
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: jsonEncode({
+          'password': oldPassword,
+          'newPassword': newPassword,
+        }),
+      );
+      final decodedResponse = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw HttpException(decodedResponse['message']);
+      }
+      await callback();
+    } catch (e) {
+      await Analytics.crashEvent(
+        'changePassword',
+        exception: e.toString(),
+        fatal: true,
+      );
+      rethrow;
+    }
+  }
 }

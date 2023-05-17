@@ -41,4 +41,5 @@ class LetTutorSvg {
   static const ebook = 'assets/svg/ic_ebook.svg';
   static const camera = 'assets/svg/ic_camera.svg';
   static const chatgpt = 'assets/svg/chatgpt.svg';
+  static const key = 'assets/svg/ic_key.svg';
 }
