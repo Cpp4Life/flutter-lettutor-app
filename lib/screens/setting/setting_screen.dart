@@ -78,24 +78,15 @@ class _SettingScreenState extends State<SettingScreen> {
                 );
               },
             ),
-            // Container(
-            //   margin: _margin,
-            //   child: SettingButtonWidget(
-            //     title: 'View Feedbacks',
-            //     iconPath: LetTutorSvg.user,
-            //     onPressed: () =>
-            //         Navigator.of(context).pushNamed(ViewFeedbacksScreen.routeName),
-            //   ),
-            // ),
-            // Container(
-            //   margin: _margin,
-            //   child: SettingButtonWidget(
-            //     title: 'Booking History',
-            //     iconPath: LetTutorSvg.list,
-            //     onPressed: () =>
-            //         Navigator.of(context).pushNamed(BookingHistoryScreen.routeName),
-            //   ),
-            // ),
+            Container(
+              margin: _margin,
+              child: SettingButtonWidget(
+                title: lang.changePassword,
+                iconPath: LetTutorSvg.key,
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(ChangePasswordScreen.routeName),
+              ),
+            ),
             Container(
               margin: _margin,
               child: SettingButtonWidget(

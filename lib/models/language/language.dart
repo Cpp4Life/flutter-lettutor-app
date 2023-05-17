@@ -88,6 +88,7 @@ abstract class Language {
 
   // Settings
   get settingsTitle;
+  get changePassword;
   get sessionHistory;
   get sessionSearchHint;
   get advancedSettings;
@@ -95,6 +96,7 @@ abstract class Language {
   get facebook;
   get version;
   get logout;
+  get newPassword;
 
   // Session card
   get mark;
