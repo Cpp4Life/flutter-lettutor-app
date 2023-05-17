@@ -37,15 +37,15 @@ workflows:
       - name: Flutter analyze
         script: |
           flutter analyze
-      - name: Flutter build ios
-        script: |
-          flutter build ios --release --codesign
       - name: Flutter build ipa and automatic versioning
         script: |
-          BUILD_NUMBER=$(($(app-store-connect get-latest-app-store-build-number "$APP_ID") + 1))
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number $APP_ID)
+          echo $LATEST_BUILD_NUMBER
+          cd ios
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
           flutter build ipa --release \
-            --build-name=1.0.$BUILD_NUMBER \
-            --build-number=$BUILD_NUMBER \
+            --build-name=1.0.$(($LATEST_BUILD_NUMBER + 1)) \
+            --build-number=$(($LATEST_BUILD_NUMBER + 1)) \
             --export-options-plist=/Users/builder/export_options.plist
     triggering:
       events:
