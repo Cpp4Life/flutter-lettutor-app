@@ -140,21 +140,12 @@ class BookingCardWidget extends StatelessWidget {
                           await Provider.of<ScheduleProvider>(context, listen: false)
                               .cancelBooking(
                             booking.id,
-                            () {
-                              TopSnackBar.show(
-                                context: context,
-                                message: lang.cancelSuccessfully,
-                                isSuccess: true,
-                              );
-                            },
+                            () =>
+                                TopSnackBar.showSuccess(context, lang.cancelSuccessfully),
                           );
                           onRemove(booking.id);
                         } on HttpException catch (e) {
-                          TopSnackBar.show(
-                            context: context,
-                            message: e.toString(),
-                            isSuccess: false,
-                          );
+                          TopSnackBar.showError(context, e.toString());
                           await Analytics.crashEvent(
                             'bookingCardCatch',
                             exception: e.toString(),
@@ -163,11 +154,7 @@ class BookingCardWidget extends StatelessWidget {
                       },
                     );
                   } else {
-                    TopSnackBar.show(
-                      context: context,
-                      message: lang.cancelFailed,
-                      isSuccess: false,
-                    );
+                    TopSnackBar.showError(context, lang.cancelFailed);
                   }
                 },
                 child: Container(

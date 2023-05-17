@@ -180,10 +180,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                                             _tutor.isFavorite = !_tutor.isFavorite!;
                                           });
                                         } on model.HttpException catch (e) {
-                                          TopSnackBar.show(
-                                              context: context,
-                                              message: e.toString(),
-                                              isSuccess: false);
+                                          TopSnackBar.showError(context, e.toString());
                                           await Analytics.crashEvent(
                                             'tutorDetailCatch',
                                             exception: e.toString(),

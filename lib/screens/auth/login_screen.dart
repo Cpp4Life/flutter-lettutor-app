@@ -40,11 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // empty validation
     if (email.isEmpty || password.isEmpty) {
-      TopSnackBar.show(
-        context: context,
-        message: 'Please fill in all fields',
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, 'Please fill in all fields');
       return;
     }
 
@@ -58,22 +54,14 @@ class _LoginScreenState extends State<LoginScreen> {
         },
       );
     } on HttpException catch (error) {
-      TopSnackBar.show(
-        context: context,
-        message: error.toString(),
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, error.toString());
       await Analytics.crashEvent(
         'handleLogin',
         exception: error.toString(),
       );
     } catch (error) {
       debugPrint(error.toString());
-      TopSnackBar.show(
-        context: context,
-        message: 'Failed to login! Please try again later',
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, 'Failed to login! Please try again later');
       await Analytics.crashEvent(
         'handleLogin',
         exception: error.toString(),
@@ -103,22 +91,15 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } on HttpException catch (error) {
       if (!mounted) return;
-      TopSnackBar.show(
-        context: context,
-        message: error.toString(),
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, error.toString());
       await Analytics.crashEvent(
         'handleGoogleLogin',
         exception: error.toString(),
       );
     } catch (error) {
       if (!mounted) return;
-      TopSnackBar.show(
-        context: context,
-        message: 'Failed to login with Google! Please try again later',
-        isSuccess: false,
-      );
+      TopSnackBar.showError(
+          context, 'Failed to login with Google! Please try again later');
       await Analytics.crashEvent(
         'handleGoogleLogin',
         exception: error.toString(),
@@ -144,22 +125,15 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } on HttpException catch (error) {
       if (!mounted) return;
-      TopSnackBar.show(
-        context: context,
-        message: error.toString(),
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, error.toString());
       await Analytics.crashEvent(
         'handleFacebookLogin',
         exception: error.toString(),
       );
     } catch (error) {
       if (!mounted) return;
-      TopSnackBar.show(
-        context: context,
-        message: 'Failed to login with Facebook! Please try again later',
-        isSuccess: false,
-      );
+      TopSnackBar.showError(
+          context, 'Failed to login with Facebook! Please try again later');
       await Analytics.crashEvent(
         'handleFacebookLogin',
         exception: error.toString(),
@@ -204,13 +178,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 Text(lang.email),
-                TextFieldWidget(
+                RoundedTextFieldWidget(
                   controller: _emailCtrl,
                   hintText: 'example@email.com',
                   keyboardType: TextInputType.emailAddress,
                 ),
                 Text(lang.password),
-                TextFieldWidget(
+                RoundedTextFieldWidget(
                   obscureText: true,
                   controller: _passwordCtrl,
                   hintText: '********',

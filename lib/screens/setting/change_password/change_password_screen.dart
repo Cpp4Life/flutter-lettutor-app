@@ -21,12 +21,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final TextEditingController _currentPasswordCtrl = TextEditingController();
   final TextEditingController _newPasswordCtrl = TextEditingController();
   final TextEditingController _confirmPasswordCtrl = TextEditingController();
+  final FocusNode _currentPasswordNode = FocusNode();
 
   @override
   void dispose() {
     _currentPasswordCtrl.dispose();
     _newPasswordCtrl.dispose();
     _confirmPasswordCtrl.dispose();
+    _currentPasswordNode.dispose();
     super.dispose();
   }
 
@@ -36,12 +38,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final String confirmPassword = _confirmPasswordCtrl.text;
 
     if (currentPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
-      _showError('Please enter all fields');
+      TopSnackBar.showError(context, 'Please enter all fields');
       return;
     }
 
     if (newPassword.compareTo(confirmPassword) != 0) {
-      _showError('New passwords do not match');
+      TopSnackBar.showError(context, 'New passwords do not match');
       return;
     }
 
@@ -49,23 +51,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       await Provider.of<UserProvider>(context, listen: false).changePassword(
         currentPassword,
         newPassword,
-        () {
-          TopSnackBar.show(
-            context: context,
-            message: 'Change password successfully',
-            isSuccess: true,
-          );
-        },
+        () => TopSnackBar.showSuccess(context, 'Change password successfully'),
       );
+      _resetInputFields();
     } on HttpException catch (error) {
-      _showError(error.toString());
+      TopSnackBar.showError(context, error.toString());
       await Analytics.crashEvent(
         'handleChangePasswordHttpExceptionCatch',
         exception: error.toString(),
         fatal: true,
       );
     } catch (error) {
-      _showError(error.toString());
+      TopSnackBar.showError(context, error.toString());
       await Analytics.crashEvent(
         'handleChangePasswordCatch',
         exception: error.toString(),
@@ -74,12 +71,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     }
   }
 
-  void _showError(String message) {
-    TopSnackBar.show(
-      context: context,
-      message: message,
-      isSuccess: false,
-    );
+  void _resetInputFields() {
+    _currentPasswordCtrl.clear();
+    _newPasswordCtrl.clear();
+    _confirmPasswordCtrl.clear();
+    _currentPasswordNode.requestFocus();
   }
 
   @override
@@ -98,21 +94,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(lang.password),
-                TextFieldWidget(
+                RoundedTextFieldWidget(
                   obscureText: true,
                   hintText: '********',
                   keyboardType: TextInputType.text,
                   controller: _currentPasswordCtrl,
+                  focusNode: _currentPasswordNode,
                 ),
                 Text(lang.newPassword),
-                TextFieldWidget(
+                RoundedTextFieldWidget(
                   obscureText: true,
                   hintText: '********',
                   keyboardType: TextInputType.text,
                   controller: _newPasswordCtrl,
                 ),
                 Text(lang.confirmPassword),
-                TextFieldWidget(
+                RoundedTextFieldWidget(
                   obscureText: true,
                   hintText: '********',
                   keyboardType: TextInputType.text,
