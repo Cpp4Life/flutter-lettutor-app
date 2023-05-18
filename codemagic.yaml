@@ -15,36 +15,34 @@ workflows:
       xcode: 14.2
       cocoapods: 1.12.1
     scripts:
-      # - name: Clean Flutter packages
-      #   script: |
-      #     flutter clean
-      # - name: Get Flutter packages
-      #   script: |
-      #     flutter packages pub get
-      # - name: Install pods
-      #   script: |
-      #     cd ios
-      #     rm -f Podfile.lock
-      #     rm -rf Pods
-      #     pod cache clean --all
-      #     pod deintegrate
-      #     pod setup
-      #     pod install
-      #     pod repo update
-      # - name: Flutter analyze
-      #   script: |
-      #     flutter analyze
+      - name: Clean Flutter packages
+        script: |
+          flutter clean
+      - name: Get Flutter packages
+        script: |
+          flutter packages pub get
+      - name: Install pods
+        script: |
+          cd ios
+          rm -f Podfile.lock
+          rm -rf Pods
+          pod cache clean --all
+          pod deintegrate
+          pod setup
+          pod install
+          pod repo update
+      - name: Flutter analyze
+        script: |
+          flutter analyze
       - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
       - name: Flutter build ipa and automatic versioning
         script: |
-          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number 6449217938)
-          cd ios
-          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number $APP_ID)
           flutter build ipa --release \
-            --build-name=1.0.$(($LATEST_BUILD_NUMBER + 1)) \
-            --build-number=$(($LATEST_BUILD_NUMBER + 1)) \
+            --build-name=1.0.$(($LATEST_BUILD_NUMBER + 2)) \
+            --build-number=$(($LATEST_BUILD_NUMBER + 2)) \
             --export-options-plist=/Users/builder/export_options.plist
     triggering:
       events:
@@ -55,9 +53,6 @@ workflows:
           include: true
           source: true
         - pattern: "master"
-          include: true
-          source: true
-        - pattern: "advance-online-app"
           include: true
           source: true
       cancel_previous_builds: true
