@@ -44,40 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDngtn84XRA3CLlW_9Lt1TKlNP2EfvXwuw',
-    appId: '1:399002733706:web:0ff5b93d1c39e6ad263173',
-    messagingSenderId: '399002733706',
-    projectId: 'flutter-lettutor-crashlytics',
-    authDomain: 'flutter-lettutor-crashlytics.firebaseapp.com',
-    storageBucket: 'flutter-lettutor-crashlytics.appspot.com',
-    measurementId: 'G-S01SNGPSB3',
+    apiKey: 'AIzaSyCOjkrdxXGBdx2b5wErPVDmm_6c7EECrOc',
+    appId: '1:948236125713:web:78f635f1fdade4943213b0',
+    messagingSenderId: '948236125713',
+    projectId: 'flutter-lettutor',
+    authDomain: 'flutter-lettutor.firebaseapp.com',
+    storageBucket: 'flutter-lettutor.appspot.com',
+    measurementId: 'G-DSR8WD8H2W',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDOWnxl3BdKH6RovLIlp7mt8xOGA6O8tDc',
-    appId: '1:399002733706:android:202d00b6245e639d263173',
-    messagingSenderId: '399002733706',
-    projectId: 'flutter-lettutor-crashlytics',
-    storageBucket: 'flutter-lettutor-crashlytics.appspot.com',
+    apiKey: 'AIzaSyAgskPjIvbBU21PMrj3b5LnfYu02xlqLgI',
+    appId: '1:948236125713:android:208e0237d104f5ce3213b0',
+    messagingSenderId: '948236125713',
+    projectId: 'flutter-lettutor',
+    storageBucket: 'flutter-lettutor.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDm4MvmoOzkhL9G6mRHhAqR8iQpEKK8sXk',
-    appId: '1:399002733706:ios:45973b3304a4d41f263173',
-    messagingSenderId: '399002733706',
-    projectId: 'flutter-lettutor-crashlytics',
-    storageBucket: 'flutter-lettutor-crashlytics.appspot.com',
-    iosClientId: '399002733706-e5mmi0qj6apon68auhegc764jutn70m1.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCnqvDrx7HqITfjNLlUv-NIwQPlraNU9qk',
+    appId: '1:948236125713:ios:49dafe9b31e42c863213b0',
+    messagingSenderId: '948236125713',
+    projectId: 'flutter-lettutor',
+    storageBucket: 'flutter-lettutor.appspot.com',
+    iosClientId: '948236125713-3t2no926tjvua9hqrp6pbke8m6javv6s.apps.googleusercontent.com',
     iosBundleId: 'com.example.lettutorApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDm4MvmoOzkhL9G6mRHhAqR8iQpEKK8sXk',
-    appId: '1:399002733706:ios:45973b3304a4d41f263173',
-    messagingSenderId: '399002733706',
-    projectId: 'flutter-lettutor-crashlytics',
-    storageBucket: 'flutter-lettutor-crashlytics.appspot.com',
-    iosClientId: '399002733706-e5mmi0qj6apon68auhegc764jutn70m1.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCnqvDrx7HqITfjNLlUv-NIwQPlraNU9qk',
+    appId: '1:948236125713:ios:49dafe9b31e42c863213b0',
+    messagingSenderId: '948236125713',
+    projectId: 'flutter-lettutor',
+    storageBucket: 'flutter-lettutor.appspot.com',
+    iosClientId: '948236125713-3t2no926tjvua9hqrp6pbke8m6javv6s.apps.googleusercontent.com',
     iosBundleId: 'com.example.lettutorApp',
   );
 }
