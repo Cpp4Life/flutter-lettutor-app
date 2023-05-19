@@ -42,6 +42,8 @@ class BookingCardWidget extends StatelessWidget {
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: CachedNetworkImage(
+              width: 50,
+              height: 50,
               imageUrl:
                   booking.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.avatar as String,
               fit: BoxFit.cover,
