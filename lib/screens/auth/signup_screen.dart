@@ -154,13 +154,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SocialLoginWidget(svgSource: LetTutorSvg.facebookAuth),
-                    SocialLoginWidget(svgSource: LetTutorSvg.google),
-                    SocialLoginWidget(svgSource: LetTutorSvg.smartPhone),
-                    SocialLoginWidget(svgSource: LetTutorSvg.apple),
+                    SocialLoginWidget(
+                      svgSource: LetTutorSvg.facebookAuth,
+                      onPressed: () => OAuth.facebookLogin(context),
+                    ),
+                    SocialLoginWidget(
+                      svgSource: LetTutorSvg.google,
+                      onPressed: () => OAuth.googleLogin(context),
+                    ),
+                    const SocialLoginWidget(svgSource: LetTutorSvg.smartPhone),
+                    const SocialLoginWidget(svgSource: LetTutorSvg.apple),
                   ],
                 ),
                 Container(

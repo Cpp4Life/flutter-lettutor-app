@@ -47,6 +47,7 @@ app.*.map.json
 *.env
 
 google-services.json
+service-account.json
 Makefile
 
 lib/config/*.json
