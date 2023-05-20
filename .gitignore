@@ -46,6 +46,8 @@ app.*.map.json
 
 *.env
 
-*firebase*
 google-services.json
-GoogleService-Info.plist
+service-account.json
+Makefile
+
+lib/config/*.json

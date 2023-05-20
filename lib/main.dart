@@ -5,22 +5,26 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
+import 'firebase_options.dart';
+import 'models/index.dart';
 import 'providers/index.dart';
 import 'screens/index.dart';
 import 'services/index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+  // await dotenv.load(fileName: ".env");
   await _setupFirebase();
+  await _initAppConfig();
   runApp(const LetTutorApp());
 }
 
 Future<void> _setupFirebase() async {
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -31,11 +35,14 @@ Future<void> _setupFirebase() async {
   };
 }
 
+Future<void> _initAppConfig() async {
+  await AppProvider.init();
+}
+
 class LetTutorApp extends StatelessWidget {
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
-
   const LetTutorApp({super.key});
 
   // This widget is the root of your application.
@@ -43,6 +50,9 @@ class LetTutorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (context) => AppProvider(),
+        ),
         ChangeNotifierProvider(
           create: (context) => AuthProvider(),
         ),
@@ -100,7 +110,9 @@ class LetTutorApp extends StatelessWidget {
         builder: (context, auth, _) => MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
-            fontFamily: 'Poppins',
+            fontFamily: Provider.of<AppProvider>(context).language is Vietnamese
+                ? 'Roboto'
+                : 'Poppins',
           ),
           navigatorObservers: [
             FirebaseAnalyticsObserver(analytics: analytics),
@@ -135,8 +147,17 @@ class LetTutorApp extends StatelessWidget {
             ViewFeedbacksScreen.routeName: (context) => const ViewFeedbacksScreen(),
             SessionHistoryScreen.routeName: (context) => const SessionHistoryScreen(),
             AdvancedSettingsScreen.routeName: (context) => const AdvancedSettingsScreen(),
+            ChangePasswordScreen.routeName: (context) => const ChangePasswordScreen(),
             ProfileScreen.routeName: (context) => const ProfileScreen(),
             ChatGPTScreen.routeName: (context) => const ChatGPTScreen(),
+            PDFViewerScreen.routeName: (context) {
+              final args =
+                  ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+              return PDFViewerScreen(
+                title: args['title'] as String,
+                url: args['url'] as String,
+              );
+            },
           },
         ),
       ),

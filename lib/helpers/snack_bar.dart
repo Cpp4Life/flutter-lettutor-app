@@ -11,7 +11,7 @@ class TopSnackBar {
     color: Colors.white,
   );
 
-  static show({
+  static _show({
     required BuildContext context,
     required String message,
     bool isSuccess = true,
@@ -29,5 +29,13 @@ class TopSnackBar {
             ),
       displayDuration: const Duration(milliseconds: 500),
     );
+  }
+
+  static showError(BuildContext context, String message) {
+    _show(context: context, message: message, isSuccess: false);
+  }
+
+  static showSuccess(BuildContext context, String message) {
+    _show(context: context, message: message, isSuccess: true);
   }
 }

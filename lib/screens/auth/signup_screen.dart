@@ -35,6 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('SIGNUP_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
 
     void handleRegister() async {
       final email = _emailCtrl.value.text;
@@ -43,41 +44,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       // empty validation
       if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-        TopSnackBar.show(
-          context: context,
-          message: 'Please fill in all fields',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, 'Please fill in all fields');
         return;
       }
 
       // email validation
       if (!RegEx.isValidEmail(email)) {
-        TopSnackBar.show(
-          context: context,
-          message: 'Please enter a valid email',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, 'Please enter a valid email');
         return;
       }
 
       // password validation
-      if (password.length < 8) {
-        TopSnackBar.show(
-          context: context,
-          message: 'Password must be at least 8 characters',
-          isSuccess: false,
-        );
+      if (password.length < 6) {
+        TopSnackBar.showError(context, 'Password must be at least 6 characters');
         return;
       }
 
       // confirm password validation
       if (confirmPassword != password) {
-        TopSnackBar.show(
-          context: context,
-          message: 'Passwords do not match',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, 'Passwords do not match');
         return;
       }
 
@@ -86,31 +71,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
           email,
           password,
           () {
-            TopSnackBar.show(
-              context: context,
-              message: 'Successfully registered an account',
-              isSuccess: true,
-            );
+            TopSnackBar.showSuccess(context, 'Successfully registered an account');
             Navigator.of(context).pop();
           },
         );
       } on HttpException catch (error) {
-        TopSnackBar.show(
-          context: context,
-          message: error.toString(),
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, error.toString());
         await Analytics.crashEvent(
           'handleRegister',
           exception: error.toString(),
         );
       } catch (error) {
         debugPrint(error.toString());
-        TopSnackBar.show(
-          context: context,
-          message: 'Failed to sign you up! Please try again later',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(context, 'Failed to sign you up! Please try again later');
         await Analytics.crashEvent(
           'handleRegister',
           exception: error.toString(),
@@ -120,7 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWidget('Sign up'),
+      appBar: CustomAppBarWidget(lang.signUp),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -129,21 +102,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Email *'),
-                TextFieldWidget(
+                Text(lang.email),
+                RoundedTextFieldWidget(
                   hintText: 'example@email.com',
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailCtrl,
                 ),
-                const Text('Password *'),
-                TextFieldWidget(
+                Text(lang.password),
+                RoundedTextFieldWidget(
                   obscureText: true,
                   hintText: '********',
                   keyboardType: TextInputType.text,
                   controller: _passwordCtrl,
                 ),
-                const Text('Confirm password *'),
-                TextFieldWidget(
+                Text(lang.confirmPassword),
+                RoundedTextFieldWidget(
                   obscureText: true,
                   hintText: '********',
                   keyboardType: TextInputType.text,
@@ -162,9 +135,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  child: const Text(
-                    'Register',
-                    style: TextStyle(
+                  child: Text(
+                    lang.signUp,
+                    style: const TextStyle(
                       fontWeight: LetTutorFontWeights.medium,
                       color: Colors.white,
                     ),
@@ -173,9 +146,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
-                  child: const Text(
-                    'Or continue with',
-                    style: TextStyle(
+                  child: Text(
+                    lang.registerWith,
+                    style: const TextStyle(
                       fontSize: LetTutorFontSizes.px12,
                       color: LetTutorColors.greyScaleDarkGrey,
                     ),
@@ -183,11 +156,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    SocialLoginWidget(svgSource: LetTutorSvg.facebookAuth),
-                    SocialLoginWidget(svgSource: LetTutorSvg.google),
-                    SocialLoginWidget(svgSource: LetTutorSvg.smartPhone),
-                    SocialLoginWidget(svgSource: LetTutorSvg.apple),
+                  children: [
+                    SocialLoginWidget(
+                      svgSource: LetTutorSvg.facebookAuth,
+                      onPressed: () => OAuth.facebookLogin(context),
+                    ),
+                    SocialLoginWidget(
+                      svgSource: LetTutorSvg.google,
+                      onPressed: () => OAuth.googleLogin(context),
+                    ),
+                    const SocialLoginWidget(svgSource: LetTutorSvg.smartPhone),
+                    const SocialLoginWidget(svgSource: LetTutorSvg.apple),
                   ],
                 ),
                 Container(
@@ -195,13 +174,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   margin: const EdgeInsets.only(top: 25),
                   child: Text.rich(
                     TextSpan(
-                      text: 'Already have an account? ',
+                      text: lang.alreadyHaveAccount,
                       style: const TextStyle(
                         fontSize: LetTutorFontSizes.px12,
                       ),
                       children: <InlineSpan>[
                         TextSpan(
-                          text: 'Log In',
+                          text: lang.login,
                           style: const TextStyle(
                             fontSize: LetTutorFontSizes.px14,
                             color: LetTutorColors.primaryBlue,

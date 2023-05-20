@@ -127,4 +127,12 @@ class BookingInfo {
         ? null
         : Generic.fromJSON<ScheduleDetails, void>(json['scheduleDetailInfo']);
   }
+
+  @override
+  bool operator ==(other) {
+    return (other is BookingInfo) && (other.id == id);
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

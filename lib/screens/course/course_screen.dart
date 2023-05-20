@@ -48,6 +48,8 @@ class _CourseScreenState extends State<CourseScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('COURSE_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
+
     return DefaultTabController(
       length: 2,
       child: Container(
@@ -56,15 +58,15 @@ class _CourseScreenState extends State<CourseScreen> {
           children: [
             TabBar(
               tabs: [
-                _initTab(tabName: 'Course', icon: LetTutorSvg.course),
-                _initTab(tabName: 'Ebook', icon: LetTutorSvg.ebook),
+                _initTab(tabName: lang.courseTitle, icon: LetTutorSvg.course),
+                _initTab(tabName: lang.ebook, icon: LetTutorSvg.ebook),
               ],
             ),
             Expanded(
               child: TabBarView(
                 children: [
-                  CourseTabWidget(_categories, _levels),
-                  EbookTabWidget(_categories, _levels),
+                  CourseTabWidget(_categories, _levels, lang),
+                  EbookTabWidget(_categories, _levels, lang),
                 ],
               ),
             )
@@ -85,7 +87,10 @@ class _CourseScreenState extends State<CourseScreen> {
               icon,
               width: 24,
               height: 24,
-              color: LetTutorColors.greyScaleDarkGrey,
+              colorFilter: const ColorFilter.mode(
+                LetTutorColors.greyScaleDarkGrey,
+                BlendMode.srcIn,
+              ),
             ),
           ),
           Text(

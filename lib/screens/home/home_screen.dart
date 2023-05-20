@@ -22,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late Language _lang;
   int _totalTimeInMinutes = 0;
   BookingInfo? _upcomingClass;
   bool _isLoading = true;
@@ -53,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('HOME_SCREEN');
     final navigationProvider = Provider.of<NavigationProvider>(context, listen: false);
+    _lang = Provider.of<AppProvider>(context).language;
 
     return SingleChildScrollView(
       child: Column(
@@ -69,36 +71,40 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Upcoming lesson',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: LetTutorFontSizes.px20,
-                        ),
-                      ),
                       Text(
-                        _upcomingClass == null
-                            ? 'There is no upcoming class'
-                            : intl.DateFormat('E, dd MMM yyyy, HH:mm - ').format(
-                                  DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
-                                      .scheduleDetailInfo!.startPeriodTimestamp!),
-                                ) +
-                                intl.DateFormat('HH:mm').format(
-                                  DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
-                                      .scheduleDetailInfo!.endPeriodTimestamp!),
-                                ),
+                        _upcomingClass != null
+                            ? _lang.upcomingLesson
+                            : _lang.welcomeMessage,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: LetTutorFontSizes.px14,
+                          fontSize: LetTutorFontSizes.px18,
                         ),
                       ),
+                      if (_upcomingClass != null)
+                        Text(
+                          intl.DateFormat('E, dd MMM yyyy, HH:mm - ').format(
+                                DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
+                                    .scheduleDetailInfo!.startPeriodTimestamp!),
+                              ) +
+                              intl.DateFormat('HH:mm').format(
+                                DateTime.fromMillisecondsSinceEpoch(_upcomingClass!
+                                    .scheduleDetailInfo!.endPeriodTimestamp!),
+                              ),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: LetTutorFontSizes.px14,
+                          ),
+                        ),
                       if (_upcomingClass != null)
                         CountdownTimer(
                           DateTime.fromMillisecondsSinceEpoch(
                               _upcomingClass!.scheduleDetailInfo!.startPeriodTimestamp!),
+                          DateTime.fromMillisecondsSinceEpoch(
+                              _upcomingClass!.scheduleDetailInfo!.endPeriodTimestamp!),
+                          _lang,
                         ),
                       Text(
-                        'Total lesson time is ${durationToString(_totalTimeInMinutes)}',
+                        '${_lang.totalLessonTime} ${durationToString(_totalTimeInMinutes)}',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: LetTutorFontSizes.px14,
@@ -107,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_upcomingClass == null) {
-                            navigationProvider.index = 3;
+                            navigationProvider.moveToTab(3);
                             return;
                           }
 
@@ -141,7 +147,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           side: const BorderSide(color: LetTutorColors.primaryBlue),
                         ),
                         child: Text(
-                          _upcomingClass == null ? 'Book a lesson' : 'Enter lesson room',
+                          _upcomingClass == null
+                              ? _lang.bookButtonTitle
+                              : _lang.enterLessonRoom,
                           style: const TextStyle(
                             color: LetTutorColors.primaryBlue,
                           ),
@@ -165,9 +173,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      child: const Text(
-                        'Recommended Tutors',
-                        style: TextStyle(
+                      child: Text(
+                        _lang.recommendedTutor,
+                        style: const TextStyle(
                           fontSize: LetTutorFontSizes.px14,
                         ),
                       ),
@@ -176,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       textDirection: TextDirection.rtl,
                       child: TextButton.icon(
                         onPressed: () {
-                          navigationProvider.index = 3;
+                          navigationProvider.moveToTab(3);
                         },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -184,11 +192,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         icon: SvgPicture.asset(
                           LetTutorSvg.next,
-                          color: LetTutorColors.primaryBlue,
+                          colorFilter: const ColorFilter.mode(
+                            LetTutorColors.primaryBlue,
+                            BlendMode.srcIn,
+                          ),
                         ),
-                        label: const Text(
-                          'See all',
-                          style: TextStyle(
+                        label: Text(
+                          _lang.seeAll,
+                          style: const TextStyle(
                             color: LetTutorColors.primaryBlue,
                             fontSize: LetTutorFontSizes.px14,
                           ),
@@ -208,28 +219,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const FreeContentWidget('No available tutors');
                   }
                   return Consumer<TutorProvider>(
-                    builder: (context, provider, child) => provider.favoriteTutors.isEmpty
+                    builder: (context, provider, child) => provider.tutors.isEmpty
                         ? const FreeContentWidget('No available tutors')
                         : Container(
                             margin: const EdgeInsets.only(left: 15, right: 15),
                             child: ListView.builder(
-                              itemCount: provider.favoriteTutors.length,
+                              itemCount: provider.tutors.length,
                               itemBuilder: (context, index) {
                                 return RecommendedTutorCardWidget(
-                                  id: provider.favoriteTutors[index].secondInfo!.id,
-                                  key: ValueKey(
-                                      provider.favoriteTutors[index].secondInfo!.id),
-                                  name: provider.favoriteTutors[index].secondInfo!.name
-                                      as String,
-                                  avatar:
-                                      provider.favoriteTutors[index].secondInfo!.avatar,
-                                  bio: provider.favoriteTutors[index].tutorInfo!.bio
-                                      as String,
-                                  specialties: provider
-                                      .favoriteTutors[index].tutorInfo!.specialties
+                                  id: provider.tutors[index].userId!,
+                                  key: ValueKey(provider.tutors[index].userId!),
+                                  name: provider.tutors[index].name as String,
+                                  avatar: provider.tutors[index].avatar,
+                                  bio: provider.tutors[index].bio as String,
+                                  specialties: provider.tutors[index].specialties
                                       ?.split(',') as List<String>,
-                                  rating:
-                                      provider.favoriteTutors[index].tutorInfo!.rating,
+                                  rating: provider.tutors[index].rating,
+                                  isFavorite: provider.tutors[index].isFavorite,
                                 );
                               },
                               shrinkWrap: true,
@@ -249,41 +255,56 @@ class _HomeScreenState extends State<HomeScreen> {
   String durationToString(int minutes) {
     final d = Duration(minutes: minutes);
     List<String> parts = d.toString().split(':');
-    return '${parts[0].padLeft(2, '0')} hour(s) ${parts[1].padLeft(2, '0')} minutes';
+    final hourText = _lang is Vietnamese ? 'giờ' : 'hours';
+    final minText = _lang is Vietnamese ? 'phút' : 'minutes';
+    return '${parts[0].padLeft(2, '0')} $hourText ${parts[1].padLeft(2, '0')} $minText';
   }
 }
 
 class CountdownTimer extends StatefulWidget {
   final DateTime start;
+  final DateTime end;
+  final Language lang;
 
-  const CountdownTimer(this.start, {super.key});
+  const CountdownTimer(this.start, this.end, this.lang, {super.key});
 
   @override
   State<CountdownTimer> createState() => _CountdownTimerState();
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
-  Timer? _timer;
+  Timer? _countDownTimer;
+  Timer? _countUpTimer;
   late Duration _remaining;
+  late Duration _accumulator;
+  late Duration _totalLessonTime;
 
   @override
   void initState() {
     super.initState();
     final now = DateTime.now();
     _remaining = widget.start.difference(now);
+    _accumulator = Duration.zero;
+    _totalLessonTime = widget.end.difference(widget.start);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      startTimer();
+      startCountDownTimer();
     });
   }
 
   @override
   void dispose() {
     super.dispose();
-    _timer!.cancel();
+    _countDownTimer?.cancel();
+    _countUpTimer?.cancel();
   }
 
-  void startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+  void startCountDownTimer() {
+    _countDownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+  }
+
+  void startCountUpTimer() {
+    _accumulator = DateTime.now().difference(widget.start);
+    _countUpTimer = Timer.periodic(const Duration(seconds: 1), (_) => setCountUp());
   }
 
   void setCountDown() {
@@ -292,9 +313,24 @@ class _CountdownTimerState extends State<CountdownTimer> {
       setState(() {
         final seconds = _remaining.inSeconds - reduceSecondsBy;
         if (seconds < 0) {
-          _timer!.cancel();
+          _countDownTimer!.cancel();
+          startCountUpTimer();
         } else {
           _remaining = Duration(seconds: seconds);
+        }
+      });
+    }
+  }
+
+  void setCountUp() {
+    const increaseSecondsBy = 1;
+    if (mounted) {
+      setState(() {
+        final seconds = _accumulator.inSeconds + increaseSecondsBy;
+        if (seconds > _totalLessonTime.inSeconds) {
+          _countUpTimer!.cancel();
+        } else {
+          _accumulator = Duration(seconds: seconds);
         }
       });
     }
@@ -303,15 +339,21 @@ class _CountdownTimerState extends State<CountdownTimer> {
   @override
   Widget build(BuildContext context) {
     String strDigits(int n) => n.toString().padLeft(2, '0');
-    final days = strDigits(_remaining.inDays);
-    final hours = strDigits(_remaining.inHours.remainder(24));
-    final minutes = strDigits(_remaining.inMinutes.remainder(60));
-    final seconds = strDigits(_remaining.inSeconds.remainder(60));
+    bool isCountDown = _remaining.inSeconds > 0 ? true : false;
+    Duration timer = isCountDown ? _remaining : _accumulator;
+    final days = strDigits(timer.inDays);
+    final hours = strDigits(timer.inHours.remainder(24));
+    final minutes = strDigits(timer.inMinutes.remainder(60));
+    final seconds = strDigits(timer.inSeconds.remainder(60));
+
+    final startText = widget.lang is Vietnamese ? 'bắt đầu trong' : 'starts in';
+    final classTimeText = widget.lang is Vietnamese ? 'giờ học' : 'class time';
+    final remindText = isCountDown ? startText : classTimeText;
 
     return Text(
-      'starts in $days (d) $hours (h) $minutes (m) $seconds (s)',
-      style: const TextStyle(
-        color: Colors.yellow,
+      '($remindText $days:$hours:$minutes:$seconds)',
+      style: TextStyle(
+        color: isCountDown ? Colors.yellow : const Color.fromRGBO(144, 238, 144, 1),
         fontSize: LetTutorFontSizes.px14,
         fontWeight: LetTutorFontWeights.medium,
       ),

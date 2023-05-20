@@ -1,18 +1,24 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
+import '../config/index.dart';
 import '../helpers/index.dart';
 import '../models/index.dart';
 import '../services/index.dart';
 
 class UserProvider with ChangeNotifier {
-  final String _baseURL = dotenv.env['BASE_URL'] as String;
+  final String _baseURL = Config.baseUrl;
   final String? _authToken;
+  User? _user;
 
   UserProvider(this._authToken);
+
+  User get user {
+    return _user ?? User(id: const Uuid().v4());
+  }
 
   Future<User> getUserInfo() async {
     try {
@@ -24,7 +30,9 @@ class UserProvider with ChangeNotifier {
       if (response.statusCode != 200) {
         throw HttpException(decodedResponse['message']);
       }
-      return Generic.fromJSON<User, void>(decodedResponse['user']);
+      _user = Generic.fromJSON<User, void>(decodedResponse['user']);
+      notifyListeners();
+      return _user!;
     } catch (e) {
       await Analytics.crashEvent(
         'getUserInfo',
@@ -35,30 +43,36 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future updateUserInfo(
-    String name,
-    String country,
-    String birthday,
-    String level,
-    List<String> learnTopics,
-    List<String> testPreparations,
-    Function callback,
-  ) async {
+  Future updateUserInfo({
+    String? name,
+    String? country,
+    String? birthday,
+    String? level,
+    String? phone,
+    List<String>? learnTopics,
+    List<String>? testPreparations,
+    required Function callback,
+  }) async {
     try {
       // * e.g: PUT https://domain.com/user/info
       final url = Uri.parse('$_baseURL/user/info');
       final headers = Http.getHeaders(token: _authToken as String);
+
+      final body = {};
+      if (name != null) body.addEntries({'name': name}.entries);
+      if (country != null) body.addEntries({'country': country}.entries);
+      if (birthday != null) body.addEntries({'birthday': birthday}.entries);
+      if (level != null) body.addEntries({'level': level}.entries);
+      if (phone != null) body.addEntries({'phone': phone}.entries);
+      if (learnTopics != null) body.addEntries({'learnTopics': learnTopics}.entries);
+      if (testPreparations != null) {
+        body.addEntries({'testPreparations': testPreparations}.entries);
+      }
+
       final response = await http.put(
         url,
         headers: headers,
-        body: json.encode({
-          'name': name,
-          'country': country,
-          'birthday': birthday,
-          'level': level,
-          'learnTopics': learnTopics,
-          'testPreparations': testPreparations,
-        }),
+        body: json.encode(body),
       );
       if (response.statusCode == 200) {
         await callback();
@@ -148,14 +162,41 @@ class UserProvider with ChangeNotifier {
       );
 
       upcomingLessons = upcomingLessons
-          .where(
-              (element) => element.scheduleDetailInfo!.startPeriodTimestamp! > dateTime)
+          .where((element) => element.scheduleDetailInfo!.endPeriodTimestamp! > dateTime)
           .toList();
 
       return upcomingLessons.isEmpty ? null : upcomingLessons.first;
     } catch (e) {
       await Analytics.crashEvent(
         'getUpcoming',
+        exception: e.toString(),
+        fatal: true,
+      );
+      rethrow;
+    }
+  }
+
+  Future changePassword(String oldPassword, String newPassword, Function callback) async {
+    try {
+      // * e.g: POST https://domain.com/auth/change-password
+      final url = Uri.parse('$_baseURL/auth/change-password');
+      final headers = Http.getHeaders(token: _authToken as String);
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: jsonEncode({
+          'password': oldPassword,
+          'newPassword': newPassword,
+        }),
+      );
+      final decodedResponse = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw HttpException(decodedResponse['message']);
+      }
+      await callback();
+    } catch (e) {
+      await Analytics.crashEvent(
+        'changePassword',
         exception: e.toString(),
         fatal: true,
       );

@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
+import '../config/index.dart';
 import '../helpers/index.dart';
 import '../models/index.dart';
 import '../services/index.dart';
 
 class CourseProvider with ChangeNotifier {
-  final String _baseURL = dotenv.env['BASE_URL'] as String;
+  final String _baseURL = Config.baseUrl;
   final String? _authToken;
 
   List<Course> _courses = [];
@@ -42,17 +42,17 @@ class CourseProvider with ChangeNotifier {
     }
   }
 
-  Future fetchAndSetCourses({
+  Future fetchAndSetCoursesWithPagination({
     required int page,
     required int size,
     String q = '',
     String categoryId = '',
   }) async {
     try {
-      // * e.g: https://domain.com/course?page=1&size=100
-      // * e.g: https://domain.com/course?page=1&size=100&q=""
-      // * e.g: https://domain.com/course?page=1&size=100&categoryId[]=""
-      // * e.g: https://domain.com/course?page=1&size=100&q=""&categoryId[]=""
+      // * e.g: GET https://domain.com/course?page=#&size=#
+      // * e.g: GET https://domain.com/course?page=#&size=#&q=""
+      // * e.g: GET https://domain.com/course?page=#&size=#&categoryId[]=""
+      // * e.g: GET https://domain.com/course?page=#&size=#&q=""&categoryId[]=""
       String urlBuilder = '$_baseURL/course?page=$page&size=$size';
       if (q.isNotEmpty) {
         urlBuilder += '&q=$q';

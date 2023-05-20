@@ -70,6 +70,14 @@ class Course {
     users =
         json['users'] == null ? [] : Generic.fromJSON<List<Tutor>, Tutor>(json['users']);
   }
+
+  @override
+  bool operator ==(other) {
+    return (other is Course) && (other.id == id);
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 class Topic {

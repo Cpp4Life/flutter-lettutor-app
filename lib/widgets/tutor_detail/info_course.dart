@@ -29,7 +29,7 @@ class InfoCourseWidget extends StatelessWidget {
           height: courses.isEmpty ? 100 : 275,
           child: courses.isEmpty
               ? const Center(
-                  child: FreeContentWidget('No courses found'),
+                  child: FreeContentWidget('No available courses'),
                 )
               : ListView.builder(
                   shrinkWrap: true,

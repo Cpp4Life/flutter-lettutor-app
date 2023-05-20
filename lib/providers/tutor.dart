@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
+import '../config/index.dart';
 import '../helpers/index.dart';
 import '../models/index.dart' as model;
 import '../services/index.dart';
 
 class TutorProvider with ChangeNotifier {
-  final String _baseURL = dotenv.env['BASE_URL'] as String;
+  final String _baseURL = Config.baseUrl;
   List<model.Tutor> _tutors = [];
   List<model.FavoriteTutor> _favoriteTutors = [];
   final String? _authToken;
@@ -39,6 +39,8 @@ class TutorProvider with ChangeNotifier {
       _tutors = Generic.fromJSON<List<model.Tutor>, model.Tutor>(tutorsList);
       _favoriteTutors =
           Generic.fromJSON<List<model.FavoriteTutor>, model.FavoriteTutor>(favoriteList);
+      _updateToFavorite();
+      _sortTutorsByFavorite();
       notifyListeners();
     } catch (error) {
       await Analytics.crashEvent(
@@ -47,6 +49,32 @@ class TutorProvider with ChangeNotifier {
         fatal: true,
       );
       rethrow;
+    }
+  }
+
+  void _sortTutorsByFavorite() {
+    _tutors.sort((a, b) {
+      if (a.isFavorite == b.isFavorite) {
+        return 0;
+      } else if (a.isFavorite!) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+  }
+
+  void _updateToFavorite() {
+    final List<String?> idsToUpdate = _favoriteTutors.map((e) => e.secondId).toList();
+    Map<String, model.Tutor> objectMap =
+        Map.fromIterable(_tutors, key: (tutor) => tutor.userId);
+    objectMap.forEach((_, value) {
+      value.isFavorite = false;
+    });
+    for (final id in idsToUpdate) {
+      final tutor = objectMap[id];
+      if (tutor == null) continue;
+      tutor.isFavorite = true;
     }
   }
 
@@ -156,11 +184,11 @@ class TutorProvider with ChangeNotifier {
       if (response.statusCode != 200) {
         throw model.HttpException(decodedResponse['message']);
       }
-      final index =
-          _favoriteTutors.indexWhere((element) => element.tutorInfo!.userId == tutorId);
+      final index = _tutors.indexWhere((element) => element.userId == tutorId);
       if (index != -1) {
-        _favoriteTutors.removeAt(index);
+        _tutors[index].isFavorite = !_tutors[index].isFavorite!;
       }
+      _sortTutorsByFavorite();
       notifyListeners();
     } catch (error) {
       await Analytics.crashEvent(

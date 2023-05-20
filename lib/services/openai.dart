@@ -1,20 +1,19 @@
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import '../config/index.dart';
 import 'index.dart';
 
 class OpenAIService {
   final List<Map<String, String>> _history = [];
 
   final _openAI = OpenAI.instance.build(
-    token: dotenv.env['TOKEN'],
+    token: Config.token,
     baseOption: HttpSetup(
       sendTimeout: const Duration(seconds: 30),
       connectTimeout: const Duration(seconds: 60),
       receiveTimeout: const Duration(seconds: 60),
     ),
-    isLog: false,
   );
 
   Future<String> getResponse(String message) async {

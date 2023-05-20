@@ -7,8 +7,8 @@ class NavigationProvider with ChangeNotifier {
     return _index;
   }
 
-  set index(int idx) {
+  void moveToTab(int idx, {bool isLogout = false}) {
     _index = idx;
-    notifyListeners();
+    if (!isLogout) notifyListeners();
   }
 }

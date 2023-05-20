@@ -1,17 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 import '../../constants/index.dart';
 import '../../core/assets/index.dart';
 import '../../core/styles/index.dart';
 import '../../helpers/index.dart';
-import '../../models/index.dart';
+import '../../models/index.dart' as model;
 import '../../providers/index.dart';
 import '../../services/index.dart';
 import '../../widgets/index.dart';
@@ -28,26 +28,12 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _phoneCtrl = TextEditingController();
-  final List<LearnTopic> _allTopics = [];
-  final List<TestPreparation> _allTests = [];
+  final List<model.LearnTopic> _allTopics = [];
+  final List<model.TestPreparation> _allTests = [];
   final FocusNode _nameFocusNode = FocusNode();
-  final _countriesList = countries.entries
-      .map(
-        (item) => DropdownMenuItem(
-          value: item.key,
-          child: Text(item.value),
-        ),
-      )
-      .toList();
-  final _levelsList = levels.entries
-      .map(
-        (item) => DropdownMenuItem(
-          value: item.key,
-          child: Text(item.value),
-        ),
-      )
-      .toList();
-  User _user = User(
+  final List<DropdownMenuItem<String>> _countriesList = [];
+  final List<DropdownMenuItem<String>> _levelsList = [];
+  model.User _user = model.User(
     id: '',
     name: '',
     email: '',
@@ -60,11 +46,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
     testPreparations: [],
   );
   bool _isInit = true;
+  late model.Language _lang;
+  DateTime _birthday = DateTime.now();
 
   @override
   void initState() {
-    _nameFocusNode.addListener(_updateName);
+    _lang = Provider.of<AppProvider>(context, listen: false).language;
+    _initData();
     super.initState();
+  }
+
+  void _initData() {
+    _nameFocusNode.addListener(_updateName);
+    _countriesList.insert(
+        0, DropdownMenuItem(value: 'UN', child: Text(_lang.countryHint)));
+    _levelsList.insert(0, DropdownMenuItem(value: 'UN', child: Text(_lang.levelHint)));
+    _countriesList.addAll(countries.entries
+        .map((item) => DropdownMenuItem(
+              value: item.key,
+              child: Text(item.value),
+            ))
+        .toList());
+    _levelsList.addAll(levels.entries
+        .map(
+          (item) => DropdownMenuItem(
+            value: item.key,
+            child: Text(item.value),
+          ),
+        )
+        .toList());
   }
 
   void _updateName() {
@@ -83,6 +93,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _user = value;
           _nameCtrl.text = _user.name ?? '';
           _phoneCtrl.text = _user.phone ?? '';
+          _birthday =
+              _user.birthday != null ? DateTime.parse(_user.birthday!) : DateTime.now();
         });
       });
       Provider.of<LearnTopicProvider>(context, listen: false)
@@ -122,46 +134,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
       try {
         if (_nameCtrl.text.isEmpty) {
-          TopSnackBar.show(
-            context: context,
-            message: 'Username cannot be empty!',
-            isSuccess: false,
-          );
+          TopSnackBar.showError(context, 'Username cannot be empty!');
+          return;
+        }
+
+        if (_phoneCtrl.text.isEmpty) {
+          TopSnackBar.showError(context, 'Phone number cannot be empty!');
+          return;
+        }
+
+        if (!RegEx.isValidPhone(_phoneCtrl.text)) {
+          TopSnackBar.showError(context, 'Enter a valid phone number!');
           return;
         }
 
         await Provider.of<UserProvider>(context, listen: false).updateUserInfo(
-          _user.name as String,
-          _user.country as String,
-          _user.birthday as String,
-          _user.level as String,
-          _user.learnTopics!.map((e) => e.id.toString()).toList(),
-          _user.testPreparations!.map((e) => e.id.toString()).toList(),
-          () {
-            TopSnackBar.show(
-              context: context,
-              message: 'Successfully updated profile! Oh-hoo~~',
-              isSuccess: true,
-            );
-          },
+          name: _nameCtrl.text,
+          country: _user.country,
+          birthday: _user.birthday,
+          level: _user.level,
+          phone: _phoneCtrl.text,
+          learnTopics: _user.learnTopics!.map((e) => e.id.toString()).toList(),
+          testPreparations: _user.testPreparations!.map((e) => e.id.toString()).toList(),
+          callback: () =>
+              TopSnackBar.showSuccess(context, 'Successfully updated profile! Oh-hoo~~'),
         );
-      } on HttpException catch (e) {
-        TopSnackBar.show(
-          context: context,
-          message: e.toString(),
-          isSuccess: false,
-        );
+      } on model.HttpException catch (e) {
+        TopSnackBar.showError(context, e.toString());
         await Analytics.crashEvent(
           'onSave',
           exception: e.toString(),
         );
       } catch (error) {
         debugPrint(error.toString());
-        TopSnackBar.show(
-          context: context,
-          message: 'Failed to update user\'s profile! Please try again later',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(
+            context, 'Failed to update user\'s profile! Please try again later');
         await Analytics.crashEvent(
           'onSave',
           exception: error.toString(),
@@ -187,13 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         await userProvider.uploadAvatar(
           imageFile.path,
           fileName,
-          () {
-            TopSnackBar.show(
-              context: context,
-              message: 'Successfully updated avatar! Oh-hoo~~',
-              isSuccess: true,
-            );
-          },
+          () => TopSnackBar.showSuccess(context, 'Successfully updated avatar! Oh-hoo~~'),
         );
         userProvider.getUserInfo().then((value) {
           setState(() {
@@ -202,23 +203,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _phoneCtrl.text = _user.phone ?? '';
           });
         });
-      } on HttpException catch (e) {
-        TopSnackBar.show(
-          context: context,
-          message: e.toString(),
-          isSuccess: false,
-        );
+      } on model.HttpException catch (e) {
+        TopSnackBar.showError(context, e.toString());
         await Analytics.crashEvent(
           'pickImageFromGallery',
           exception: e.toString(),
         );
       } catch (error) {
         debugPrint(error.toString());
-        TopSnackBar.show(
-          context: context,
-          message: 'Failed to update your avatar! Please try again later',
-          isSuccess: false,
-        );
+        TopSnackBar.showError(
+            context, 'Failed to update your avatar! Please try again later');
         await Analytics.crashEvent(
           'pickImageFromGallery',
           exception: error.toString(),
@@ -228,7 +222,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWidget('Profile'),
+      appBar: CustomAppBarWidget(_lang.profileTitle),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -271,7 +265,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: 15,
                             height: 15,
                             fit: BoxFit.cover,
-                            color: Colors.white,
+                            colorFilter: const ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.srcIn,
+                            ),
                           ),
                         ),
                       ),
@@ -310,7 +307,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: const Text('Birthday'),
+                  child: Text(_lang.birthday),
                 ),
                 Container(
                   height: 48,
@@ -334,20 +331,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         splashFactory: NoSplash.splashFactory,
                       ),
                       onPressed: () {
-                        DatePicker.showDatePicker(
-                          context,
-                          showTitleActions: true,
-                          minTime: DateTime(1950, 1, 1),
-                          maxTime: DateTime(2030, 12, 31),
-                          currentTime: _user.birthday != null
-                              ? DateTime.parse(_user.birthday!)
-                              : DateTime.now(),
-                          onConfirm: (date) {
-                            setState(() {
-                              _user.birthday = DateFormat('yyyy-MM-dd').format(date);
-                            });
-                          },
-                          locale: LocaleType.en,
+                        BottomModalSheet.show(
+                          context: context,
+                          title: _lang.birthday,
+                          widget: ScrollDatePicker(
+                            selectedDate: _birthday,
+                            minimumDate: DateTime(1950, 1, 1),
+                            maximumDate: DateTime(2030, 12, 31),
+                            locale: Locale(_lang.locale.name),
+                            options: const DatePickerOptions(
+                              itemExtent: 40.0,
+                              isLoop: false,
+                            ),
+                            scrollViewOptions: const DatePickerScrollViewOptions(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            ),
+                            onDateTimeChanged: (DateTime value) {
+                              setState(() {
+                                _birthday = value;
+                                _user.birthday =
+                                    DateFormat('yyyy-MM-dd').format(_birthday);
+                              });
+                            },
+                          ),
                         );
                       },
                       child: Text(
@@ -370,36 +376,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Container(
                         alignment: Alignment.centerLeft,
-                        child: const Text('Phone number'),
+                        child: Text(_lang.phone),
                       ),
                       TextField(
                         controller: _phoneCtrl,
                         keyboardType: TextInputType.phone,
-                        enabled: !_user.isPhoneActivated!,
+                        enabled: _user.isPhoneActivated == null
+                            ? true
+                            : !_user.isPhoneActivated!,
                         onChanged: (value) {},
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           isDense: true,
-                          hintText: 'Phone Number',
-                          hintStyle: TextStyle(
+                          hintText: _lang.phoneHint,
+                          hintStyle: const TextStyle(
                             color: LetTutorColors.greyScaleMediumGrey,
                           ),
                           contentPadding:
-                              EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-                          border: OutlineInputBorder(
+                              const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
+                          border: const OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: LetTutorColors.greyScaleLightGrey),
                             borderRadius: BorderRadius.all(
                               Radius.circular(10),
                             ),
                           ),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: LetTutorColors.greyScaleLightGrey),
                             borderRadius: BorderRadius.all(
                               Radius.circular(10),
                             ),
                           ),
-                          disabledBorder: OutlineInputBorder(
+                          disabledBorder: const OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: LetTutorColors.greyScaleLightGrey),
                             borderRadius: BorderRadius.all(
@@ -415,7 +423,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 dropdownItems(
-                  title: 'Country',
+                  title: _lang.country,
                   items: _countriesList,
                   value: _user.country ?? 'UN',
                   onChanged: (String? val) {
@@ -427,7 +435,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                 ),
                 dropdownItems(
-                  title: 'My Level',
+                  title: _lang.level,
                   items: _levelsList,
                   value: _user.level ?? 'UN',
                   onChanged: (String? val) {
@@ -445,7 +453,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Container(
                         alignment: Alignment.centerLeft,
-                        child: const Text('Want to Learn'),
+                        child: Text(_lang.wantToLearn),
                       ),
                       Container(
                         margin: const EdgeInsets.only(bottom: 10, top: 10, left: 10),
@@ -462,7 +470,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            skillsAndLevels<LearnTopic>(
+                            skillsAndLevels<model.LearnTopic>(
                               allTypes: _allTopics,
                               userTypes: _user.learnTopics!,
                             ),
@@ -475,7 +483,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            skillsAndLevels<TestPreparation>(
+                            skillsAndLevels<model.TestPreparation>(
                               allTypes: _allTests,
                               userTypes: _user.testPreparations!,
                             ),

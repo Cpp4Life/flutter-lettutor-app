@@ -37,11 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // empty validation
     if (email.isEmpty || password.isEmpty) {
-      TopSnackBar.show(
-        context: context,
-        message: 'Please fill in all fields',
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, 'Please fill in all fields');
       return;
     }
 
@@ -55,22 +51,14 @@ class _LoginScreenState extends State<LoginScreen> {
         },
       );
     } on HttpException catch (error) {
-      TopSnackBar.show(
-        context: context,
-        message: error.toString(),
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, error.toString());
       await Analytics.crashEvent(
         'handleLogin',
         exception: error.toString(),
       );
     } catch (error) {
       debugPrint(error.toString());
-      TopSnackBar.show(
-        context: context,
-        message: 'Failed to login! Please try again later',
-        isSuccess: false,
-      );
+      TopSnackBar.showError(context, 'Failed to login! Please try again later');
       await Analytics.crashEvent(
         'handleLogin',
         exception: error.toString(),
@@ -81,10 +69,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('LOGIN_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWidget('Sign in'),
+      appBar: CustomAppBarWidget(lang.loginScreenTitle),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -113,14 +102,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                const Text('Email'),
-                TextFieldWidget(
+                Text(lang.email),
+                RoundedTextFieldWidget(
                   controller: _emailCtrl,
                   hintText: 'example@email.com',
                   keyboardType: TextInputType.emailAddress,
                 ),
-                const Text('Password'),
-                TextFieldWidget(
+                Text(lang.password),
+                RoundedTextFieldWidget(
                   obscureText: true,
                   controller: _passwordCtrl,
                   hintText: '********',
@@ -134,9 +123,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     onTap: () {
                       Navigator.of(context).pushNamed(ForgotPasswordScreen.routeName);
                     },
-                    child: const Text(
-                      'Forgot Password?',
-                      style: TextStyle(
+                    child: Text(
+                      lang.forgotPassword,
+                      style: const TextStyle(
                         color: LetTutorColors.primaryBlue,
                         fontSize: LetTutorFontSizes.px12,
                       ),
@@ -153,9 +142,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  child: const Text(
-                    'Log In',
-                    style: TextStyle(
+                  child: Text(
+                    lang.login,
+                    style: const TextStyle(
                       fontWeight: LetTutorFontWeights.medium,
                       color: Colors.white,
                     ),
@@ -164,9 +153,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
-                  child: const Text(
-                    'Or continue with',
-                    style: TextStyle(
+                  child: Text(
+                    lang.continueWith,
+                    style: const TextStyle(
                       fontSize: LetTutorFontSizes.px12,
                       color: LetTutorColors.greyScaleDarkGrey,
                     ),
@@ -174,11 +163,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    SocialLoginWidget(svgSource: LetTutorSvg.facebookAuth),
-                    SocialLoginWidget(svgSource: LetTutorSvg.google),
-                    SocialLoginWidget(svgSource: LetTutorSvg.smartPhone),
-                    SocialLoginWidget(svgSource: LetTutorSvg.apple),
+                  children: [
+                    SocialLoginWidget(
+                      svgSource: LetTutorSvg.facebookAuth,
+                      onPressed: () => OAuth.facebookLogin(context),
+                    ),
+                    SocialLoginWidget(
+                      svgSource: LetTutorSvg.google,
+                      onPressed: () => OAuth.googleLogin(context),
+                    ),
+                    const SocialLoginWidget(svgSource: LetTutorSvg.smartPhone),
+                    const SocialLoginWidget(svgSource: LetTutorSvg.apple),
                   ],
                 ),
                 Container(
@@ -186,13 +181,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   margin: const EdgeInsets.only(top: 25),
                   child: Text.rich(
                     TextSpan(
-                      text: 'Don\'t have account? ',
+                      text: lang.doNotHaveAccount,
                       style: const TextStyle(
                         fontSize: LetTutorFontSizes.px12,
                       ),
                       children: <InlineSpan>[
                         TextSpan(
-                          text: 'Sign up',
+                          text: lang.signUp,
                           style: const TextStyle(
                             fontSize: LetTutorFontSizes.px14,
                             color: LetTutorColors.primaryBlue,

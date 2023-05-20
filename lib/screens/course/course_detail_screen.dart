@@ -6,6 +6,7 @@ import '../../core/styles/index.dart';
 import '../../models/index.dart';
 import '../../providers/index.dart';
 import '../../services/index.dart';
+import '../index.dart';
 
 class CourseDetailScreen extends StatefulWidget {
   static const routeName = '/course-detail';
@@ -56,6 +57,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<Analytics>().setTrackingScreen('COURSE_DETAIL_SCREEN');
+    final lang = Provider.of<AppProvider>(context).language;
 
     final size = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
@@ -130,9 +132,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      "About Course",
-                                      style: TextStyle(
+                                    Text(
+                                      lang.aboutCourse,
+                                      style: const TextStyle(
                                         fontSize: LetTutorFontSizes.px26,
                                         fontWeight: LetTutorFontWeights.bold,
                                       ),
@@ -148,15 +150,15 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                 ),
                               ),
                               Container(
-                                margin: const EdgeInsets.only(bottom: 15),
+                                margin: const EdgeInsets.only(bottom: 5),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
                                       margin: const EdgeInsets.only(bottom: 10),
-                                      child: const Text(
-                                        "Overview",
-                                        style: TextStyle(
+                                      child: Text(
+                                        lang.overview,
+                                        style: const TextStyle(
                                           fontSize: LetTutorFontSizes.px26,
                                           fontWeight: LetTutorFontWeights.bold,
                                         ),
@@ -166,23 +168,28 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                       margin: const EdgeInsets.only(bottom: 10),
                                       child: Column(
                                         children: [
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              const Icon(Icons.help_outline),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 10, bottom: 10),
-                                                child: const Text(
-                                                  "Why take this course?",
-                                                  style: TextStyle(
-                                                    fontSize: LetTutorFontSizes.px16,
-                                                    color:
-                                                        LetTutorColors.secondaryDarkBlue,
+                                          Container(
+                                            margin: const EdgeInsets.only(bottom: 10),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                const Icon(Icons.help_outline),
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                    left: 10,
                                                   ),
-                                                ),
-                                              )
-                                            ],
+                                                  child: Text(
+                                                    lang.whyThisCourse,
+                                                    style: const TextStyle(
+                                                      fontSize: LetTutorFontSizes.px16,
+                                                      color: LetTutorColors
+                                                          .secondaryDarkBlue,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                           Text(
                                             _course.reason!,
@@ -198,23 +205,26 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                       margin: const EdgeInsets.only(bottom: 10),
                                       child: Column(
                                         children: [
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              const Icon(Icons.help_outline),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 10, bottom: 10),
-                                                child: const Text(
-                                                  "What will you be able to do?",
-                                                  style: TextStyle(
-                                                    fontSize: LetTutorFontSizes.px16,
-                                                    color:
-                                                        LetTutorColors.secondaryDarkBlue,
+                                          Container(
+                                            margin: const EdgeInsets.only(bottom: 10),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                const Icon(Icons.help_outline),
+                                                Container(
+                                                  margin: const EdgeInsets.only(left: 10),
+                                                  child: Text(
+                                                    lang.whatYouGet,
+                                                    style: const TextStyle(
+                                                      fontSize: LetTutorFontSizes.px16,
+                                                      color: LetTutorColors
+                                                          .secondaryDarkBlue,
+                                                    ),
                                                   ),
-                                                ),
-                                              )
-                                            ],
+                                                )
+                                              ],
+                                            ),
                                           ),
                                           Text(
                                             _course.purpose!,
@@ -234,9 +244,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      "Level",
-                                      style: TextStyle(
+                                    Text(
+                                      lang.level,
+                                      style: const TextStyle(
                                         fontSize: LetTutorFontSizes.px26,
                                         fontWeight: LetTutorFontWeights.bold,
                                       ),
@@ -258,9 +268,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                   children: [
                                     Container(
                                       margin: const EdgeInsets.only(bottom: 7),
-                                      child: const Text(
-                                        "Topic",
-                                        style: TextStyle(
+                                      child: Text(
+                                        lang.courseTopics,
+                                        style: const TextStyle(
                                           fontSize: LetTutorFontSizes.px26,
                                           fontWeight: LetTutorFontWeights.bold,
                                         ),
@@ -272,53 +282,64 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                         itemCount: _course.topics!.length,
                                         shrinkWrap: true,
                                         physics: const NeverScrollableScrollPhysics(),
-                                        itemBuilder: (_, index) => Card(
-                                          shape: RoundedRectangleBorder(
-                                            side: const BorderSide(
-                                              color: LetTutorColors.greyScaleLightGrey,
-                                              width: 1,
+                                        itemBuilder: (_, index) => GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context).pushNamed(
+                                              PDFViewerScreen.routeName,
+                                              arguments: {
+                                                'title': _course.topics![index].name,
+                                                'url': _course.topics![index].nameFile,
+                                              },
+                                            );
+                                          },
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                              side: const BorderSide(
+                                                color: LetTutorColors.greyScaleLightGrey,
+                                                width: 1,
+                                              ),
+                                              borderRadius: BorderRadius.circular(10),
                                             ),
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 10,
-                                              vertical: 10,
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  width: 50,
-                                                  height: 50,
-                                                  margin:
-                                                      const EdgeInsets.only(right: 10),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(10),
-                                                    color: Colors.indigo[200],
-                                                  ),
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    (index + 1).toString(),
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: LetTutorFontSizes.px24,
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                horizontal: 10,
+                                                vertical: 10,
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    width: 50,
+                                                    height: 50,
+                                                    margin:
+                                                        const EdgeInsets.only(right: 10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(10),
+                                                      color: Colors.indigo[200],
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      (index + 1).toString(),
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: LetTutorFontSizes.px24,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    _course.topics![index].name!,
-                                                    style: const TextStyle(
-                                                      fontSize: LetTutorFontSizes.px16,
-                                                      fontWeight:
-                                                          LetTutorFontWeights.bold,
+                                                  Expanded(
+                                                    child: Text(
+                                                      _course.topics![index].name!,
+                                                      style: const TextStyle(
+                                                        fontSize: LetTutorFontSizes.px16,
+                                                        fontWeight:
+                                                            LetTutorFontWeights.bold,
+                                                      ),
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
                                                     ),
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                )
-                                              ],
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -360,9 +381,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                       color: LetTutorColors.primaryBlue,
                                     ),
                                   ),
-                                  const Text(
-                                    "topics",
-                                    style: TextStyle(
+                                  Text(
+                                    lang.courseTopics,
+                                    style: const TextStyle(
                                       fontSize: LetTutorFontSizes.px20,
                                       color: LetTutorColors.primaryBlue,
                                     ),
@@ -383,9 +404,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                       color: LetTutorColors.secondaryDarkBlue,
                                     ),
                                   ),
-                                  const Text(
-                                    "tutor",
-                                    style: TextStyle(
+                                  Text(
+                                    lang.courseTutor,
+                                    style: const TextStyle(
                                       fontSize: LetTutorFontSizes.px16,
                                       color: LetTutorColors.secondaryDarkBlue,
                                     ),

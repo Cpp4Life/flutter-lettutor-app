@@ -44,32 +44,20 @@ class _PeriodItemWidgetState extends State<PeriodItemWidget> {
                     await Provider.of<ScheduleProvider>(context, listen: false).bookClass(
                       widget.id,
                       () {
-                        TopSnackBar.show(
-                          context: context,
-                          message: 'Booked class successfully',
-                          isSuccess: true,
-                        );
+                        TopSnackBar.showSuccess(context, 'Booked class successfully');
                       },
                     );
                     setState(() {
                       _isBooked = true;
                     });
                   } on HttpException catch (e) {
-                    TopSnackBar.show(
-                      context: context,
-                      message: e.toString(),
-                      isSuccess: false,
-                    );
+                    TopSnackBar.showError(context, e.toString());
                     await Analytics.crashEvent(
                       'periodItemCatch',
                       exception: e.toString(),
                     );
                   } catch (e) {
-                    TopSnackBar.show(
-                      context: context,
-                      message: 'Oops! Something went wrong',
-                      isSuccess: false,
-                    );
+                    TopSnackBar.showError(context, 'Oops! Something went wrong');
                     await Analytics.crashEvent(
                       'periodItemCatch',
                       exception: e.toString(),
